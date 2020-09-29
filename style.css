@@ -1,0 +1,47 @@
+body {
+	background-color: black;
+  color: DarkCyan;
+	word-wrap: break-word;
+  font-family: Consolas, monaco, monospace;
+}
+
+#input {
+	width: 100%;
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+.dim {
+	color: DimGray;
+}
+
+.red {
+  color: Red;
+}
+
+.yellow {
+	color: Gold;
+}
+
+.green {
+	color: Green;
+}
+
+.blue {
+  color: DodgerBlue;
+}
+
+.purple {
+  color: MediumOrchid;
+}
+
+.cyan {
+	color: DarkCyan;
+}
+
+.white {
+	color: White;
+}
