@@ -3,6 +3,7 @@ const acceptingInput = false
 var output
 var input
 var sleep
+
 debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000))
 
 function tokenize(string) {
@@ -51,7 +52,7 @@ async function rainbowPrint(string, wait, textSpeed) {
   const rainbowList = ["red", "yellow", "green", "blue", "purple"]
   let rainbowInt = Math.floor(Math.random() * 5)
   for(let c of tokenize(string)) {
-    const span = createSpan(rainbowList[rainbowIndex])
+    const span = createSpan(rainbowList[rainbowInt])
     span.innerHTML = c
     output.appendChild(span)
     rainbowInt += 1
@@ -75,6 +76,7 @@ async function rainbowPrint(string, wait, textSpeed) {
 }
 
 const choice = array => new Promise(async (resolve, reject) => {
+  input.classList.add("visible")
 	for(i in array) {
     fprint(`[${parseInt(i) + 1}] ${array[i]}`,  "cyan", 0, 0)
 	}
@@ -84,6 +86,7 @@ const choice = array => new Promise(async (resolve, reject) => {
     fprint(answer, "cyan", 0, 0)
     answer = parseInt(answer.slice(3))
 		if(answer >= 1 && answer <= array.length) {
+      input.classList.remove("visible")
 			resolve(answer)
 		} else {
 			fprint("Invalid input...", "red", 0, 0)
@@ -94,18 +97,22 @@ const choice = array => new Promise(async (resolve, reject) => {
 
 const awaitInput = () => new Promise(async (resolve, reject) => {
   input.innerHTML = ">> "
-  let text = input.innerHTML
-  input.classList.add("visible")
+  let text = ">> "
 	document.addEventListener("keypress", e => {
     if(e.key == "Enter") {
-      input.innerHTML = ">> "
-      input.classList.remove("visible")
       resolve(text)
     } else {
       text += e.key
       input.innerHTML = text
     }
 	})
+  document.addEventListener("keydown", e => {
+    if(e.key == "Backspace") {
+      if(text.length < 4) return
+      text = text.slice(0, text.length - 1)
+      input.innerHTML = text
+    }
+  })
 })
 
 async function d_oldMan(queue) {

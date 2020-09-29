@@ -10,7 +10,7 @@ body {
   display: none;
 }
 
-.visible {
+#input.visible {
   display: block;
 }
 
