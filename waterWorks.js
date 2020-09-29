@@ -1,11 +1,17 @@
 const debug = false
-const acceptingInput = false
-var output
-var input
-var sleep
+const days = 0 // number of days
+const experience = 0 // exp level
+const personality = 0 // positive = good, negative = bad
+const state = 0 // 0 = alive, -1 = win, string = death message
+const message = 0 // used to communicate short term between days, typically used in multidays
 
+var output // output div
+var input // input div
+
+var sleep // sleep in seconds
 debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000))
 
+// converts string to an array + converts \n to <br>
 function tokenize(string) {
   let array = []
   while(string.length != 0) {
@@ -20,34 +26,57 @@ function tokenize(string) {
   return array
 }
 
+// creates an HTML span element
 function createSpan(color) {
   const span = document.createElement("span")
   span.classList.add(color)
   return span
 }
 
+/*
+- Informational text is "dim"
+- Narrator speech is "green"
+- Character's speech is "cyan"
+- Other character's speech are "yellow", "blue", and "purple" in that order
+- Onomonopoeia and other sounds are "red"
+- God and stat level ups are "rainbow"
+- Use "rainbow" and "white" very sparingly
+
+- Carlos (Carlos Sandchez) is a reoccurring friend character for the crab now
+
+TIMINGS
+wait is how long to wait before next instruction, default 0.5
+text speed is how long normal letters take, default 0.04
+slow text speed is recommended to be 0.06
+fast text speed is recommended to be 0.02
+*/
+
+// fancy print
 async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
-	if(color == "rainbow") return rainbowPrint(string, wait, textSpeed)
+	if(color == "rainbow") return rainbowPrint(string, wait, textSpeed) // do rainbow print
 	const span = createSpan(color)
-	output.appendChild(span)
-	for(let c of tokenize(string)) {
-    span.innerHTML += c
+	output.appendChild(span) // make and put an empty span of the specified color on the dom
+	for(let c of tokenize(string)) { // loop through all characters
+    span.innerHTML += c // add character
 		if(textSpeed != 0) {
-			if([".", "!", "?", ";"].includes(c)) {
+			if([".", "!", "?", ";"].includes(c)) { // full stop sleep
 				await sleep(0.5)
-			} else if([",", ":"].includes(c)) {
+			} else if([",", ":"].includes(c)) { // soft stop sleep
 				await sleep(0.25)
-			} else {
+			} else { // default sleep for characters
 				await sleep(textSpeed)
 			}
 		}
 	}
-	span.innerHTML += "<br>"
-	if(!debug) {
+	span.innerHTML += "<br>" // add line break at end
+	if(!debug) { // end wait
 		await sleep(wait)
 	}
 }
 
+
+// rainbow print
+// pretty much the same as fprint but cycles between colors
 async function rainbowPrint(string, wait, textSpeed) {
   const rainbowList = ["red", "yellow", "green", "blue", "purple"]
   let rainbowInt = Math.floor(Math.random() * 5)
@@ -75,10 +104,11 @@ async function rainbowPrint(string, wait, textSpeed) {
   }
 }
 
+// okay I kind of don't want to comment the rest of this because it's ugly
 const choice = array => new Promise(async (resolve, reject) => {
   input.classList.add("visible")
-	for(i in array) {
-    fprint(`[${parseInt(i) + 1}] ${array[i]}`,  "cyan", 0, 0)
+	for(let i in array) {
+    fprint(`[${parseInt(i) + 1}] ${array[i]}`, "cyan", 0, 0)
 	}
   fprint("", "cyan", 0, 0)
 	while(true) {
@@ -115,30 +145,9 @@ const awaitInput = () => new Promise(async (resolve, reject) => {
   })
 })
 
-async function d_oldMan(queue) {
-	await fprint("A visibly old male crab approaches you out of the shadows.\n", "dim", 1)
-  await fprint("Ey, you, kid.", "yellow", 0.5, 0.06)
-  await fprint("You new here or somethin?\n", "yellow", 0.5, 0.06)
-	answer = await choice(["Yes", "No"])
-  if(answer == 1) {
-    await fprint("Uh yeah, actually. I was reincarnated here 1 day ago.\n", "cyan")
-    await fprint("Oh, dip. Well I hope I see ya around, kid. Good luck out there.\n", "yellow", 0.5, 0.06)
-    await fprint("Honesty be kinda quirky tho. Lowkey cool ig.\n", "green")
-    await fprint("Coolness + 1", "rainbow", 1)
-    await fprint("Goodness + 1", "rainbow", 1)
-  } else {
-    await fprint("Nah, I've been here a while now.\n", "cyan")
-    await fprint("Oh, word. Well I hope I see ya around, kid. Good luck out there.\n", "yellow", 0.5, 0.06)
-    await fprint("Woah, lies and deciet? That's pretty cool.\n", "green")
-    await fprint("Coolness + 1000", "rainbow", 1)
-    await fprint("Badness + 1", "rainbow", 1)
-  }
-  await fprint("Experience + 1\n", "rainbow", 2)
-  alert(1)
-}
-
 window.onload = () => {
 	output = document.getElementById("output")
 	input = document.getElementById("input")
-	d_oldMan(1)
 }
+
+export { debug, days, experience, personality, state, message, output, input, sleep, createSpan, fprint, choice }
