@@ -19,6 +19,6 @@ priates, c_supermarketPirate
 prawnShop
 prisonersDilemma
 purchaseSomeGoods
-randomHotCrab, c_hotCrabSecondMeeting
-tasteTesting
+  randomHotCrab, c_hotCrabSecondMeeting
+  tasteTesting
   wrongSecretAgent

@@ -10,7 +10,8 @@ function generateQueue() {
     "./days/oldMan.js",
     "./days/depression.js",
     "./days/wrongSecretAgent.js",
-    "./days/multiDays/oldGuyDrugs/oldGuyDrugs_1.js"
+    "./days/multiDays/oldGuyDrugs/oldGuyDrugs_1.js",
+    "./days/randomHotCrab.js"
   ]
   queueList = shuffleArray(queueList)
   return queueListTest || queueList
@@ -160,20 +161,6 @@ const awaitInput = () => new Promise(async (resolve, reject) => {
 
 const dayPlural = () => window.days == 1 ? "day" : "days"
 
-<<<<<<< HEAD
-function generateQueue() {
-  var queueList = [
-    "./days/oldMan.js",
-    "./days/depression.js",
-    "./days/wrongSecretAgent.js",
-    "./days/tasteTesting.js"
-  ]
-  queueList = shuffleArray(queueList)
-  return queueList
-}
-
-=======
->>>>>>> e9ece03df05506451cd07e0d43998897d1ef8d4a
 // taken from https://stackoverflow.com/a/6274398
 // why doesn't JavaScript have a built in array shuffle method?
 function shuffleArray(array) {
