@@ -1,7 +1,7 @@
 import { fprint, choice, clear, pause } from "../../waterWorks.js"
 import * as config from "../../waterWorks.js"
 
-async function execute(queue){
+export async function execute(queue){
     await fprint("After a long day at the offish, you decide to let off some steam at the local pub.\n", "green")
     await fprint("One fish-key neat, thanks.\n", "cyan")
     await fprint("Coming right up. Hey, you look a little down, you good?\n", "yellow")
@@ -31,8 +31,8 @@ async function execute(queue){
     await fprint("Honestly, this shit sucks.\n", "cyan")
     await fprint("Yeah bro for real.\n", "green")
     await fprint("Idk, I think it's kind of charming\n", "rainbow", 0)
-    await fprint("FUCK you, go back to doing stats, Stat boy.\n", "green")
-    await fprint("*sniff* fine, experience + 1\n", "rainbow")
+    await fprint("FUCK you, go back to doing stats, stat boy.\n", "green")
+    await fprint("*sniff* fine, experience + 1\n", "rainbow", 2)
 
     return queue
 }
