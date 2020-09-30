@@ -6,7 +6,7 @@ var speed = 1
 function generateQueue(flag) {
   if(flag !== false) return flag
   var queueListTest = false
-  //queueListTest = ["./days/prawnShop.js"]
+  //queueListTest = ["./days/prisonersDilemma.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",
@@ -28,7 +28,8 @@ function generateQueue(flag) {
     "./days/paneraBreadGiftcard.js",
     "./days/peerPressure.js",
     "./days/pirates.js",
-    "./days/prawnShop.js"
+    "./days/prawnShop.js",
+    "./days/prisonersDilemma.js"
   ]
   queueList = shuffleArray(queueList)
   return queueListTest || queueList
@@ -261,6 +262,10 @@ window.addEventListener("load", () => {
   document.addEventListener("keyup", e => {
 	   if(e.code == "ShiftLeft") speed = 1
   })
+  setInterval(() => {
+    if()
+  })
+
 })
 
 export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray, randomDeath, randomGreeting, randomAgree, scrollToBottom }
