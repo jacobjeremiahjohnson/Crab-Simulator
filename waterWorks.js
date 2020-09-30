@@ -1,9 +1,6 @@
-var debug
 var output // output div
 var input // input div
-
-var sleep // sleep in seconds
-debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000))
+var sleep
 
 // converts string to an array + converts \n to <br>
 function tokenize(string) {
@@ -47,13 +44,12 @@ fast text speed is recommended to be 0.02
 
 // fancy print
 async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
-  console.log(debug)
 	if(color == "rainbow") return rainbowPrint(string, wait, textSpeed) // do rainbow print
 	const span = createSpan(color)
 	output.appendChild(span) // make and put an empty span of the specified color on the dom
 	for(let c of tokenize(string)) { // loop through all characters
     span.innerHTML += c // add character
-		if(textSpeed != 0 && !debug) {
+		if(textSpeed != 0 && !window.debug) {
 			if([".", "!", "?", ";"].includes(c)) { // full stop sleep
 				await sleep(0.5)
 			} else if([",", ":"].includes(c)) { // soft stop sleep
@@ -64,7 +60,7 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
 		}
 	}
 	span.innerHTML += "<br>" // add line break at end
-	if(!debug) { // end wait
+	if(!window.debug) { // end wait
 		await sleep(wait)
 	}
 }
@@ -83,7 +79,7 @@ async function rainbowPrint(string, wait, textSpeed) {
 		if(rainbowInt == 5) {
       rainbowInt = 0
     }
-    if(textSpeed != 0 && !debug) {
+    if(textSpeed != 0 && !window.debug) {
 			if([".", "!", "?", ";"].includes(c)) {
 				await sleep(0.5)
 			} else if([",", ":"].includes(c)) {
@@ -94,7 +90,7 @@ async function rainbowPrint(string, wait, textSpeed) {
 		}
   }
   fprint("", "cyan", 0, 0)
-  if(!debug) {
+  if(!window.debug) {
     await sleep(wait)
   }
 }
@@ -120,6 +116,7 @@ const choice = array => new Promise(async (resolve, reject) => {
 		if(answer >= 1 && answer <= array.length) {
       input.classList.remove("visible")
 			resolve(answer)
+      break
 		} else {
 			fprint("Invalid input...", "red", 0, 0)
 			continue
@@ -147,10 +144,35 @@ const awaitInput = () => new Promise(async (resolve, reject) => {
   })
 })
 
-window.onload = () => {
-  debug = window.debug
-	output = document.getElementById("output")
-	input = document.getElementById("input")
+const dayPlural = () => window.days == 1 ? "day" : "days"
+
+function generateQueue() {
+  var queueList = [
+    "./days/oldMan.js",
+    "./days/depression.js"
+  ]
+  queueList = shuffleArray(queueList)
+  return queueList
 }
 
-export { output, input, clear, pause, sleep, createSpan, fprint, choice }
+// taken from https://stackoverflow.com/a/6274398
+// why doesn't JavaScript have a built in array shuffle method?
+function shuffleArray(array) {
+  let counter = array.length
+  while(counter > 0) {
+    let index = Math.floor(Math.random() * counter)
+    counter--
+    let temp = array[counter]
+    array[counter] = array[index]
+    array[index] = temp
+  }
+  return array
+}
+
+window.addEventListener("load", () => {
+  window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000))
+	output = document.getElementById("output")
+	input = document.getElementById("input")
+})
+
+export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray }
