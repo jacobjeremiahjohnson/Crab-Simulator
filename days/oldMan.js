@@ -1,4 +1,5 @@
 import { fprint, choice, clear, pause } from "../../waterWorks.js"
+import * as config from "../../waterWorks.js"
 
 export async function execute(queue) {
 	await fprint("A visibly old male crab approaches you out of the shadows.\n", "dim", 1)
@@ -6,7 +7,7 @@ export async function execute(queue) {
   await fprint("You new here or somethin?\n", "yellow", 0.5, 0.06)
 	let answer = await choice(["Yes", "No"])
   if(answer == 1) {
-    await fprint("Uh yeah, actually. I was reincarnated here 1 day ago.\n", "cyan")
+    await fprint("Uh yeah, actually. I was reincarnated here " + window.days + " " + config.dayPlural() + "ago.\n", "cyan")
     await fprint("Oh, dip. Well I hope I see ya around, kid. Good luck out there.\n", "yellow", 0.5, 0.06)
     await fprint("Honesty be kinda quirky tho. Lowkey cool ig.\n", "green")
     await fprint("Coolness + 1", "rainbow", 1)

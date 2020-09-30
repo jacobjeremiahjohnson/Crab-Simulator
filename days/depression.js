@@ -12,11 +12,11 @@ export async function execute(queue) {
     await fprint("Let's do this thing.\n", "cyan", 2)
     window.state = "I mean, you died. You committed suicide after you couldn't deal with your new crab life. Good job?01"
   } else {
-    fprint("Actually nevermind. I don't feel like it.\n", "cyan")
-    fprint("Cool cool. Glad you didn't?\n", "green")
-    fprint("Depression - 5", "rainbow", 1)
-    fprint("Goodness + 1", "rainbow", 1)
-    fprint("Experience + 1\n", "rainbow", 2)
+    await fprint("Actually nevermind. I don't feel like it.\n", "cyan")
+    await fprint("Cool cool. Glad you didn't?\n", "green")
+    await fprint("Depression - 5", "rainbow", 1)
+    await fprint("Goodness + 1", "rainbow", 1)
+    await fprint("Experience + 1\n", "rainbow", 2)
     window.experience += 1
     window.personality += 1
   }
