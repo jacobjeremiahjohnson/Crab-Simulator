@@ -6,7 +6,7 @@ var speed = 1
 function generateQueue(flag) {
   if(flag !== false) return flag
   var queueListTest = false
-  //queueListTest = ["./days/pirates.js"]
+  //queueListTest = ["./days/prawnShop.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",
@@ -27,7 +27,8 @@ function generateQueue(flag) {
     "./days/gameShow.js",
     "./days/paneraBreadGiftcard.js",
     "./days/peerPressure.js",
-    "./days/pirates.js"
+    "./days/pirates.js",
+    "./days/prawnShop.js"
   ]
   queueList = shuffleArray(queueList)
   return queueListTest || queueList
