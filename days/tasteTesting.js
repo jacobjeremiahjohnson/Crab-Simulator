@@ -47,7 +47,7 @@ export async function execute(queue){
         await fprint("You chose the " + cans[answer].toLowerCase() + ", but the cursed can was " + cans[cursedCan].toLowerCase() + ". You got off lucky THIS time...\n", "green")
         await fprint("You reheat the " + cans[answer].toLowerCase() + " in the microwave and enjoy a nice dinner while watching the news.\n", "dim", 1)
     }
-    fprint("Experience + 1\n", "rainbow", 2)
+    await fprint("Experience + 1\n", "rainbow", 2)
     window.experience += 1
 
     return queue
