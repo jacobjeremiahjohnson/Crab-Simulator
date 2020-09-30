@@ -3,9 +3,10 @@ var input // input div
 var sleep
 var speed = 1
 
-function generateQueue() {
+function generateQueue(flag) {
+  if(flag !== false) return flag
   var queueListTest = false
-  //queueListTest = ["./days/burnWitch.js"]
+  //queueListTest = ["./days/multiDays/presidentialCampaign/presidentialCampaign_3.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",
@@ -70,6 +71,7 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
 	output.appendChild(span) // make and put an empty span of the specified color on the dom
 	for(let c of tokenize(string)) { // loop through all characters
     span.innerHTML += c // add character
+    scrollToBottom()
 		if(textSpeed != 0 && !window.debug) {
 			if([".", "!", "?", ";"].includes(c)) { // full stop sleep
 				await sleep(0.5)
@@ -81,6 +83,7 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
 		}
 	}
 	span.innerHTML += "<br>" // add line break at end
+  scrollToBottom()
 	if(!window.debug) { // end wait
 		await sleep(wait / speed)
 	}
@@ -96,6 +99,7 @@ async function rainbowPrint(string, wait, textSpeed) {
     const span = createSpan(rainbowList[rainbowInt])
     span.innerHTML = c
     output.appendChild(span)
+    scrollToBottom()
     rainbowInt += 1
 		if(rainbowInt == 5) {
       rainbowInt = 0
@@ -233,6 +237,10 @@ function randomDeath() {
 	return randomDeathList[Math.floor(Math.random() * randomDeathList.length)]
 }
 
+function scrollToBottom() {
+  document.documentElement.scrollTop = document.body.scrollHeight
+}
+
 window.addEventListener("load", () => {
   window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
@@ -245,4 +253,4 @@ window.addEventListener("load", () => {
   })
 })
 
-export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray, randomDeath, randomGreeting, randomAgree }
+export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray, randomDeath, randomGreeting, randomAgree, scrollToBottom }
