@@ -141,10 +141,18 @@ async function credits() {
 	await fprint("Crab art by tre\n", "green", 1)
   await fprint("Ib and Alex for feedback and ideas\n", "green", 1)
 	await fprint("A bunch of people who tested and probably don't want their names on this\n", "green", 1)
-	await fprint("And you, gamer.", "green", 1)
-	await fprint("*mwha*", "green", 3)
+	await fprint("And you, gamer.", "green", 2)
+  const emoji = document.createElement("img")
+  emoji.draggable = false
+  emoji.classList.add("emoji")
+  emoji.alt = "😘"
+  emoji.src = "https://twemoji.maxcdn.com/v/13.0.1/72x72/1f618.png"
+  config.output.appendChild(emoji)
+  await config.sleep(3)
 	titleScreen()
 }
+
+// https://twemoji.maxcdn.com/v/13.0.1/72x72/1f618.png
 
 async function titleScreen() {
   clear()
