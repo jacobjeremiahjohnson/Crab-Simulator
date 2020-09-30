@@ -5,14 +5,15 @@ var speed = 1
 
 function generateQueue() {
   var queueListTest = false
-  queueListTest = ["./days/multiDays/presidentialCampaign/presidentialCampaign_1.js"]
+  //queueListTest = ["./days/multiDays/robberyTime/robberyTime_1.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",
     "./days/wrongSecretAgent.js",
     "./days/multiDays/oldGuyDrugs/oldGuyDrugs_1.js",
     "./days/tasteTesting.js",
-    "./days/multiDays/presidentialCampaign_1.js"
+    "./days/multiDays/presidentialCampaign/presidentialCampaign_1.js",
+    "./days/multiDays/robberyTime/robberyTime_1.js"
   ]
   queueList = shuffleArray(queueList)
   return queueListTest || queueList
