@@ -15,7 +15,7 @@ export async function execute(queue){
     // All my homies hate let
     var cursedCan = Math.floor(Math.random() * 3) + 1
     var cans = ["Blue can", "Red can", "Green can"]
-    var answer = choice(cans) - 1
+    var answer = await choice(cans) - 1
     var selectionCan = 0
     var switchAnswer = 0
     while (selectionCan == cursedCan || selectionCan == answer){
@@ -24,9 +24,9 @@ export async function execute(queue){
     while (switchAnswer == answer or switchAnswer == selectionCan){
         switchAnswer += 1
     }
-    await fprint("I choose-\n", "cyan", 0)
-    await fprint("BUT WAIT! The " + cans[selectionCan].toLowerCase() + " DOESN'T contain any crab stock! Do you wish to switch your selected can?\n", "green")
-    var newAnswer = choice(["Keep it on the " + cans[answer].toLowerCase(), "Switch it to the " + cans[switchAnswer].toLowerCase()])
+    await await fprint("I choose-\n", "cyan", 0)
+    await await fprint("BUT WAIT! The " + cans[selectionCan].toLowerCase() + " DOESN'T contain any crab stock! Do you wish to switch your selected can?\n", "green")
+    var newAnswer = await choice(["Keep it on the " + cans[answer].toLowerCase(), "Switch it to the " + cans[switchAnswer].toLowerCase()])
     if (newAnswer == 2) {
         answer = switchAnswer
         await fprint("You fool! Switching would increase your chances of getting the cursed can to 2/3! Now let's see what the cursed can really is...\n", "green")
