@@ -15,7 +15,7 @@ Tab these out as you do em so we can keep track of what there's left to do
   oldMan, c_cringeNarrator
   paneraBreadGiftcard
   peerPressure
-priates, c_supermarketPirate
+  pirates, c_supermarketPirate
 prawnShop
 prisonersDilemma
   purchaseSomeGoods
