@@ -6,7 +6,7 @@ var speed = 1
 function generateQueue(flag) {
   if(flag !== false) return flag
   var queueListTest = false
-  //queueListTest = ["./days/tasteTesting.js"]
+  //queueListTest = ["./days/purchaseSomeGoods.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",

@@ -1,7 +1,7 @@
 import { fprint, choice, clear, pause, dayPlural } from "../../waterWorks.js"
 import * as config from "../../waterWorks.js"
 
-async function execute(queue){
+export async function execute(queue){
     async function purchaseSomeGoods_oldBay(){
     await fprint("Well, I should obviously pick up the most important thi-\n", "cyan", 0)
     await fprint("God, look at you.\n", "green", 2)
@@ -14,7 +14,7 @@ async function execute(queue){
   }
     async function purchaseSomeGoods_bread(){
     await fprint("Oh, I forgot to write down which kind of bread. What should I go for?\n", "cyan")
-    let answer = choice(["White bread", "Multigrain"])
+    let answer = await choice(["White bread", "Multigrain"])
     if (answer == 1) {
         await fprint("Really? White bread? I'm disappointed.\n", "green")
         await fprint("Oh come on! White bread tastes a million times better than multigrain bread could even hope to taste like.\n", "cyan", 1)
@@ -51,20 +51,20 @@ async function execute(queue){
     var shoppingItems = ["Old bay", "Bread", "Milk", "Chlorine gas"]
 
     while (true){
-        answer = choice(shoppingItems)
+        let answer = await choice(shoppingItems)
         if (shoppingItems[answer - 1] == "Old bay") await purchaseSomeGoods_oldBay()
         else if (shoppingItems[answer - 1] == "Bread") await purchaseSomeGoods_bread()
         else if (shoppingItems[answer - 1] == "Milk") await purchaseSomeGoods_milk()
         else if (shoppingItems[answer - 1] == "Chlorine gas") await purchaseSomeGoods_chlorineGas()
         shoppingItems.splice(answer - 1, 1)
-        if (shoppingItems.length() == 0) break;
+        if (shoppingItems.length == 0) break;
     }
     await fprint("You stare at your now empty shopping list.\n", "dim")
     await fprint("Oh, radical. I'm outta here.\n", "cyan")
 
     await fprint("Old Bay + 4", "rainbow", 1)
     await fprint("Bread + 1", "rainbow", 1)
-    await fprint("Milk + 1", "rainbow", 1)
+    await fprint("Milk + 0", "rainbow", 1)
     await fprint("Chlorine gas + 1", "yellow", 1)
     await fprint("Wait, no, get out of the stats screen Shia LeBarnacle. Shoo.", "rainbow", 1)
     await fprint("Uhh, also experience + 1\n", "rainbow", 2)
