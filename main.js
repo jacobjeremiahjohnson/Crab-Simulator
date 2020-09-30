@@ -101,7 +101,13 @@ async function game(flag) {
       fprint("", "dim", 0, 0)
       window.state = 0
       window.days--
-      if(dayString == "./days/chainDays/presidentStay.js") dayString = "./days/multiDays/presidentialCampaign/presidentialCampaign_3.js"
+      if(dayString == "./days/chainDays/presidentStay.js") {
+        window.days--
+        dayString = "./days/multiDays/presidentialCampaign/presidentialCampaign_3.js"
+      } else if(dayString == "./days/chainDays/crabExamDeath.js") {
+        window.days--
+        dayString = "./days/crabExam.js"
+      }
       queue.unshift(dayString)
       game(queue)
     } else {

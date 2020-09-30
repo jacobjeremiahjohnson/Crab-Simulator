@@ -6,7 +6,7 @@ Tab these out as you do em so we can keep track of what there's left to do
   soccerPractice 1, 2, 3
   burnWitch, c_broomHospital
   cookingCompetition
-crabExam, c_crabExamDeath
+  crabExam, c_crabExamDeath
   depression
 firstContact
 fisherman
