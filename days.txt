@@ -10,7 +10,7 @@ Tab these out as you do em so we can keep track of what there's left to do
   depression
   firstContact
   fisherman
-forwardScuttle
+  forwardScuttle
 gameShow
   oldMan, c_cringeNarrator
 paneraBreadGiftcard
