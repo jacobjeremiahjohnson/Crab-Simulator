@@ -101,6 +101,11 @@ async function rainbowPrint(string, wait, textSpeed) {
 
 const clear = () => output.innerHTML = ""
 
+async function pause() {
+  fprint("Press ENTER", "dim", 0, 0)
+  await awaitInput()
+}
+
 // okay I kind of don't want to comment the rest of this because it's ugly
 const choice = array => new Promise(async (resolve, reject) => {
   input.classList.add("visible")
@@ -147,4 +152,4 @@ window.onload = () => {
 	input = document.getElementById("input")
 }
 
-export { output, input, clear, sleep, createSpan, fprint, choice }
+export { output, input, clear, pause, sleep, createSpan, fprint, choice }
