@@ -19,5 +19,7 @@ export async function execute(queue){
     await fprint("Stealth - 4", "rainbow", 1)
     await fprint("Experience + 1\n", "rainbow", 2)
     // no experience for this one :(
+    window.experience++
+    // dw I gotchu
     return queue
 }

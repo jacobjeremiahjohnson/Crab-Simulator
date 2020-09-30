@@ -1,6 +1,20 @@
 var output // output div
 var input // input div
 var sleep
+var speed = 1
+
+function generateQueue() {
+  var queueListTest = false
+  //queueListTest = ["./days/multiDays/oldGuyDrugs/oldGuyDrugs_1.js"]
+  var queueList = [
+    "./days/oldMan.js",
+    "./days/depression.js",
+    "./days/wrongSecretAgent.js",
+    "./days/multiDays/oldGuyDrugs/oldGuyDrugs_1.js"
+  ]
+  queueList = shuffleArray(queueList)
+  return queueListTest || queueList
+}
 
 // converts string to an array + converts \n to <br>
 function tokenize(string) {
@@ -61,7 +75,7 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
 	}
 	span.innerHTML += "<br>" // add line break at end
 	if(!window.debug) { // end wait
-		await sleep(wait)
+		await sleep(wait / speed)
 	}
 }
 
@@ -91,7 +105,7 @@ async function rainbowPrint(string, wait, textSpeed) {
   }
   fprint("", "cyan", 0, 0)
   if(!window.debug) {
-    await sleep(wait)
+    await sleep(wait / speed)
   }
 }
 
@@ -146,6 +160,7 @@ const awaitInput = () => new Promise(async (resolve, reject) => {
 
 const dayPlural = () => window.days == 1 ? "day" : "days"
 
+<<<<<<< HEAD
 function generateQueue() {
   var queueList = [
     "./days/oldMan.js",
@@ -157,6 +172,8 @@ function generateQueue() {
   return queueList
 }
 
+=======
+>>>>>>> e9ece03df05506451cd07e0d43998897d1ef8d4a
 // taken from https://stackoverflow.com/a/6274398
 // why doesn't JavaScript have a built in array shuffle method?
 function shuffleArray(array) {
@@ -224,9 +241,15 @@ function randomDeath() {
 }
 
 window.addEventListener("load", () => {
-  window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000))
+  window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
 	input = document.getElementById("input")
+  document.addEventListener("keydown", e => {
+	   if(e.code == "ShiftLeft") speed = 2
+   })
+  document.addEventListener("keyup", e => {
+	   if(e.code == "ShiftLeft") speed = 1
+  })
 })
 
 export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray, randomDeath, randomGreeting, randomAgree }
