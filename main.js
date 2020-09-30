@@ -98,7 +98,6 @@ async function game(flag) {
     let answer = await choice(["Yes", "No"])
 
     if(answer == 1) {
-      fprint("", "dim", 0, 0)
       window.state = 0
       window.days--
       if(dayString == "./days/chainDays/presidentStay.js") {
@@ -111,7 +110,6 @@ async function game(flag) {
       queue.unshift(dayString)
       game(queue)
     } else {
-      fprint("", "dim", 0, 0)
       await pause()
       titleScreen()
     }

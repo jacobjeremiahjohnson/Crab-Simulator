@@ -6,7 +6,7 @@ var speed = 1
 function generateQueue(flag) {
   if(flag !== false) return flag
   var queueListTest = false
-  //queueListTest = ["./days/crabExam.js"]
+  //queueListTest = ["./days/depression.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",
@@ -18,7 +18,10 @@ function generateQueue(flag) {
     "./days/randomHotCrab.js",
     "./days/multiDays/soccerPractice/soccerPractice_1.js",
     "./days/burnWitch.js",
-    "./days/purchaseSomeGoods.js"
+    "./days/purchaseSomeGoods.js",
+    "./days/cookingCompetition.js",
+    "./days/crabExam.js",
+    ".days/firstContact.js"
   ]
   queueList = shuffleArray(queueList)
   return queueListTest || queueList
@@ -136,7 +139,7 @@ const choice = array => new Promise(async (resolve, reject) => {
   fprint("", "cyan", 0, 0)
 	while(true) {
 		let answer = await awaitInput()
-    fprint(answer, "cyan", 0, 0)
+    fprint(answer + "\n", "cyan", 0, 0)
     answer = parseInt(answer.slice(3))
 		if(answer >= 1 && answer <= array.length) {
       input.classList.remove("visible")

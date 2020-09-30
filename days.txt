@@ -8,7 +8,7 @@ Tab these out as you do em so we can keep track of what there's left to do
   cookingCompetition
   crabExam, c_crabExamDeath
   depression
-firstContact
+  firstContact
 fisherman
 forwardScuttle
 gameShow
