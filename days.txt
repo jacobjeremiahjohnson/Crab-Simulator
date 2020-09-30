@@ -18,7 +18,7 @@ peerPressure
 priates, c_supermarketPirate
 prawnShop
 prisonersDilemma
-purchaseSomeGoods
+  purchaseSomeGoods
   randomHotCrab, c_hotCrabSecondMeeting
   tasteTesting
   wrongSecretAgent

@@ -16,7 +16,8 @@ function generateQueue() {
     "./days/multiDays/robberyTime/robberyTime_1.js",
     "./days/randomHotCrab.js",
     "./days/multiDays/soccerPractice/soccerPractice_1.js",
-    "./days/burnWitch.js"
+    "./days/burnWitch.js",
+    "./days/purchaseSomeGoods.js"
   ]
   queueList = shuffleArray(queueList)
   return queueListTest || queueList
