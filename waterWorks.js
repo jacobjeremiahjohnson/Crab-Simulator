@@ -147,4 +147,4 @@ window.onload = () => {
 	input = document.getElementById("input")
 }
 
-export { output, input, sleep, createSpan, fprint, choice }
+export { output, input, clear, sleep, createSpan, fprint, choice }

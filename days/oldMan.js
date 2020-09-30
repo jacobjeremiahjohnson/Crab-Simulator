@@ -1,5 +1,4 @@
-import { fprint, choice, /*clear, pause*/ } from "../../waterWorks.js"
-import * as config from "../../waterWorks.js"
+import { fprint, choice, clear, /*pause*/ } from "../../waterWorks.js"
 
 export async function execute(queue) {
 	await fprint("A visibly old male crab approaches you out of the shadows.\n", "dim", 1)
@@ -18,7 +17,7 @@ export async function execute(queue) {
     await fprint("Oh, word. Well I hope I see ya around, kid. Good luck out there.\n", "yellow", 0.5, 0.06)
     await fprint("Woah, lies and deciet? That's pretty cool.\n", "green")
     await fprint("Coolness + 1000", "rainbow", 1)
-		config.clear()
+		clear()
     await fprint("Badness + 1", "rainbow", 1)
 		window.personality--
   }
