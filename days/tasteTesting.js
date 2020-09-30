@@ -13,7 +13,7 @@ export async function execute(queue){
 
     // Fuck let
     // All my homies hate let
-    var cursedCan = Math.floor(Math.random() * 3) + 1
+    var cursedCan = Math.floor(Math.random() * 3)
     var cans = ["Blue can", "Red can", "Green can"]
     var answer = await choice(cans) - 1
     var selectionCan = 0
@@ -21,7 +21,7 @@ export async function execute(queue){
     while (selectionCan == cursedCan || selectionCan == answer){
         selectionCan += 1
     }
-    while (switchAnswer == answer or switchAnswer == selectionCan){
+    while (switchAnswer == answer || switchAnswer == selectionCan){
         switchAnswer += 1
     }
     await await fprint("I choose-\n", "cyan", 0)
@@ -35,13 +35,12 @@ export async function execute(queue){
     }
     await fprint("You hear a muffled drumroll from inside the fridge.\n", "dim", 1)
     if (answer == cursedCan) {
-        await fprint("You chose the " + cans[answer].toLowerCase()) + ", which is also the cursed can! You imbecile!\n", "green", 1.5)
+        await fprint("You chose the " + cans[answer].toLowerCase() + ", which is also the cursed can! You imbecile!\n", "green", 1.5)
         await fprint("Your heart races as you open the refrigerator door. There lies the " + cans[answer].toLowerCase() + ", mocking you. Calling to you as if to say \"please, please eat me\". You shudder, knowing what you must do.", "dim", 1)
         await fprint("The microwave beeped deafeningly loud, with a piping hot can of soup inside. What have you become? Eating one of your own kind? Don't think that this isn't your fault. You deserve this.", "dim", 1)
         await fprint("Your spoon extends into the surface of the tantalizing crab stock soup. You bring it closer and closer to your mouth.", "dim", 1.5)
         await fprint("With a single gulp, you've committed the cardinal sin.", "dim", 2)
         await fprint("You collapse to the ground, longing for the days where you didn't have to suffer like this. Tears stream down your eyes as you feel your ancestors looking down upon you in shame. Crabs, crayfish, lobsters, ants, humans, cats, dogs. They peer with a look of disgust over what you have become.\n", "dim", 3)
-        await fprint("Not bad.\n", "cyan", 1)
         await fprint("Cannibalistic tendencies + 9", "rainbow", 1)
     } else {
         await fprint("You chose the " + cans[answer].toLowerCase() + ", but the cursed can was " + cans[cursedCan].toLowerCase() + ". You got off lucky THIS time...\n", "green")

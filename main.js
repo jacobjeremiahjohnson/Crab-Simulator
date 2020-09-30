@@ -208,5 +208,6 @@ window.addEventListener("load", () => {
     game(false)
   } else {
     titleScreen()
+    //game(false)
   }
 })
