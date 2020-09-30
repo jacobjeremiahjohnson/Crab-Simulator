@@ -1,0 +1,24 @@
+Tab these out as you do em so we can keep track of what there's left to do
+
+oldGuyDrugs 1, 2, 3
+presidentialCampaign 1, 2, 3, c_presidentStay, c_presidentResign
+robberyTime 1, 2, 3, 4, 5, 6
+soccerPractice 1, 2, 3
+burnWitch, c_broomHospital
+cookingCompetition
+crabExam, c_crabExamDeath
+  depression
+firstContact
+fisherman
+forwardScuttle
+gameShow
+  oldMan, c_cringeNarrator
+paneraBreadGiftcard
+peerPressure
+priates, c_supermarketPirate
+prawnShop
+prisonersDilemma
+purchaseSomeGoods
+randomHotCrab, c_hotCrabSecondMeeting
+tasteTesting
+wrongSecretAgent

@@ -5,6 +5,10 @@ body {
   font-family: Consolas, monaco, monospace;
 }
 
+a {
+	color: Green;
+}
+
 #input {
 	width: 100%;
   display: none;

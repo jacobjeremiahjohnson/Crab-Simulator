@@ -169,10 +169,62 @@ function shuffleArray(array) {
   return array
 }
 
+function randomGreeting() {
+  const randomGreetList = [
+    "Lets get into it, yeah?",
+    "You ready?",
+    "Check me out on Bandcamp!",
+    "Now with extra days!",
+    "*snip snap snip snap snip snap*",
+    "My claws are clicking \"fuck you\" in morse code.",
+    "Let's get Kraken!"
+  ]
+  return randomGreetList[Math.floor(Math.random() * randomGreetList.length)]
+}
+
+function randomAgree() {
+  const randomAgreeList = [
+    "Aight bro.",
+    "Good choice.",
+    "kk",
+    "Alrighty.",
+    "Okey dokey!!"
+  ]
+  return randomAgreeList[Math.floor(Math.random() * randomAgreeList.length)]
+}
+
+function randomDeath() {
+  const randomDeathList = [
+    "as a crab",
+    "from carbon monoxide poisoning",
+    "from really bad Chinese food",
+    "from CoVID-19",
+    "from fall damage",
+    "in the trenches",
+    "in a compromising position",
+    "trying to commit suicide",
+    "through reading this message",
+    "in an online game of Chess",
+    "in your favorite battle royale videogame",
+    "in a TLS handshake",
+    "in an automobile accident",
+    "as a Kurdish freedom fighter",
+    "from a gluten overdose", // oof
+    "in a candle factory fire",
+    "trying to pursue the American Dream",
+    "caught up in the grimy criminal underworld of urban Wyoming",
+    "as an ant",
+    "from an angry weasel",
+    "in a \"suicide\"",
+    "from good, clean, fun"
+  ]
+	return randomDeathList[Math.floor(Math.random() * randomDeathList.length)]
+}
+
 window.addEventListener("load", () => {
   window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000))
 	output = document.getElementById("output")
 	input = document.getElementById("input")
 })
 
-export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray }
+export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray, randomDeath, randomGreeting, randomAgree }
