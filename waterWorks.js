@@ -262,10 +262,6 @@ window.addEventListener("load", () => {
   document.addEventListener("keyup", e => {
 	   if(e.code == "ShiftLeft") speed = 1
   })
-  setInterval(() => {
-    if()
-  })
-
 })
 
 export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray, randomDeath, randomGreeting, randomAgree, scrollToBottom }
