@@ -1,5 +1,4 @@
-const debug = false
-
+var debug
 var output // output div
 var input // input div
 
@@ -48,12 +47,13 @@ fast text speed is recommended to be 0.02
 
 // fancy print
 async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
+  console.log(debug)
 	if(color == "rainbow") return rainbowPrint(string, wait, textSpeed) // do rainbow print
 	const span = createSpan(color)
 	output.appendChild(span) // make and put an empty span of the specified color on the dom
 	for(let c of tokenize(string)) { // loop through all characters
     span.innerHTML += c // add character
-		if(textSpeed != 0) {
+		if(textSpeed != 0 && !debug) {
 			if([".", "!", "?", ";"].includes(c)) { // full stop sleep
 				await sleep(0.5)
 			} else if([",", ":"].includes(c)) { // soft stop sleep
@@ -83,7 +83,7 @@ async function rainbowPrint(string, wait, textSpeed) {
 		if(rainbowInt == 5) {
       rainbowInt = 0
     }
-    if(textSpeed != 0) {
+    if(textSpeed != 0 && !debug) {
 			if([".", "!", "?", ";"].includes(c)) {
 				await sleep(0.5)
 			} else if([",", ":"].includes(c)) {
@@ -148,6 +148,7 @@ const awaitInput = () => new Promise(async (resolve, reject) => {
 })
 
 window.onload = () => {
+  debug = window.debug
 	output = document.getElementById("output")
 	input = document.getElementById("input")
 }
