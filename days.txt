@@ -5,7 +5,7 @@ Tab these out as you do em so we can keep track of what there's left to do
   robberyTime 1, 2, 3, 4, 5, 6
   soccerPractice 1, 2, 3
   burnWitch, c_broomHospital
-cookingCompetition
+  cookingCompetition
 crabExam, c_crabExamDeath
   depression
 firstContact
