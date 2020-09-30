@@ -1,9 +1,4 @@
 const debug = false
-const days = 0 // number of days
-const experience = 0 // exp level
-const personality = 0 // positive = good, negative = bad
-const state = 0 // 0 = alive, -1 = win, string = death message
-const message = 0 // used to communicate short term between days, typically used in multidays
 
 var output // output div
 var input // input div
@@ -104,6 +99,8 @@ async function rainbowPrint(string, wait, textSpeed) {
   }
 }
 
+const clear = () => output.innerHTML = ""
+
 // okay I kind of don't want to comment the rest of this because it's ugly
 const choice = array => new Promise(async (resolve, reject) => {
   input.classList.add("visible")
@@ -150,4 +147,4 @@ window.onload = () => {
 	input = document.getElementById("input")
 }
 
-export { debug, days, experience, personality, state, message, output, input, sleep, createSpan, fprint, choice }
+export { output, input, sleep, createSpan, fprint, choice }

@@ -12,13 +12,17 @@ export async function execute(queue) {
     await fprint("Honesty be kinda quirky tho. Lowkey cool ig.\n", "green")
     await fprint("Coolness + 1", "rainbow", 1)
     await fprint("Goodness + 1", "rainbow", 1)
+		window.personality++
   } else {
     await fprint("Nah, I've been here a while now.\n", "cyan")
     await fprint("Oh, word. Well I hope I see ya around, kid. Good luck out there.\n", "yellow", 0.5, 0.06)
     await fprint("Woah, lies and deciet? That's pretty cool.\n", "green")
     await fprint("Coolness + 1000", "rainbow", 1)
+		config.clear()
     await fprint("Badness + 1", "rainbow", 1)
+		window.personality--
   }
   await fprint("Experience + 1\n", "rainbow", 2)
-  alert(1)
+	window.experience++
+	return
 }
