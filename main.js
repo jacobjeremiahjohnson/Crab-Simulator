@@ -1,7 +1,7 @@
 import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-window.debug = false
+window.debug = true
 window.days = 0 // number of days
 window.experience = 0 // exp level
 window.personality = 0 // positive = good, negative = bad
@@ -24,14 +24,15 @@ window.message = 0 // used to communicate short term between days, typically use
 13 - prisonersDilemma.py Prison time
 */
 
-async function game() {
-  var queue = config.generateQueue()
+async function game(flag) {
+  var queue = config.generateQueue(flag)
   while(true) {
     await pause()
     window.days++
     clear()
     await fprint("DAY " + window.days + "\n", "white", 1, 0)
-    var day = await import(queue.shift())
+    var dayString = queue.shift()
+    var day = await import(dayString)
     queue = await day.execute(queue)
     if(queue.length == 0 && window.state == 0) { // if queue is empty and not dead on the last day
       window.state = -1 // set state to win
@@ -92,11 +93,22 @@ async function game() {
     await fprint("Ending " + window.state.slice(-2) + "\n", "green", 1, 0)
     await fprint(window.state.slice(0, -2) + "\n", "green", 1)
     await fprint("Congrats, you made it " + window.days + " " + config.dayPlural() + ".\n", "green", 2)
+    await fprint("Restart day?\n", "dim")
 
-    // TODO return to game code here?
+    let answer = await choice(["Yes", "No"])
 
-    await pause()
-    titleScreen()
+    if(answer == 1) {
+      fprint("", "dim", 0, 0)
+      window.state = 0
+      window.days--
+      if(dayString == "./days/chainDays/presidentStay.js") dayString = "./days/multiDays/presidentialCampaign/presidentialCampaign_3.js"
+      queue.unshift(dayString)
+      game(queue)
+    } else {
+      fprint("", "dim", 0, 0)
+      await pause()
+      titleScreen()
+    }
   }
 }
 
@@ -116,7 +128,7 @@ async function intro() {
   window.experience = 0
   window.personality = 0
   window.state = 0
-  game()
+  game(false)
 }
 
 async function credits() {
@@ -189,7 +201,7 @@ async function titleScreen() {
 
 window.addEventListener("load", () => {
   if(window.debug) {
-    game()
+    game(false)
   } else {
     titleScreen()
   }

@@ -3,9 +3,10 @@ var input // input div
 var sleep
 var speed = 1
 
-function generateQueue() {
+function generateQueue(flag) {
+  if(flag !== false) return flag
   var queueListTest = false
-  //queueListTest = ["./days/cookingCompetition.js"]
+  queueListTest = ["./days/multiDays/presidentialCampaign/presidentialCampaign_3.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",

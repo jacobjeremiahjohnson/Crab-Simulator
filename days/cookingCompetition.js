@@ -82,7 +82,7 @@ export async function execute(queue) {
     window.state = "The shrimp told the judges and you got kicked out of the stadium. And then you got hit by a car walking home. Pay more attention, yeah?09"
     return queue
   } else {
-    await fprint("You open the ingredients draw and pull out a styrofoam cup of ramen to heat up in the microwave. After a couple of minutes of preparation, your meal is done.\n", "dim", 1)
+    await fprint("You open the ingredients drawer and pull out a styrofoam cup of ramen to heat up in the microwave. After a couple of minutes of preparation, your meal is done.\n", "dim", 1)
     await fprint("Uh, guess I gotta wait until time's up?\n", "cyan")
     await fprint("You decide to take a piss.\n", "dim", 1)
     await fprint("---One really long piss later---\n", "dim", 2)
