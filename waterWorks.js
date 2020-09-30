@@ -149,7 +149,9 @@ const dayPlural = () => window.days == 1 ? "day" : "days"
 function generateQueue() {
   var queueList = [
     "./days/oldMan.js",
-    "./days/depression.js"
+    "./days/depression.js",
+    "./days/wrongSecretAgent.js",
+    "./days/tasteTesting.js"
   ]
   queueList = shuffleArray(queueList)
   return queueList
