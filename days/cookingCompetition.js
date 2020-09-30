@@ -73,7 +73,7 @@ export async function execute(queue) {
     await fprint("Time's up! Chefs, bring your creations up to the judging platform.\n", "yellow", 2)
     await fprint("After 20 long minutes, it's finally your turn to go.\n", "dim", 1)
     await fprint("Here's my, uh, meatloaf.\n", "cyan")
-    await fprint("The judge nodded, pulled out her fork and knife, and took a large bite. The entire crowd went silent. The tension in the air was palpable. Her eyes opened. It was impossible to tell what she was thinking. What seemed like a hush fell over the already silent venue. Finally, the judge opened her mouth and said", "dim", 0)
+    await fprint("The judge nods, pulls out her fork and knife, and takes a large bite. The entire crowd goes silent. The tension in the air is palpable. Her eyes open. It's impossible to tell what she's thinking. What seemed like a hush falls over the already silent venue. Finally, the judge opens her mouth and says", "dim", 0)
     await fprint("Needs more salt.\n", "blue", 3)
   } else if(answer == 2) {
     await fprint("You sneak over to your opponent's table. He doesn't appear to notice you due to the loud roar of the crowd. Taking a paper off the table, you swiftly return to your own table, successfully completing the mission.\n", "dim", 1)
