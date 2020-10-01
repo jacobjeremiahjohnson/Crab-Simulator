@@ -1,7 +1,7 @@
-import { fprint, choice, clear, pause, shuffleArray } from "../../waterWorks.js"
-import * as config from "../../waterWorks.js"
+import { fprint, choice, clear, pause } from "../waterWorks.js"
+import * as config from "../waterWorks.js"
 
-async function execute(queue){
+export async function execute(queue){
   await fprint("Sigh, just another lonely walk down the street.", "cyan", 0)
   await fprint("You think, gloomily scuttling along.\n", "dim")
   await fprint("You look around.\n", "dim")
@@ -10,7 +10,7 @@ async function execute(queue){
   await fprint("Damn, she's kinda hot tho.\n", "green")
   await fprint("Ikr?\n", "cyan")
   await fprint("Wave back?\n", "green")
-  let answer = choice(["Yeah","Nah"])
+  let answer = await choice(["Yeah","Nah"])
 
     if (answer == 1){
         await fprint("Ok, I'm gonna do it.\n", "cyan")
@@ -26,10 +26,10 @@ async function execute(queue){
         await fprint("She and her friend walk off, giggling.\n", "dim")
         await fprint("Huh.\n", "cyan", 2)
         await fprint("Huh.\n", "green", 2)
-        await fprint("Experience + 1", "rainbow", 2)
+        await fprint("Experience + 1\n", "rainbow", 2)
         await fprint("Huh.\n", "rainbow", 2)
         queue.unshift("./days/chainDays/hotCrabSecondMeeting.js")
-        queue = shuffleArray(queue)
+        queue = config.shuffleArray(queue)
         window.experience++
 
     } else if (answer == 2){
