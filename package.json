@@ -1,9 +1,12 @@
 {
-  "type" : "module",
-  "name" : "Crab-Simulator",
-  "version" : "0.1.0",
-  "main" : "main.js",
-  "scripts" : {
-    "start" : "electron ."
+  "_type": "module",
+  "name": "Crab-Simulator",
+  "version": "0.1.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^10.1.3"
   }
 }
