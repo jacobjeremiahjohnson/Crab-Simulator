@@ -6,6 +6,7 @@
     "start": "electron ."
   },
   "dependencies": {
+    "discord-rich-presence": "0.0.8",
     "electron": "^10.1.3"
   }
 }

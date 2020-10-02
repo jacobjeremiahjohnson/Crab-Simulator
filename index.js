@@ -1,11 +1,20 @@
 // npm modules
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
+
+const client = require("discord-rich-presence")("761407625707126796")
 
 function createWindow() {
   const mainWindow = new BrowserWindow({ // creates the browser window
     width: 800,
-    height: 600
+    height: 600,
+    minWidth: 500,
+    minHeight: 300,
+    icon: "./assets/icon.ico",
+    webPreferences: {
+      nodeIntegration: true,
+      worldSafeExecuteJavaScript: true
+    }
   })
   mainWindow.loadFile("./website/index.html") // loads index.html into window
 }
@@ -26,4 +35,12 @@ app.whenReady()
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
   if(process.platform !== "darwin") app.quit()
+})
+
+ipcMain.on("updatePresence", (e, arg) => {
+  client.updatePresence({
+    details: arg,
+    largeImageKey: "icon",
+    instance: false
+  })
 })

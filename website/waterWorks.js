@@ -3,6 +3,10 @@ var input // input div
 var sleep
 var speed = 1
 
+const rainbowList = ["red", "yellow", "green", "blue", "purple"]
+let rainbowInt = Math.floor(Math.random() * rainbowList.length)
+const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
+
 function generateQueue(flag) {
   if(flag !== false) return flag
   var queueListTest = false
@@ -36,7 +40,8 @@ function generateQueue(flag) {
 }
 
 // converts string to an array + converts \n to <br>
-function tokenize(string) {
+function tokenize(string, color) {
+  if(color == "rainbow") return rainbowTokenize(string)
   let array = []
   while(string.length != 0) {
     if(string.startsWith("\n")) {
@@ -50,9 +55,27 @@ function tokenize(string) {
   return array
 }
 
+function rainbowTokenize(string) {
+  let array = []
+  while(string.length != 0) {
+    if(string.startsWith("\n")) {
+      array.push("<br>")
+      string = string.substring(2)
+    } else {
+      rainbowCycle()
+      const span = document.createElement("span")
+      span.classList.add(rainbowList[rainbowInt])
+      span.innerHTML = string[0]
+      array.push(span)
+      string = string.substring(1)
+    }
+  }
+  return array
+}
+
 // creates an HTML span element
 function createSpan(color) {
-  const span = document.createElement("span")
+  const span = document.createElement("p")
   span.classList.add(color)
   return span
 }
@@ -76,12 +99,12 @@ fast text speed is recommended to be 0.02
 */
 
 // fancy print
-async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
-	if(color == "rainbow") return rainbowPrint(string, wait, textSpeed) // do rainbow print
+async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false) {
 	const span = createSpan(color)
+  if(isChoice) span.classList.add("choice")
 	output.appendChild(span) // make and put an empty span of the specified color on the dom
-	for(let c of tokenize(string)) { // loop through all characters
-    span.innerHTML += c // add character
+	for(let c of tokenize(string, color)) { // loop through all characters
+    span.innerHTML += c.outerHTML || c // add character
     scrollToBottom()
 		if(textSpeed != 0 && !window.debug) {
 			if([".", "!", "?", ";"].includes(c)) { // full stop sleep
@@ -100,37 +123,6 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04) {
 	}
 }
 
-
-// rainbow print
-// pretty much the same as fprint but cycles between colors
-async function rainbowPrint(string, wait, textSpeed) {
-  const rainbowList = ["red", "yellow", "green", "blue", "purple"]
-  let rainbowInt = Math.floor(Math.random() * 5)
-  for(let c of tokenize(string)) {
-    const span = createSpan(rainbowList[rainbowInt])
-    span.innerHTML = c
-    output.appendChild(span)
-    scrollToBottom()
-    rainbowInt += 1
-		if(rainbowInt == 5) {
-      rainbowInt = 0
-    }
-    if(textSpeed != 0 && !window.debug) {
-			if([".", "!", "?", ";"].includes(c)) {
-				await sleep(0.5)
-			} else if([",", ":"].includes(c)) {
-				await sleep(0.25)
-			} else {
-				await sleep(textSpeed)
-			}
-		}
-  }
-  fprint("", "cyan", 0, 0)
-  if(!window.debug) {
-    await sleep(wait / speed)
-  }
-}
-
 const clear = () => output.innerHTML = ""
 
 async function pause() {
@@ -142,12 +134,12 @@ async function pause() {
 const choice = array => new Promise(async (resolve, reject) => {
   input.classList.add("visible")
 	for(let i in array) {
-    fprint(`[${parseInt(i) + 1}] ${array[i]}`, "cyan", 0, 0)
+    fprint(`[${parseInt(i) + 1}] ${array[i]}`, "cyan", 0, 0, true)
 	}
   fprint("", "cyan", 0, 0)
 	while(true) {
 		let answer = await awaitInput()
-    fprint(answer, "cyan", 0, 0)
+    fprint(answer, "cyan", 0, 0, true)
     answer = parseInt(answer.slice(3))
 		if(answer >= 1 && answer <= array.length) {
       input.classList.remove("visible")
@@ -155,7 +147,7 @@ const choice = array => new Promise(async (resolve, reject) => {
 			resolve(answer)
       break
 		} else {
-			fprint("Invalid input...", "red", 0, 0)
+			fprint("Invalid input...", "red", 0, 0, true)
 			continue
 		}
 	}

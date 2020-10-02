@@ -9,11 +9,34 @@ a {
 	color: Green;
 }
 
+p {
+	margin: 0px;
+}
+
+p.rainbow {
+	display: inline;
+}
+
 img.emoji {
 	height: 1em;
 	width: 1em;
 	margin: 0 .05em 0 .1em;
 	vertical-align: -0.1em;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.choice {
+	text-align: left;
+	margin-left: 20vw
+}
+
+#output {
+	margin-top: 1em;
+	width: 100%;
+	text-align: center;
 }
 
 #input {

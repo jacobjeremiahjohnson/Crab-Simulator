@@ -1,7 +1,8 @@
 import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
+const { ipcRenderer } = require("electron")
 
-window.debug = false
+window.debug = true
 window.days = 0 // number of days
 window.experience = 0 // exp level
 window.personality = 0 // positive = good, negative = bad
@@ -29,12 +30,11 @@ async function game(flag) {
   while(true) {
     await pause()
     window.days++
+    ipcRenderer.send("updatePresence", "On day " + window.days)
     clear()
     await fprint("DAY " + window.days + "\n", "white", 1, 0)
     var dayString = queue.shift()
     if(window.debug) fprint(dayString)
-    //https://unpkg.com/crab-simulator@1.0.0/waterWorks.js
-    //var day = await import("https://unpkg.com/crab-simulator@1.0.0" + dayString.slice(1))
     var day = await import(dayString)
     queue = await day.execute(queue)
     if(queue.length == 0 && window.state == 0) { // if queue is empty and not dead on the last day
@@ -174,6 +174,7 @@ async function credits() {
 // https://twemoji.maxcdn.com/v/13.0.1/72x72/1f618.png
 
 async function titleScreen() {
+  ipcRenderer.send("updatePresence", "In menus")
   clear()
   const pre = document.createElement("pre")
   pre.classList.add("red")
