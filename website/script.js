@@ -2,7 +2,8 @@ import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 const { ipcRenderer } = require("electron")
 
-window.debug = true
+
+window.debug = false
 window.days = 0 // number of days
 window.experience = 0 // exp level
 window.personality = 0 // positive = good, negative = bad
@@ -191,6 +192,8 @@ async function titleScreen() {
 `
   config.output.appendChild(pre)
   await config.sleep(2)
+  var audio = new Audio('ambient.mp3')
+  audio.play()
   await fprint("Welcome to Crab Simulator (2020)!\n", "yellow", 1.5)
 
   await fprint(config.randomGreeting(), "green")

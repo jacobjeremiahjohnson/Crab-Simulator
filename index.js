@@ -1,6 +1,7 @@
 // npm modules
 const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
+var invisWindow;
 
 const client = require("discord-rich-presence")("761407625707126796")
 
@@ -17,6 +18,19 @@ function createWindow() {
     }
   })
   mainWindow.loadFile("./website/index.html") // loads index.html into window
+  mainWindow.on('closed', () => {
+   invisWindow.close();
+   invisWindow = null;
+ })
+}
+
+function invisibleWindow() {
+  invisWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    show: false
+  })
+  invisWindow.loadFile("./website/player.html")
 }
 
 // waits until app is ready, then creates window
@@ -34,7 +48,14 @@ app.whenReady()
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
-  if(process.platform !== "darwin") app.quit()
+  if(process.platform !== "darwin") {
+    app.quit()
+    invisWindow.close()
+  }
+})
+
+app.on("ready", () => {
+  invisibleWindow();
 })
 
 ipcMain.on("updatePresence", (e, arg) => {
