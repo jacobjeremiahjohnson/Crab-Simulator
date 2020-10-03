@@ -133,9 +133,15 @@ async function pause() {
 // okay I kind of don't want to comment the rest of this because it's ugly
 const choice = array => new Promise(async (resolve, reject) => {
   input.classList.add("visible")
+  const span = createSpan("cyan")
+  span.classList.add("choice")
 	for(let i in array) {
-    fprint(`[${parseInt(i) + 1}] ${array[i]}`, "cyan", 0, 0, true)
+    let index = createSpan("cyan")
+    index.innerHTML = `[${parseInt(i) + 1}] ${array[i]}`
+    span.appendChild(index)
+    //fprint(, "cyan", 0, 0, true)
 	}
+  output.appendChild(span)
   fprint("", "cyan", 0, 0)
 	while(true) {
 		let answer = await awaitInput()

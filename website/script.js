@@ -157,11 +157,11 @@ async function credits() {
     a.innerHTML += c
     await config.sleep(0.04)
   }
-  await fprint("\n", "green", 1, 0)
+  await fprint("", "green", 1, 0)
 	await fprint("Crab art by tre\n", "green", 1)
   await fprint("Ib and Alex for feedback and ideas\n", "green", 1)
 	await fprint("A bunch of people who tested and probably don't want their names on this\n", "green", 1)
-	await fprint("And you, gamer.", "green", 2)
+	await fprint("And you, gamer.\n", "green", 2)
   const emoji = document.createElement("img")
   emoji.draggable = false
   emoji.classList.add("emoji")
@@ -177,20 +177,21 @@ async function credits() {
 async function titleScreen() {
   ipcRenderer.send("updatePresence", "In menus")
   clear()
+  const span = config.createSpan("red")
   const pre = document.createElement("pre")
-  pre.classList.add("red")
   pre.innerHTML = `
-    /\\
-   ( /   @ @    ()
-    \\  __| |__  /
-     -/   "   \\-
-    /-|       |-\\
-   / /-\\     /-\\ \\
-    / /-\`---'-\\ \\
-     /         \\
+  /\\
+  ( /   @ @    ()
+   \\  __| |__  /
+    -/   "   \\-
+   /-|       |-\\
+  / /-\\     /-\\ \\
+   / /-\`---'-\\ \\
+    /         \\
 
 `
-  config.output.appendChild(pre)
+  span.appendChild(pre)
+  config.output.appendChild(span)
   await config.sleep(2)
   var audio = new Audio('ambient.mp3')
   audio.play()
