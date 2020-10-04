@@ -149,12 +149,13 @@ async function credits() {
     span.innerHTML += c
     await config.sleep(0.04)
   }
-  const a = document.createElement("a")
-  a.href = "https://en.wikipedia.org/wiki/Crab"
-  a.target = "_blank"
-  span.appendChild(a)
+  const link = document.createElement("span")
+  link.classList.add("link")
+  link.onclick = () => config.openLink("https://en.wikipedia.org/wiki/Crab")
+  // config.openLink('https://en.wikipedia.org/wiki/Crab')
+  span.appendChild(link)
   for(let c of "https://en.wikipedia.org/wiki/Crab") {
-    a.innerHTML += c
+    link.innerHTML += c
     await config.sleep(0.04)
   }
   await fprint("", "green", 1, 0)
@@ -166,7 +167,7 @@ async function credits() {
   emoji.draggable = false
   emoji.classList.add("emoji")
   emoji.alt = "😘"
-  emoji.src = "https://twemoji.maxcdn.com/v/13.0.1/72x72/1f618.png"
+  emoji.src = "../assets/kiss_emoji.png"
   config.output.appendChild(emoji)
   await config.sleep(3)
 	titleScreen()
@@ -180,14 +181,14 @@ async function titleScreen() {
   const span = config.createSpan("red")
   const pre = document.createElement("pre")
   pre.innerHTML = `
-  /\\
-  ( /   @ @    ()
-   \\  __| |__  /
-    -/   "   \\-
-   /-|       |-\\
-  / /-\\     /-\\ \\
-   / /-\`---'-\\ \\
-    /         \\
+/\\
+( /   @ @    ()
+ \\  __| |__  /
+  -/   "   \\-
+ /-|       |-\\
+/ /-\\     /-\\ \\
+ / /-\`---'-\\ \\
+  /         \\
 
 `
   span.appendChild(pre)

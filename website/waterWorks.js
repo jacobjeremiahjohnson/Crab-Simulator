@@ -1,3 +1,5 @@
+const { shell } = require("electron")
+
 var output // output div
 var input // input div
 var sleep
@@ -251,6 +253,8 @@ function scrollToBottom() {
   document.documentElement.scrollTop = document.body.scrollHeight
 }
 
+const openLink = link => shell.openExternal(link)
+
 window.addEventListener("load", () => {
   window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
@@ -263,4 +267,21 @@ window.addEventListener("load", () => {
   })
 })
 
-export { output, input, clear, pause, sleep, createSpan, fprint, choice, dayPlural, generateQueue, shuffleArray, randomDeath, randomGreeting, randomAgree, scrollToBottom }
+export {
+  output,
+  input,
+  clear,
+  pause,
+  sleep,
+  createSpan,
+  fprint,
+  choice,
+  dayPlural,
+  generateQueue,
+  shuffleArray,
+  randomDeath,
+  randomGreeting,
+  randomAgree,
+  scrollToBottom,
+  openLink
+}

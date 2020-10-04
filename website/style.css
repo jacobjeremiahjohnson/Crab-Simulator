@@ -57,6 +57,11 @@ img.emoji {
 	text-align: left;
 }
 
+.link {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
 .dim {
 	color: DimGray;
 }
