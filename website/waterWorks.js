@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue(flag) {
   if(flag !== false) return flag
   var queueListTest = false
-  //queueListTest = ["./days/wrongSecretAgent.js"]
+  queueListTest = ["./days/chainDays/secretMeeting.js"]
   var queueList = [
     "./days/oldMan.js",
     "./days/depression.js",
@@ -35,7 +35,8 @@ function generateQueue(flag) {
     "./days/peerPressure.js",
     "./days/pirates.js",
     "./days/prawnShop.js",
-    "./days/prisonersDilemma.js"
+    "./days/prisonersDilemma.js",
+    "./days/coolCrabs.js"
   ]
   queueList = shuffleArray(queueList)
   return queueListTest || queueList
@@ -81,24 +82,6 @@ function createSpan(color) {
   span.classList.add(color)
   return span
 }
-
-/*
-- Informational text is "dim"
-- Narrator speech is "green"
-- Character's speech is "cyan"
-- Other character's speech are "yellow", "blue", and "purple" in that order
-- Onomonopoeia and other sounds are "red"
-- God and stat level ups are "rainbow"
-- Use "rainbow" and "white" very sparingly
-
-- Carlos (Carlos Sandchez) is a reoccurring friend character for the crab now
-
-TIMINGS
-wait is how long to wait before next instruction, default 0.5
-text speed is how long normal letters take, default 0.04
-slow text speed is recommended to be 0.06
-fast text speed is recommended to be 0.02
-*/
 
 // fancy print
 async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false) {

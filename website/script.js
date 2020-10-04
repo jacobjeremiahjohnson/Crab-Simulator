@@ -10,22 +10,6 @@ window.personality = 0 // positive = good, negative = bad
 window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
 
-/* LIST OF DEATHS
-01 - depression.py Crab suicide
-02 - burnWitch.py Burnt to a crisp
-03 - oldGuyDrugs.2.py Oyster-piod overdose
-04 - $chainDays.cringeNarrator.py Cringed to death
-05 - oldGuyDrugs.2.py M'shark-er fume overdose
-06 - robberyTime.3.py Buff crab beat up
-07 - oldGuyDrugs.2.py Apartment flooding
-08 - $chainDays.crabExamDeath.py Not licensed to crab
-09 - cookingCompetition.py Automobile gakked you
-10 - $chainDays.presidentStay.py Assassination
-11 - fisherman.py Cooked and eaten
-12 - unused
-13 - prisonersDilemma.py Prison time
-*/
-
 async function game(flag) {
   var queue = config.generateQueue(flag)
   while(true) {
@@ -152,7 +136,6 @@ async function credits() {
   const link = document.createElement("span")
   link.classList.add("link")
   link.onclick = () => config.openLink("https://en.wikipedia.org/wiki/Crab")
-  // config.openLink('https://en.wikipedia.org/wiki/Crab')
   span.appendChild(link)
   for(let c of "https://en.wikipedia.org/wiki/Crab") {
     link.innerHTML += c
@@ -172,8 +155,6 @@ async function credits() {
   await config.sleep(3)
 	titleScreen()
 }
-
-// https://twemoji.maxcdn.com/v/13.0.1/72x72/1f618.png
 
 async function titleScreen() {
   ipcRenderer.send("updatePresence", "In menus")

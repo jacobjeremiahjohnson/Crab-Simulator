@@ -1,5 +1,40 @@
 // https://docs.google.com/document/d/18BcuCWor4hgtS_EwAWBTJOp9TZmFc8nn81btmvg1E-Y/edit?usp=sharing
 
+/*
+- Informational text is "dim"
+- Narrator speech is "green"
+- Character's speech is "cyan"
+- Other character's speech are "yellow", "blue", and "purple" in that order
+- Onomonopoeia and other sounds are "red"
+- God and stat level ups are "rainbow"
+- Use "rainbow" and "white" very sparingly
+
+- Carlos (Carlos Sandchez) is a reoccurring friend character for the crab now
+
+TIMINGS
+wait is how long to wait before next instruction, default 0.5
+text speed is how long normal letters take, default 0.04
+slow text speed is recommended to be 0.06
+fast text speed is recommended to be 0.02
+*/
+
+/* LIST OF DEATHS
+01 - depression.js Crab suicide
+02 - burnWitch.js Burnt to a crisp
+03 - /chainDays/oldGuyDrugs/oldGuyDrugs_2.js Oyster-piod overdose
+04 - /chainDays/cringeNarrator.js Cringed to death
+05 - /multiDays/oldGuyDrugs/oldGuyDrugs_2.js M'shark-er fume overdose
+06 - /multiDays/robberyTime/robberyTime_3.js Buff crab beat up
+07 - /multiDays/oldGuyDrugs/oldGuyDrugs_2.js Apartment flooding
+08 - /chainDays/crabExamDeath.js Not licensed to crab
+09 - cookingCompetition.js Automobile gakked you
+10 - /chainDays/presidentStay.js Assassination
+11 - fisherman.js Cooked and eaten
+12 - coolCrabs.js Beat up real "oof ouch owie" like
+13 - prisonersDilemma.js Prison time
+14 - /chainDays/secretMeeting.js Ouch ow fire
+*/
+
 // npm modules
 const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
