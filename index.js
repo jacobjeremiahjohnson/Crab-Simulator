@@ -1,3 +1,5 @@
+// https://docs.google.com/document/d/18BcuCWor4hgtS_EwAWBTJOp9TZmFc8nn81btmvg1E-Y/edit?usp=sharing
+
 // npm modules
 const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
