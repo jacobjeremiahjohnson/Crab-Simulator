@@ -238,12 +238,13 @@ function scrollToBottom() {
 
 const openLink = link => shell.openExternal(link)
 
+// returns a promise that is resolved when audio is finished playing
 const playAudio = async src => new Promise((resolve, reject) => {
-  let player = new Audio(src)
-  player.play()
+  let player = new Audio(src) // new audio player
+  player.play() // plays from file specified in src
   player.onended = () => {
-    player = null
-    resolve()
+    player = null // set to null so player is garbage collected
+    resolve() // resolve promise
   }
 })
 
