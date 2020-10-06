@@ -175,8 +175,10 @@ async function titleScreen() {
   span.appendChild(pre)
   config.output.appendChild(span)
   await config.sleep(2)
-  var audio = new Audio('ambient.mp3')
-  audio.play()
+
+  await config.playAudio("./audio/movie_1.mp3")
+  await config.playAudio("./audio/movie_1.mp3")
+
   await fprint("Welcome to Crab Simulator (2020)!\n", "yellow", 1.5)
 
   await fprint(config.randomGreeting(), "green")

@@ -238,6 +238,15 @@ function scrollToBottom() {
 
 const openLink = link => shell.openExternal(link)
 
+const playAudio = async src => new Promise((resolve, reject) => {
+  let player = new Audio(src)
+  player.play()
+  player.onended = () => {
+    player = null
+    resolve()
+  }
+})
+
 window.addEventListener("load", () => {
   window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
@@ -266,5 +275,6 @@ export {
   randomGreeting,
   randomAgree,
   scrollToBottom,
-  openLink
+  openLink,
+  playAudio
 }
