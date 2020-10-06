@@ -253,10 +253,10 @@ window.addEventListener("load", () => {
 	output = document.getElementById("output")
 	input = document.getElementById("input")
   document.addEventListener("keydown", e => {
-	   if(e.code == "ShiftLeft") speed = 2
+	   if(e.key == "Shift") speed = 2
    })
   document.addEventListener("keyup", e => {
-	   if(e.code == "ShiftLeft") speed = 1
+	   if(e.key == "Shift") speed = 1
   })
 })
 
