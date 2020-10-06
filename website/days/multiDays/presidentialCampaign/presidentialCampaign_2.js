@@ -32,8 +32,11 @@ export async function execute(queue) {
     await fprint("Voters + 45\n", "rainbow", 2)
   } else {
     await fprint("You whip out your phone and type a real quick message to informing them of your decision to campaign.\n", "dim", 1 )
+    await config.playAudio("./audio/ping.mp3")
     await fprint("[CrabbyMan#8644] : @everyone, Im running for president so yall should vote for me thanks", "white", 5, 0)
+	await config.playAudio("./audio/ping.mp3")
     await fprint("[OldBayStan#5277] : ok buddy", "white", 2, 0)
+	await config.playAudio("./audio/ping.mp3")
     await fprint("[JohnnyFisher#2012] : aight\n", "white", 2, 0)
     await fprint("Looks like you convinced a few people to vote for you.\n", "dim", 1)
     await fprint("Voters + 14\n", "rainbow", 2)
