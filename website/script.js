@@ -181,7 +181,7 @@ async function titleScreen() {
 
   await fprint("Welcome to Crab Simulator (2020)!\n", "yellow", 1.5)
 
-  await fprint(config.randomGreeting(), "green")
+  //await fprint(config.randomGreeting(), "green")
   await fprint("Select an option pleeeaase\n", "green")
 
   let answer = await choice(["New Game", "Credits"])
