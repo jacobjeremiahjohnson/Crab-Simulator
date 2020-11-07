@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue(flag) {
 	if(flag !== false) return flag
 	var queueListTest = false
-	queueListTest = ["./days/multiDays/presidentialCampaign/presidentialCampaign_2.js"]
+	//queueListTest = ["./days/multiDays/restaurant/restaurant_1.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -105,7 +105,7 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isC
 					break
 				default:
 					await sleep(textSpeed) // default sleep for characters
-			}			
+			}
 		}
 	}
 	span.innerHTML += "<br>" // add line break at end
