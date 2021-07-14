@@ -26,7 +26,7 @@ export async function execute(queue) {
   } else {
     await fprint("Nah.\n", "cyan", 1)
     await fprint("In that case you can rummage through the pile of rejected restaurants over there, pick one you like.\n", "yellow")
-    await fprint("How about a.. um... this, ninja-themed pizza parlour?\n", "cyan")
+    await fprint("How about a.. uh... this, ninja-themed pizza parlour?\n", "cyan")
     await fprint("That's hella dope, granted.\n", "yellow", 1)
   }
 

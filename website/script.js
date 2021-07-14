@@ -176,9 +176,6 @@ async function titleScreen() {
   config.output.appendChild(span)
   await config.sleep(2)
 
-  await config.playAudio("./audio/movie_1.mp3")
-  await config.playAudio("./audio/movie_1.mp3")
-
   await fprint("Welcome to Crab Simulator (2020)!\n", "yellow", 1.5)
 
   //await fprint(config.randomGreeting(), "green")
@@ -199,7 +196,7 @@ window.addEventListener("load", () => {
   if(window.debug) {
     game(false)
   } else {
-    titleScreen()
-    //game(false)
+    //titleScreen()
+    game(false)
   }
 })

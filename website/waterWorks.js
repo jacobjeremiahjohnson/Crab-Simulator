@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue(flag) {
 	if(flag !== false) return flag
 	var queueListTest = false
-	//queueListTest = ["./days/multiDays/restaurant/restaurant_1.js"]
+	queueListTest = ["./days/multiDays/restaurant/restaurant_1.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
