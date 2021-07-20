@@ -1,4 +1,4 @@
-const { shell } = require("electron")
+const { shell, ipcRenderer } = require("electron")
 
 var output // output div
 var input // input div
@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue(flag) {
 	if(flag !== false) return flag
 	var queueListTest = false
-	queueListTest = ["./days/multiDays/restaurant/restaurant_1.js"]
+	queueListTest = ["./days/coding.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -195,7 +195,8 @@ function randomGreeting() {
 		"Now with extra days!",
 		"*snip snap snip snap snip snap*",
 		"My claws are clicking \"fuck you\" in morse code.",
-		"Let's get Kraken!"
+		"Let's get Kraken!",
+		"Now with twice as many crabs!"
 	]
 	return randomGreetList[Math.floor(Math.random() * randomGreetList.length)]
 }
@@ -255,6 +256,12 @@ const playAudio = async src => new Promise((resolve, reject) => {
 	}
 })
 
+async function messageBox(options) {
+	return new Promise((resolve, reject) => {
+		resolve(ipcRenderer.sendSync("showMessageBox", options))
+	})
+}
+
 window.addEventListener("load", () => {
 	window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
@@ -284,5 +291,6 @@ export {
 	randomAgree,
 	scrollToBottom,
 	openLink,
-	playAudio
+	playAudio,
+	messageBox
 }

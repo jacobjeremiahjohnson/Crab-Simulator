@@ -34,10 +34,11 @@ fast text speed is recommended to be 0.02
 13 - prisonersDilemma.js Prison time
 14 - /chainDays/secretMeeting.js Ouch ow fire
 15 - /multiDays/restaurant_2.js Stalking and choking
+16 - coding.js Code error
 */
 
 // npm modules
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, dialog } = require("electron")
 const path = require("path")
 var invisWindow;
 
@@ -102,4 +103,8 @@ ipcMain.on("updatePresence", (e, arg) => {
     largeImageKey: "icon",
     instance: false
   })
+})
+
+ipcMain.on("showMessageBox", (e, arg) => {
+	e.returnValue = dialog.showMessageBoxSync(arg)
 })
