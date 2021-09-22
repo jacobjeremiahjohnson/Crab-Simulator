@@ -5,14 +5,15 @@ var input // input div
 var sleep
 var speed = 1
 
-const rainbowList = ["red", "yellow", "green", "blue", "purple"]
+const rainbowList = ["red", "orange", "yellow", "green", "blue", "purple"]
 let rainbowInt = Math.floor(Math.random() * rainbowList.length)
 const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 
 function generateQueue(flag) {
 	if(flag !== false) return flag
 	var queueListTest = false
-	queueListTest = ["./days/coding.js"]
+	// comment out this line to use normal queue list
+	//queueListTest = ["./days/mcDolphins.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -37,7 +38,8 @@ function generateQueue(flag) {
 		"./days/prawnShop.js",
 		"./days/prisonersDilemma.js",
 		"./days/coolCrabs.js",
-		"./days/multiDays/restaurant/restaurant_1.js"
+		"./days/multiDays/restaurant/restaurant_1.js",
+		"./days/mcDolphins.js"
 	]
 	queueList = shuffleArray(queueList)
 	return queueListTest || queueList

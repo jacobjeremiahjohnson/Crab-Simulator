@@ -35,6 +35,7 @@ fast text speed is recommended to be 0.02
 14 - /chainDays/secretMeeting.js Ouch ow fire
 15 - /multiDays/restaurant_2.js Stalking and choking
 16 - coding.js Code error
+17 - mcDolphins.js village uprising
 */
 
 // npm modules
