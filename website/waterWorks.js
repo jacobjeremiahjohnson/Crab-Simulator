@@ -36,7 +36,8 @@ function generateQueue(flag) {
 		"./days/pirates.js",
 		"./days/prawnShop.js",
 		"./days/prisonersDilemma.js",
-		"./days/coolCrabs.js"
+		"./days/coolCrabs.js",
+		"./days/multiDays/restaurant/restaurant_1.js"
 	]
 	queueList = shuffleArray(queueList)
 	return queueListTest || queueList
