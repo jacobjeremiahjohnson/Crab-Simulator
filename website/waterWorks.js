@@ -154,6 +154,34 @@ const choice = array => new Promise(async (resolve, reject) => {
 	}
 })
 
+const menu = array => new Promise(async (resolve, reject) => {
+	// displays text to screen
+	const span = createSpan("cyan")
+	span.classList.add("choice")
+	for(let i in array) {
+		let index = createSpan("menu")
+		index.innerHTML = array[i]
+		span.appendChild(index)
+	}
+	output.appendChild(span)
+	// input handling
+	let answer = await new Promise(async (resolve, reject) => {
+		span.childNodes[0].classList.add("menuSelected")
+		let count = 1
+		document.addEventListener("keydown", e => {
+			if(e.key == "Enter") resolve(count)
+			if(e.key == "ArrowDown") count++
+			if(e.key == "ArrowUp") count--
+			if(count > array.length) count = array.length
+			if(count < 1) count = 1
+			span.childNodes.forEach(span => span.classList.remove("menuSelected"))
+			span.childNodes[count - 1].classList.add("menuSelected")
+		})
+	})
+	fprint("", "cyan", 0, 0)
+	resolve(answer)
+})
+
 const awaitInput = () => new Promise(async (resolve, reject) => {
 	input.innerHTML = ">> "
 	let text = ">> "
@@ -295,5 +323,6 @@ export {
 	scrollToBottom,
 	openLink,
 	playAudio,
-	messageBox
+	messageBox,
+	menu
 }

@@ -62,6 +62,17 @@ img.emoji {
 	cursor: pointer;
 }
 
+.menuSelected.menu {
+	background-color: DarkCyan;
+	color: Black;
+}
+
+.menu {
+	color: DarkCyan;
+	text-align: center;
+	padding: 0 0.5em;
+}
+
 .dim {
 	color: DimGray;
 }

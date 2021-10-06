@@ -62,7 +62,7 @@ async function game(flag) {
     await pause()
     clear()
     config.sleep(2)
-    await fprint("Thanks for playing Crab Simulator (2020)!\n", "yellow", 3)
+    await fprint("Thanks for playing Crab Simulator (2022)!\n", "yellow", 3)
     await fprint("STATS:", "white", 1)
     await fprint("Total days : " + window.days, "white", 1)
     await fprint("Experience : " + window.experience, "white", 1)
@@ -123,6 +123,12 @@ async function intro() {
   game(false)
 }
 
+async function settings() {
+	clear()
+	await fprint("Settings would go here, if I had any to set.", "green", 2)
+	titleScreen()
+}
+
 async function credits() {
   clear()
   await fprint("Made by Jacob Johnson and Roger Cronin\n", "green", 1)
@@ -177,26 +183,27 @@ async function titleScreen() {
   await config.sleep(2)
 
   await fprint("Welcome to Crab Simulator (2020)!\n", "yellow", 1.5)
-
-  //await fprint(config.randomGreeting(), "green")
   await fprint("Select an option pleeeaase\n", "green")
 
-  let answer = await choice(["New Game", "Credits"])
+  let answer = await config.menu(["New Game", "Resume Game", "Settings", "Credits"])
 
   await fprint(config.randomAgree() + "\n", "green", 2)
 
   if(answer == 1) {
     intro()
-  } else {
-    credits()
-  }
+  } else if(answer == 2) {
+    resumeGame() // not done yet
+  } else if(answer == 3) {
+		settings()
+	} else {
+		credits()
+	}
 }
 
 window.addEventListener("load", () => {
   if(window.debug) {
     game(false)
   } else {
-    //titleScreen()
-    game(false)
+    titleScreen()
   }
 })
