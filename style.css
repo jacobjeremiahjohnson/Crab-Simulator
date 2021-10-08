@@ -3,6 +3,7 @@ body {
   color: DarkCyan;
 	word-wrap: break-word;
   font-family: Consolas, monaco, monospace;
+	margin: 8px 10vw;
 }
 
 a {

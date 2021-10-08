@@ -41,7 +41,7 @@ fast text speed is recommended to be 0.02
 import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-const skipIntro = true
+const skipIntro = false
 window.debug = false
 window.days = 0 // number of days
 window.experience = 0 // exp level

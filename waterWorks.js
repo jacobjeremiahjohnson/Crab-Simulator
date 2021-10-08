@@ -13,7 +13,7 @@ function generateQueue(flag) {
 	if(flag !== false) return flag
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	//queueListTest = ["./days/coding.js"]
+	//queueListTest = ["./days/multiDays/presidentialCampaign/presidentialCampaign_2.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -170,9 +170,9 @@ const menu = array => new Promise(async (resolve, reject) => {
 		span.childNodes[0].classList.add("menuSelected")
 		let count = 1
 		document.addEventListener("keydown", e => {
-			if(e.key == "Enter") resolve(count)
-			if(e.key == "ArrowDown") count++
-			if(e.key == "ArrowUp") count--
+			if(e.key == "Enter" || e.key == " ") resolve(count)
+			if(e.key == "ArrowDown" || e.key == "s") count++
+			if(e.key == "ArrowUp" || e.key == "w") count--
 			if(count > array.length) count = array.length
 			if(count < 1) count = 1
 			span.childNodes.forEach(span => span.classList.remove("menuSelected"))
@@ -187,7 +187,7 @@ const awaitInput = () => new Promise(async (resolve, reject) => {
 	input.innerHTML = ">> "
 	let text = ">> "
 	document.addEventListener("keypress", e => {
-		if(e.key == "Enter") {
+		if(e.key == "Enter" || e.key == " ") {
 			resolve(text)
 		} else {
 			text += e.key
