@@ -3,13 +3,9 @@ import * as config from "../waterWorks.js"
 
 export async function execute(queue) {
 
-	await config.messageBox({
-		message: `Uncaught (in promise) ReferenceError: depression.js:0
-	    at Module.execute (depression.js:0)
-	    at game (script.js:24)`,
-		type: "error",
-		buttons: ["OK"]
-	})
+	alert(`Uncaught (in promise) ReferenceError: depression.js:0
+			at Module.execute (depression.js:0)
+			at game (script.js:24)`)
 
 	await config.sleep(1.5)
 

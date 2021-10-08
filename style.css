@@ -49,8 +49,16 @@ img.emoji {
 	text-align: center;
 }
 
+#quiting {
+	color: white;
+	position: fixed;
+	display: none;
+}
+
 #input.visible {
   display: flex;
+	bottom: 0;
+	left: 0;
 }
 
 .choice {

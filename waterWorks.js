@@ -1,9 +1,9 @@
-const { shell, ipcRenderer } = require("electron")
-
 var output // output div
 var input // input div
 var sleep
 var speed = 1
+var quitVar = 0
+var quitDotInterval
 
 const rainbowList = ["red", "orange", "yellow", "green", "blue", "purple"]
 let rainbowInt = Math.floor(Math.random() * rainbowList.length)
@@ -13,7 +13,7 @@ function generateQueue(flag) {
 	if(flag !== false) return flag
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	//queueListTest = ["./days/mcDolphins.js"]
+	//queueListTest = ["./days/coding.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -39,7 +39,8 @@ function generateQueue(flag) {
 		"./days/prisonersDilemma.js",
 		"./days/coolCrabs.js",
 		"./days/multiDays/restaurant/restaurant_1.js",
-		"./days/mcDolphins.js"
+		"./days/mcDolphins.js",
+		"./days/coding.js"
 	]
 	queueList = shuffleArray(queueList)
 	return queueListTest || queueList
@@ -275,8 +276,6 @@ function scrollToBottom() {
 	document.documentElement.scrollTop = document.body.scrollHeight
 }
 
-const openLink = link => shell.openExternal(link)
-
 // returns a promise that is resolved when audio is finished playing
 const playAudio = async src => new Promise((resolve, reject) => {
 	let player = new Audio(src) // new audio player
@@ -287,23 +286,54 @@ const playAudio = async src => new Promise((resolve, reject) => {
 	}
 })
 
-async function messageBox(options) {
-	return new Promise((resolve, reject) => {
-		resolve(ipcRenderer.sendSync("showMessageBox", options))
-	})
-}
-
 window.addEventListener("load", () => {
 	window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
 	input = document.getElementById("input")
 	document.addEventListener("keydown", e => {
 		 if(e.key == "Shift") speed = 2
+		 if(e.key == "Escape") startQuiting()
 	 })
 	document.addEventListener("keyup", e => {
-		 if(e.key == "Shift") speed = 1
+		if(e.key == "Shift") speed = 1
+		if(e.key == "Escape") stopQuiting()
 	})
 })
+
+function startQuiting() {
+	quitVar++
+	if(quitVar == 1) {
+		let div = document.getElementById("quiting")
+		let dots = document.getElementById("quitingDots")
+		div.style.display = "block"
+		quitDotInterval = setInterval(() => {
+			dots.innerHTML += "."
+			if(dots.innerHTML.length == 10) saveAndQuit()
+		}, 250)
+	}
+}
+
+function stopQuiting() {
+	quitVar = 0
+	let div = document.getElementById("quiting")
+	div.style.display = "none"
+	clearInterval(quitDotInterval)
+	document.getElementById("quitingDots").innerHTML = ""
+}
+
+function saveAndQuit() {
+	// save everything to local files
+	// quit web app
+}
+
+// list of window variables to save
+const windowSaveList = [
+	"days",
+	"experience",
+	"personality",
+	"state",
+	"message"
+]
 
 export {
 	output,
@@ -321,8 +351,7 @@ export {
 	randomGreeting,
 	randomAgree,
 	scrollToBottom,
-	openLink,
 	playAudio,
-	messageBox,
-	menu
+	menu,
+	awaitInput
 }
