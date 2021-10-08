@@ -54,6 +54,7 @@ img.emoji {
 	color: white;
 	position: fixed;
 	display: none;
+	margin-left: calc(-10vw + 8px);
 }
 
 #input.visible {

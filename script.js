@@ -41,23 +41,40 @@ fast text speed is recommended to be 0.02
 import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-const skipIntro = false
-window.debug = false
+const skipIntro = false // goes straight into the game if true
+var inGame = false // if is in game or not
+var atEndOfDay = false
+var quitVar = 0 // save and quit stuff
+var quitDotInterval // save and quit stuff
+var queue, dayString
+window.debug = false // skips all sleep
 window.days = 0 // number of days
 window.experience = 0 // exp level
 window.personality = 0 // positive = good, negative = bad
 window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
 
-// bro what the fuck does the flag do??
+// flag means its a resume
 async function game(flag = false) {
-  var queue = config.generateQueue(flag)
+	queue = config.generateQueue()
+	if(flag) {
+		let saveFile = JSON.parse(window.localStorage.getItem("save"))
+		window.days = saveFile[0]
+		window.experience = saveFile[1]
+		window.personality = saveFile[2]
+		window.state = saveFile[3]
+		window.message = saveFile[4]
+		queue = saveFile[5]
+	}
   while(true) {
+		atEndOfDay = true
     await pause()
+		atEndOfDay = false
     window.days++
     clear()
+		inGame = true
     await fprint("DAY " + window.days + "\n", "white", 1, 0)
-    var dayString = queue.shift()
+    dayString = queue.shift()
     if(window.debug) fprint(dayString)
     var day = await import(dayString)
     queue = await day.execute(queue)
@@ -69,6 +86,7 @@ async function game(flag = false) {
       break
     }
   }
+	inGame = false
   if(window.state == -1) {
     // win game
     clear()
@@ -112,6 +130,9 @@ async function game(flag = false) {
       await fprint("Those weren't some pretty nice choices back there. Not cool, dude.\n", "rainbow", 3)
     }
     await fprint("Hope you liked our game. Gotta run now, bye.\n", "yellow", 1)
+
+		// delete save here
+
   } else {
     // lose game
     clear()
@@ -120,25 +141,27 @@ async function game(flag = false) {
     await fprint("Ending " + window.state.slice(-2) + "\n", "green", 1, 0)
     await fprint(window.state.slice(0, -2) + "\n", "green", 1)
     await fprint("Congrats, you made it " + window.days + " " + config.dayPlural() + ".\n", "green", 2)
-    await fprint("Restart day?\n", "dim")
 
-    let answer = await choice(["Yes", "No"])
+		let answer = await choice(["Restart day", "Save and quit"])
+
+		window.state = 0
+		window.days--
+		// dead end days where you die no matter what, reset to previous chain day
+		if(dayString == "./days/chainDays/presidentStay.js") {
+			window.days--
+			dayString = "./days/multiDays/presidentialCampaign/presidentialCampaign_3.js"
+		} else if(dayString == "./days/chainDays/crabExamDeath.js") {
+			window.days--
+			dayString = "./days/crabExam.js"
+		}
 
     if(answer == 1) {
-      window.state = 0
-      window.days--
-      if(dayString == "./days/chainDays/presidentStay.js") {
-        window.days--
-        dayString = "./days/multiDays/presidentialCampaign/presidentialCampaign_3.js"
-      } else if(dayString == "./days/chainDays/crabExamDeath.js") {
-        window.days--
-        dayString = "./days/crabExam.js"
-      }
-      queue.unshift(dayString)
-      game(queue)
+			inGame = true
+			queue.unshift(dayString)
+			game(queue)
     } else {
       await pause()
-      titleScreen()
+      saveAndQuit()
     }
   }
 }
@@ -149,7 +172,7 @@ async function intro() {
   await fprint("You've died tragically " + config.randomDeath() + ".\n", "red", 1.5)
   if(Math.floor(Math.random() * 4) == 0) {
     await fprint("LucKRILLy...", "green", 1)
-		await fprint("haha did you get it", "dim", 0, 0.02)
+		await fprint("haha do you get it", "dim", 0, 0.02)
   } else {
     await fprint("Luckily...", "green", 1)
   }
@@ -202,7 +225,8 @@ async function credits() {
 	titleScreen()
 }
 
-async function titleScreen() {
+async function titleScreen(flag = false) {
+	inGame = false
   clear()
   const span = config.createSpan("red")
   const pre = document.createElement("pre")
@@ -219,24 +243,72 @@ async function titleScreen() {
 `
   span.appendChild(pre)
   config.output.appendChild(span)
-  await config.sleep(2)
+  flag ? "" : await config.sleep(2)
 
-  await fprint("Welcome to Crab Simulator (2020)!\n", "yellow", 1.5)
-  await fprint("Select an option pleeeaase\n", "green")
+  await fprint("Welcome to Crab Simulator 2!\n", "yellow", flag ? 0 : 1.5, flag ? 0 : 0.04)
+  await fprint("Select an option pleeeaase\n", "green", flag ? 0 : 0.5, flag ? 0 : 0.04)
 
-  let answer = await config.menu(["New Game", "Resume Game", "Settings", "Credits"])
+	let resumable
+	if(window.localStorage.getItem("save") === null) resumable = false
+	else resumable = JSON.parse(window.localStorage.getItem("save"))[0]
 
-  await fprint(config.randomAgree() + "\n", "green", 2)
+  let answer = await config.menu(["New Game", `Resume Game : ${resumable === false ? "X" : " Day " + resumable}`, "Settings", "Credits"])
 
   if(answer == 1) {
+		await fprint(config.randomAgree() + "\n", "green", 2)
     intro()
   } else if(answer == 2) {
-    resumeGame() // not done yet
+		if(resumable === false) {
+			await fprint("Uh, I can't find anything, rip your save file lmao.", "green", 2)
+			return titleScreen(true)
+		}
+		await fprint(config.randomAgree() + "\n", "green", 2)
+    game(true)
   } else if(answer == 3) {
+		await fprint(config.randomAgree() + "\n", "green", 2)
 		settings() // not really done yet
 	} else {
+		await fprint(config.randomAgree() + "\n", "green", 2)
 		credits()
 	}
+}
+
+function startQuiting() {
+	quitVar++
+	if(quitVar == 1) {
+		let div = document.getElementById("quiting")
+		let dots = document.getElementById("quitingDots")
+		div.style.display = "block"
+		quitDotInterval = setInterval(() => {
+			if(!inGame) return stopQuiting()
+			dots.innerHTML += "."
+			if(dots.innerHTML.length == 10) {
+				window.days--
+				saveAndQuit()
+			}
+		}, 250)
+	}
+}
+
+function stopQuiting() {
+	quitVar = 0
+	let div = document.getElementById("quiting")
+	div.style.display = "none"
+	clearInterval(quitDotInterval)
+	document.getElementById("quitingDots").innerHTML = ""
+}
+
+function saveAndQuit() {
+	if(!atEndOfDay) {
+		queue.unshift(dayString)
+	} else {
+		window.days++
+	}
+	let saveString = JSON.stringify([window.days, window.experience, window.personality, window.state, window.message, queue])
+	window.localStorage.setItem("save", saveString)
+	location.reload()
+	// save everything to local files
+	// quit web app
 }
 
 window.addEventListener("load", async () => {
@@ -245,6 +317,14 @@ window.addEventListener("load", async () => {
 	let audio = new Audio("./assets/ambient.mp3")
 	audio.loop = true
 	audio.play()
+
+	document.addEventListener("keydown", e => {
+		if(e.key == "Escape" && inGame) startQuiting()
+	})
+	document.addEventListener("keyup", e => {
+		if(e.key == "Escape") stopQuiting()
+	})
+
 	clear()
   if(window.debug) {
     game()

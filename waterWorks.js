@@ -2,18 +2,15 @@ var output // output div
 var input // input div
 var sleep
 var speed = 1
-var quitVar = 0
-var quitDotInterval
 
 const rainbowList = ["red", "orange", "yellow", "green", "blue", "purple"]
 let rainbowInt = Math.floor(Math.random() * rainbowList.length)
 const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 
-function generateQueue(flag) {
-	if(flag !== false) return flag
+function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	//queueListTest = ["./days/multiDays/presidentialCampaign/presidentialCampaign_2.js"]
+	queueListTest = ["./days/depression.js", "./days/oldMan.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -292,39 +289,11 @@ window.addEventListener("load", () => {
 	input = document.getElementById("input")
 	document.addEventListener("keydown", e => {
 		 if(e.key == "Shift") speed = 2
-		 if(e.key == "Escape") startQuiting()
 	 })
 	document.addEventListener("keyup", e => {
 		if(e.key == "Shift") speed = 1
-		if(e.key == "Escape") stopQuiting()
 	})
 })
-
-function startQuiting() {
-	quitVar++
-	if(quitVar == 1) {
-		let div = document.getElementById("quiting")
-		let dots = document.getElementById("quitingDots")
-		div.style.display = "block"
-		quitDotInterval = setInterval(() => {
-			dots.innerHTML += "."
-			if(dots.innerHTML.length == 10) saveAndQuit()
-		}, 250)
-	}
-}
-
-function stopQuiting() {
-	quitVar = 0
-	let div = document.getElementById("quiting")
-	div.style.display = "none"
-	clearInterval(quitDotInterval)
-	document.getElementById("quitingDots").innerHTML = ""
-}
-
-function saveAndQuit() {
-	// save everything to local files
-	// quit web app
-}
 
 // list of window variables to save
 const windowSaveList = [
