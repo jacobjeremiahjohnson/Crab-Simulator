@@ -3,6 +3,8 @@ var input // input div
 var sleep
 var speed = 1
 
+var textSpeedAdjustment = 1
+
 const rainbowList = ["red", "orange", "yellow", "green", "blue", "purple"]
 let rainbowInt = Math.floor(Math.random() * rainbowList.length)
 const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
@@ -105,7 +107,7 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isC
 					await sleep(0.25) // soft stop sleep
 					break
 				default:
-					await sleep(textSpeed) // default sleep for characters
+					await sleep(textSpeed * textSpeedAdjustment) // default sleep for characters
 			}
 		}
 	}
@@ -123,8 +125,10 @@ async function pause() {
 	await awaitInput()
 }
 
+var choice
+
 // okay I kind of don't want to comment the rest of this because it's ugly
-const choice = array => new Promise(async (resolve, reject) => {
+const choiceClassic = array => new Promise(async (resolve, reject) => {
 	input.classList.add("visible")
 	const span = createSpan("cyan")
 	span.classList.add("choice")
@@ -283,6 +287,13 @@ const playAudio = async src => new Promise((resolve, reject) => {
 	}
 })
 
+function loadSettings() {
+	let settings = JSON.parse(window.localStorage.getItem("settings"))
+	if(settings[0] === 0) choice = menu
+	else choice = choiceClassic
+	textSpeedAdjustment = settings[1]
+}
+
 window.addEventListener("load", () => {
 	window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
@@ -295,14 +306,7 @@ window.addEventListener("load", () => {
 	})
 })
 
-// list of window variables to save
-const windowSaveList = [
-	"days",
-	"experience",
-	"personality",
-	"state",
-	"message"
-]
+const id = i => document.getElementById(i)
 
 export {
 	output,
@@ -322,5 +326,7 @@ export {
 	scrollToBottom,
 	playAudio,
 	menu,
-	awaitInput
+	awaitInput,
+	loadSettings,
+	id
 }
