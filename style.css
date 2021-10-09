@@ -76,6 +76,18 @@ img.emoji {
 	width: 50%;
 }
 
+#settingsLeft div {
+	margin: 0 10%;
+}
+
+#settingsRight div {
+	margin: 0 10%;
+}
+
+#menuOptionsDisp {
+	text-align: center;
+}
+
 #input.visible {
   display: flex;
 	bottom: 0;

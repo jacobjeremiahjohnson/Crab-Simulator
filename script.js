@@ -217,8 +217,7 @@ const settings = async () => new Promise((resolve, reject) => {
 	let oldSettings = JSON.parse(window.localStorage.getItem("settings"))
 	selections[0][0] = oldSettings[0]
 	selections[1][0] = Math.round((oldSettings[1] - .5) * 10) // floating point precision :whyyy:
-	selections[0][1].innerHTML = selections[0][2][selections[0][0]] // lol
-	selections[1][1].innerHTML = selections[1][2][selections[1][0]]
+	updateSettingsScreen(selections)
 	id("settings").style.display = "block" // make settings screen visible
 
 	let count = 0 // currently selected menu item
@@ -260,8 +259,19 @@ const settings = async () => new Promise((resolve, reject) => {
 		if(count < 0) count = 0
 		options.forEach(span => span.classList.remove("menuSelected"))
 		options[count].classList.add("menuSelected")
+		updateSettingsScreen(selections)
 	})
 })
+
+function updateSettingsScreen(selections) {
+	selections[0][1].innerHTML = selections[0][2][selections[0][0]] // lol
+	selections[1][1].innerHTML = selections[1][2][selections[1][0]]
+	if(selections[0][0] == 0) {
+		id("menuOptionsDisp").innerHTML = '<p class="cyan choice"><p class="menu menuSelected">Option one</p><p class="menu">Option 2</p></p>'
+	} else {
+		id("menuOptionsDisp").innerHTML = '<p class="cyan">[1] New Game&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[2] Resume Game : X</p><p class="cyan">[3] Settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[4] Credits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>'
+	}
+}
 
 async function credits() {
   clear()
@@ -324,7 +334,7 @@ async function titleScreen(flag = false) {
 	if(window.localStorage.getItem("save") === null) resumable = false
 	else resumable = JSON.parse(window.localStorage.getItem("save"))[0]
 
-  let answer = await config.menu(["New Game", `Resume Game : ${resumable === false ? "X" : " Day " + resumable}`, "Settings", "Credits"])
+  let answer = await choice(["New Game", `Resume Game : ${resumable === false ? "X" : " Day " + resumable}`, "Settings", "Credits"])
 
   if(answer == 1) {
 		await fprint(config.randomAgree() + "\n", "green", 2)
@@ -380,8 +390,6 @@ function saveAndQuit() {
 	let saveString = JSON.stringify([window.days, window.experience, window.personality, window.state, window.message, queue])
 	window.localStorage.setItem("save", saveString)
 	location.reload()
-	// save everything to local files
-	// quit web app
 }
 
 window.addEventListener("load", async () => {

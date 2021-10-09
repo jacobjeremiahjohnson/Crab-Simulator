@@ -291,6 +291,7 @@ function loadSettings() {
 	let settings = JSON.parse(window.localStorage.getItem("settings"))
 	if(settings[0] === 0) choice = menu
 	else choice = choiceClassic
+	console.log(choice)
 	textSpeedAdjustment = settings[1]
 }
 
