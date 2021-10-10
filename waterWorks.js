@@ -326,9 +326,13 @@ const settings = async () => new Promise((resolve, reject) => {
 		null
 	]
 
+	options.forEach(span => span.classList.remove("menuSelected"))
+	options[0].classList.add("menuSelected")
+
 	let oldSettings = JSON.parse(window.localStorage.getItem("settings"))
 	selections[0][0] = oldSettings[0]
-	selections[1][0] = Math.round((oldSettings[1] - .5) * 10) // floating point precision :whyyy:
+	selections[1][0] = Math.round(Math.abs(1.5 - oldSettings[1]) * 10) // floating point precision :whyyy:
+	console.log(oldSettings[1], selections[1][0])
 	updateSettingsScreen(selections)
 	id("settings").style.display = "block" // make settings screen visible
 
@@ -402,7 +406,7 @@ async function fprintSettings(speed = 1) {
 				await sleep(0.04 * speed)
 		}
 	}
-	if(currentInteration == fprintSettingsIter) span.innerHTML += "<br><br>"
+	if(currentIteration == fprintSettingsIter) span.innerHTML += "<br><br>"
 }
 
 function updateSettingsScreen(selections) {
