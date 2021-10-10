@@ -291,8 +291,130 @@ function loadSettings() {
 	let settings = JSON.parse(window.localStorage.getItem("settings"))
 	if(settings[0] === 0) choice = menu
 	else choice = choiceClassic
-	console.log(choice)
 	textSpeedAdjustment = settings[1]
+}
+
+var fprintSettingsIter = 0
+
+// settings screen
+const settings = async () => new Promise((resolve, reject) => {
+
+	fprintSettingsIter = 0
+	const randomSettingsList = [ // random thing that's displayed at the top of the page
+		"Set to your heart's content.",
+		"Set all your stuff here.",
+		"So many choices, so little time.",
+		"Set all your ings here.",
+		"I bet this is where you change your settings.",
+		"I wonder if this is where you change your settings...",
+		"The Crab Simulator farm-fresh settings guarantee!"
+	]
+
+	clear()
+	id("settingsRandom").innerHTML = randomSettingsList[Math.floor(Math.random() * randomSettingsList.length)] + "<br><br>"
+
+	let options = [ // elements for menu items
+		id("menuOptions"),
+		id("textSpeed"),
+		id("deleteSave"),
+		id("exitSettings")
+	]
+	let selections = [ // all possible menu selections
+		[0, id("menuOptionsSelect"), ["&nbsp;&nbsp;Modern >&nbsp;", "< Classic&nbsp;&nbsp;"]],
+		[5, id("textSpeedSelect"), ["&nbsp;&nbsp;x0.5 >", "< x0.6 >", "< x0.7 >", "< x0.8 >", "< x0.9 >", "< x1.0 >", "< x1.1 >", "< x1.2 >", "< x1.3 >", "< x1.4 >", "< x1.5&nbsp;&nbsp;"]],
+		null, // no menu selection attached to delete save or exit settings
+		null
+	]
+
+	let oldSettings = JSON.parse(window.localStorage.getItem("settings"))
+	selections[0][0] = oldSettings[0]
+	selections[1][0] = Math.round((oldSettings[1] - .5) * 10) // floating point precision :whyyy:
+	updateSettingsScreen(selections)
+	id("settings").style.display = "block" // make settings screen visible
+
+	let count = 0 // currently selected menu item
+	document.addEventListener("keydown", e => {
+		if(e.key == "Enter" || e.key == " ") {
+			if(count == 2) { // delete save file
+				if(options[2].innerHTML == "Delete save file") {
+					options[2].innerHTML = "Click again to delete"
+				} else if(options[2].innerHTML == "Click again to delete") {
+					window.localStorage.removeItem("save")
+					options[2].innerHTML = "Deleted!"
+				}
+			} else if(count == 3) { // exit settings
+				id("settings").style.display = "none"
+				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], 1.5 - (selections[1][0] * 0.1)]))
+				config.loadSettings()
+				resolve()
+			}
+		} else {
+			options[2].innerHTML = "Delete save file"
+		}
+		if(e.key == "ArrowLeft" || e.key == "a") {
+			if(selections[count] != null) { // if menu selection attached to current item
+				selections[count][0]--
+				if(selections[count][0] < 0) selections[count][0] = 0 // out of bounds
+				selections[count][1].innerHTML = selections[count][2][selections[count][0]] // lol
+			}
+			if(count == 1) fprintSettings(1.5 - (selections[1][0] * 0.1))
+		}
+		if(e.key == "ArrowRight" || e.key == "d") {
+			if(selections[count] != null) {
+				selections[count][0]++
+				if(selections[count][0] > selections[count][2].length - 1) selections[count][0] = selections[count][2].length - 1
+				selections[count][1].innerHTML = selections[count][2][selections[count][0]]
+			}
+			if(count == 1) fprintSettings(1.5 - (selections[1][0] * 0.1))
+		}
+		if(e.key == "ArrowDown" || e.key == "s") count++
+		if(e.key == "ArrowUp" || e.key == "w") count--
+		if(count > options.length - 1) count = options.length - 1
+		if(count < 0) count = 0
+		options.forEach(span => span.classList.remove("menuSelected"))
+		options[count].classList.add("menuSelected")
+		updateSettingsScreen(selections)
+	})
+})
+
+async function fprintSettings(speed = 1) {
+	let span = id("textSpeedDisp")
+	span.innerHTML = ""
+	fprintSettingsIter++
+	let currentIteration = fprintSettingsIter
+	for(let c of "This is how fast text appears in the game, at least under normal conditions. Holding the shift key doubles it.") {
+		if(currentIteration != fprintSettingsIter) {
+			break
+		}
+		span.innerHTML += c
+		switch(c) {
+			case ".":
+			case "!":
+			case "?":
+			case ";":
+				await sleep(0.5)
+				break
+			case ",":
+			case ":":
+				await sleep(0.25)
+				break
+			default:
+				await sleep(0.04 * speed)
+		}
+	}
+	if(currentInteration == fprintSettingsIter) span.innerHTML += "<br><br>"
+}
+
+function updateSettingsScreen(selections) {
+	selections[0][1].innerHTML = selections[0][2][selections[0][0]] // lol
+	selections[1][1].innerHTML = selections[1][2][selections[1][0]]
+	let saveDays = JSON.parse(window.localStorage.getItem("save"))
+	id("deleteSaveDisp").innerHTML = "Days : " + ((saveDays === null) ? "X" : saveDays[0])
+	if(selections[0][0] == 0) {
+		id("menuOptionsDisp").innerHTML = '<p class="cyan choice"><p class="menu menuSelected">Option one</p><p class="menu">Option 2</p></p><br><br><br>'
+	} else {
+		id("menuOptionsDisp").innerHTML = '<p class="cyan">[1] New Game&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[2] Resume Game : X</p><p class="cyan">[3] Settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[4] Credits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br>'
+	}
 }
 
 window.addEventListener("load", () => {
@@ -329,5 +451,6 @@ export {
 	menu,
 	awaitInput,
 	loadSettings,
-	id
+	id,
+	settings
 }

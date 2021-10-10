@@ -66,21 +66,25 @@ img.emoji {
 	display: none;
 }
 
-#settingsLeft {
+#settings div {
+	overflow: hidden;
+}
+
+.settingsLeft {
 	float: left;
 	width: 50%;
 }
 
-#settingsRight {
+.settingsRight {
 	float: right;
 	width: 50%;
 }
 
-#settingsLeft div {
+.settingsLeft div {
 	margin: 0 10%;
 }
 
-#settingsRight div {
+.settingsRight div {
 	margin: 0 10%;
 }
 
