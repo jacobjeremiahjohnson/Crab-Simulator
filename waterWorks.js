@@ -345,7 +345,7 @@ const settings = async () => new Promise((resolve, reject) => {
 			} else if(count == 3) { // exit settings
 				id("settings").style.display = "none"
 				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], 1.5 - (selections[1][0] * 0.1)]))
-				config.loadSettings()
+				loadSettings()
 				resolve()
 			}
 		} else {
