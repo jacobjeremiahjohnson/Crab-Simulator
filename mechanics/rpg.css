@@ -1,0 +1,45 @@
+#rpg {
+	display: none;
+}
+
+#rpg .sprite {
+	white-space: pre;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	font-size: 1.3em;
+	width: 100px;
+	height: 100px;
+	transition: color 1s ease-out;
+}
+
+#rpgMenu {
+	width: 300px;
+}
+
+#rpgOutput {
+	position: absolute;
+	top: 500px;
+}
+
+#rpgMenu {
+	float: left;
+}
+
+#rpgMenuText {
+	margin-left: 16px;
+	float: right;
+	color: DimGray;
+}
+
+#rpg .sprite.hurt {
+	color: #892400;
+	transition: color 0s;
+}
+
+.hurtText {
+	color: #892400;
+	font-size: 2em;
+}

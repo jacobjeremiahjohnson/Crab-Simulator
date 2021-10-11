@@ -41,7 +41,7 @@ fast text speed is recommended to be 0.02
 import { fprint, choice, clear, pause, id } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-const skipIntro = false // goes straight into the game if true
+const skipIntro = true // goes straight into the game if true
 var inGame = false // if is in game or not
 var atEndOfDay = false
 var quitVar = 0 // save and quit stuff
@@ -53,6 +53,12 @@ window.experience = 0 // exp level
 window.personality = 0 // positive = good, negative = bad
 window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
+window.rpg = {
+	money: 0,
+	weapons: [],
+	spells: [],
+	inventory: []
+}
 
 // flag means its a resume
 async function game(flag = false) {
@@ -65,6 +71,7 @@ async function game(flag = false) {
 		window.state = saveFile[3]
 		window.message = saveFile[4]
 		queue = saveFile[5]
+		window.inventory = saveFile[6]
 	}
   while(true) {
 		atEndOfDay = true
@@ -129,9 +136,14 @@ async function game(flag = false) {
     } else {
       await fprint("Those weren't some pretty nice choices back there. Not cool, dude.\n", "rainbow", 3)
     }
-    await fprint("Hope you liked our game. Gotta run now, bye.\n", "yellow", 1)
-
-		// delete save here
+    await fprint("Hope you liked our game. Gotta run now, bye.\n", "yellow", 10)
+		window.localStorage.removeItem("save")
+		await fprint("Refresh this page btw. There isn't anything after this.\n", "green", 30)
+		await fprint("No, I'm serious. There's not.", "green", 30)
+		await fprint("Truly, this is the last funny little text that appears.\n", "green", 30)
+		await fprint("Ok I lied, this is. But actually nothing after this.\n", "green", 120)
+		await fprint("You're taking too long, lemme just do it for you.\n", "green", 1)
+		location.reload()
 
   } else {
     // lose game
@@ -299,7 +311,7 @@ function saveAndQuit() {
 	} else {
 		window.days++
 	}
-	let saveString = JSON.stringify([window.days, window.experience, window.personality, window.state, window.message, queue])
+	let saveString = JSON.stringify([window.days, window.experience, window.personality, window.state, window.message, queue, window.rpg])
 	window.localStorage.setItem("save", saveString)
 	location.reload()
 }

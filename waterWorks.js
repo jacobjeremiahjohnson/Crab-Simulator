@@ -12,11 +12,11 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	queueListTest = ["./days/depression.js", "./days/oldMan.js"]
+	queueListTest = ["./days/multiDays/spyStory/2_alleyway.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
-		"./days/wrongSecretAgent.js",
+		"./days/multiDays/spyStory/1_wrongSecretAgent.js",
 		"./days/multiDays/oldGuyDrugs/oldGuyDrugs_1.js",
 		"./days/tasteTesting.js",
 		"./days/multiDays/presidentialCampaign/presidentialCampaign_1.js",
@@ -433,6 +433,7 @@ window.addEventListener("load", () => {
 	})
 })
 
+const realSleep = s => new Promise(r => setTimeout(r, s * 1000))
 const id = i => document.getElementById(i)
 
 export {
@@ -456,5 +457,6 @@ export {
 	awaitInput,
 	loadSettings,
 	id,
-	settings
+	settings,
+	realSleep
 }

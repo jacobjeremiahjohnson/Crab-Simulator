@@ -21,5 +21,7 @@ export async function execute(queue){
     // no experience for this one :(
     window.experience++
     // dw I gotchu
+		queue.push("./days/multiDays/spyStory/2_alleyway.js")
+		queue = config.shuffleArray(queue)
     return queue
 }
