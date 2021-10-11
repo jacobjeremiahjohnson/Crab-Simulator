@@ -65,6 +65,8 @@ export async function execute(queue){
 	await fprint("Experience + 1\n", "rainbow", 2)
 	window.experience++
 
+	queue.push("./days/multiDays/spyStory/3_gameShow.js")
+	queue = config.shuffleArray(queue)
 	return queue
 }
 

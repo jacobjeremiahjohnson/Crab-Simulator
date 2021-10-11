@@ -55,7 +55,10 @@ export async function execute(queue) {
   await fprint("Money + " + money, "rainbow", 1)
   await fprint("Experience + 1\n", "rainbow", 2)
   window.experience++
+	window.rpg.money += money
 
+	queue.push("./days/multiDays/spyStory/4_prawnShop.js")
+	queue = config.shuffleArray(queue)
   return queue
 }
 

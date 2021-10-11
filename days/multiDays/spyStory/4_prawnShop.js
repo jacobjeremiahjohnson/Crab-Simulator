@@ -20,22 +20,30 @@ export async function execute(queue) {
   if(answer == 1) {
     await fprint("I got an old laptop here. How much will you take it for?\n", "cyan", 2)
     await fprint("...", "yellow", 1)
-    await fprint("Best I can do is $15.\n", "yellow", 2)
-    await fprint("With all the money you gained, you decide to buy 15 Beefy Fritos Burritos from Taco Bell.\n", "dim", 1)
+    await fprint("Best I can do is $20.\n", "yellow", 1)
+    await fprint("Deal.\n", "cyan", 1)
     await fprint("Old laptop - 1", "rainbow", 1)
-    await fprint("Beefy Fritos Burrito + 15", "rainbow", 1)
+    await fprint("Money + 20", "rainbow", 1)
+		queue.push("./days/multiDays/spyStory/5_yardSale.js")
+		queue = config.shuffleArray(queue)
+		window.rpg.money += 20
   } else if(answer == 2) {
     await fprint("I got a Big Mouth Billy Bass here. How much will you take it for?\n", "cyan", 1)
     await fprint("tf makes you think I want that?\n", "yellow", 1)
     await fprint("Oh ok sorry.\n", "cyan", 1)
     await fprint("Nothing + 0", "rainbow", 1)
+		queue.push("./days/multiDays/spyStory/4.5_extraMoney.js")
+		queue = config.shuffleArray(queue)
+		// day where you find 20 dollars in an unmarked paper bag by the railroad tracks
   } else {
     await fprint("I got a watch here. How much will you take for it?\n", "cyan")
-    await fprint("My oh my, that is a fantastic watch. Tell you what, I'll give you $400 for it.\n", "yellow")
+    await fprint("My oh my, that is a fantastic watch. Tell you what, I'll give you $30 for it.\n", "yellow")
     await fprint("Oh dope.\n", "cyan", 2)
-    await fprint("With all the money you gained, you decide to buy 400 Beefy Fritos Burritos from Taco Bell.\n", "dim", 1)
     await fprint("Watch - 1", "rainbow", 1)
-    await fprint("Beefy Fritos Burrito + 400", "rainbow", 1)
+    await fprint("Money + 30", "rainbow", 1)
+		queue.push("./days/multiDays/spyStory/5_yardSale.js")
+		queue = config.shuffleArray(queue)
+		window.rpg.money += 30
   }
   await fprint("Experience + 1\n", "rainbow", 2)
   window.experience += 1
