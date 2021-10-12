@@ -1,10 +1,10 @@
-import { fprint, choice, clear, pause } from "../waterWorks.js"
-import * as config from "../waterWorks.js"
+import { fprint, choice, clear, pause } from "/waterWorks.js"
+import * as config from "/waterWorks.js"
 
 // originally made when the beefy fritos burrito was still an available menu item
 
 export async function execute(queue) {
-  await fprint("Damn, I'm really craving some Taco Bell but I don't have any money.\n", "cyan")
+  await fprint("Damn, wish I had some money.\n", "cyan")
   await fprint("Well, what's a fast way to earn clean cash?\n", "green", 1)
   await fprint("How about I just pawn some stuff off at a pawnshop? I don't see how this could go wrong in the slightest.\n", "cyan", 2)
   await fprint("You approach the shop. The brick walls of the building look very old. The thick layer of dust coating the windows doesn't do much to help alleviate the sense of foreboding.\n", "dim", 1)
@@ -32,8 +32,7 @@ export async function execute(queue) {
     await fprint("tf makes you think I want that?\n", "yellow", 1)
     await fprint("Oh ok sorry.\n", "cyan", 1)
     await fprint("Nothing + 0", "rainbow", 1)
-		queue.push("./days/multiDays/spyStory/4.5_extraMoney.js")
-		queue = config.shuffleArray(queue)
+		queue.unshift("./days/multiDays/spyStory/4.5_extraMoney.js")
 		// day where you find 20 dollars in an unmarked paper bag by the railroad tracks
   } else {
     await fprint("I got a watch here. How much will you take for it?\n", "cyan")
