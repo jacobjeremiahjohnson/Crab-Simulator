@@ -32,7 +32,7 @@ export async function execute(queue) {
     await fprint("tf makes you think I want that?\n", "yellow", 1)
     await fprint("Oh ok sorry.\n", "cyan", 1)
     await fprint("Nothing + 0", "rainbow", 1)
-		queue.unshift("./days/multiDays/spyStory/4.5_extraMoney.js")
+		queue.unshift("./days/multiDays/spyStory/4_5_extraMoney.js")
 		// day where you find 20 dollars in an unmarked paper bag by the railroad tracks
   } else {
     await fprint("I got a watch here. How much will you take for it?\n", "cyan")
