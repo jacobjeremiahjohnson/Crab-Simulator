@@ -37,6 +37,7 @@ fast text speed is recommended to be 0.02
 15 - /multiDays/restaurant_2.js Stalking and choking
 16 - coding.js Code error
 17 - mcDolphins.js village uprising
+18 - slideWhistle.js crushed by a piano
 */
 
 import { fprint, choice, clear, pause, id } from "./waterWorks.js"
@@ -61,10 +62,12 @@ window.rpg = {
 	items: []
 }
 
-// flag means its a resume
+// flag means its a resume if true
+// flag means normal if false
+// flag is the queue if restarting day
 async function game(flag = false) {
 	queue = config.generateQueue()
-	if(flag) {
+	if(flag === true) {
 		let saveFile = JSON.parse(window.localStorage.getItem("save"))
 		window.days = saveFile[0]
 		window.experience = saveFile[1]
@@ -73,6 +76,8 @@ async function game(flag = false) {
 		window.message = saveFile[4]
 		queue = saveFile[5]
 		window.inventory = saveFile[6]
+	} else if(flag !== false) {
+		queue = flag
 	}
   while(true) {
 		atEndOfDay = true
