@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	queueListTest = ["./days/slideWhistle.js"]
+	queueListTest = ["./days/cardGame.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -158,6 +158,7 @@ const choiceClassic = array => new Promise(async (resolve, reject) => {
 })
 
 const menu = array => new Promise(async (resolve, reject) => {
+	const controller = new AbortController()
 	// displays text to screen
 	const span = createSpan("cyan")
 	span.classList.add("choice")
@@ -179,9 +180,10 @@ const menu = array => new Promise(async (resolve, reject) => {
 			if(count < 1) count = 1
 			span.childNodes.forEach(span => span.classList.remove("menuSelected"))
 			span.childNodes[count - 1].classList.add("menuSelected")
-		})
+		}, { signal: controller.signal })
 	})
 	fprint("", "cyan", 0, 0)
+	controller.abort()
 	resolve(answer)
 })
 
