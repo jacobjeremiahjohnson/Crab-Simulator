@@ -8,7 +8,7 @@ export async function execute(queue) {
 
   await fprint("You notice an unusually large envelope in your mailbox one breezy morning.\n", "dim", 1)
   await fprint("Hmm, I wonder what this could be?\n", "cyan", 1)
-  await fprint("You pick up the envelope and open it. Inside there is a letter that reads the following:\n", "dim", 1)
+  await fprint("You sift through unopened fighting-game invitations, pick up the envelope, and open it. Inside there is a letter that reads the following:\n", "dim", 1)
   await fprint("Hello from the representatives of MSNBSea's entertainment branch. \n  Congratulations! You have been selected as one of five participants for MSNBSea's venture into online broadcasted game shows. In the game show \"Seafront Feud\", you answer trivia questions about the great blue and win money! Will you accept our offer?\n", "yellow", 1)
 
   let answer = await choice(["Yes", "Yes, but farther down on your screen"])
