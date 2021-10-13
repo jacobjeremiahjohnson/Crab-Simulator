@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	queueListTest = ["./days/multiDays/spyStory/4_5_extraMoney.js"]
+	queueListTest = ["./days/multiDays/spyStory/5_yardSale.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -51,6 +51,9 @@ function tokenize(string, color) {
 		if(string.startsWith("\n")) {
 			array.push("<br>")
 			string = string.substring(2)
+		} else if(string.startsWith("｡")) {
+			array.push("<span>.</span>")
+			string = string.substring(1)
 		} else {
 			array.push(string[0])
 			string = string.substring(1)

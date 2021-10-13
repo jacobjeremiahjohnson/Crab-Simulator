@@ -1,30 +1,34 @@
 import { awaitInput, createSpan, id, sleep } from "/waterWorks.js"
 
 const fps = 60
-const realSleep = s => new Promise(r => setTimeout(r, s * 1000))
+const realSleep = s => new Promise(r => setTimeout(r, s * 1000)) // sleep unaffected by shift key
 
-const textOutput = id("rpgText")
-const menuOutput = id("rpgMenu")
-const menuTextOutput = id("rpgMenuText")
+const textOutput = id("rpgText") // main text field
+const menuOutputDefault = id("rpgMenu") // left section for menu choice
+const menuTextOutputDefault = id("rpgMenuText") // text field for menu choice descriptions
+var menuOutput = menuOutputDefault
+var menuTextOutput = menuTextOutputDefault
 
-var spriteList = {}
-var hurtBox = [false, false, false]
-var positionBox = [false, true, false]
-var enemy = null
+var spriteList = {} // object with key of Math.random() "spirteID", value of sprite element
+var hurtBox = [false, false, false] // active hitbox
+var positionBox = [false, true, false] // where player currently is
+var enemy = null // enemy and player are sprite elements
 var player = null
-var enemyDamageOutput = 0
+var enemyDamageOutput = 0 // how much hp to decrease when hit
 
-const fpsInterval = 1000 / 60
+const fpsInterval = 1000 / fps // how long a frame is as per fps
 var then = Date.now()
-gameLoop()
+var gameStarted = false // is a fight going on currently?
 
+// main game loop
 function gameLoop() {
-	requestAnimationFrame(gameLoop)
+	if(gameStarted) requestAnimationFrame(gameLoop)
+	else return
 	let now = Date.now()
 	let elapsed = now - then
 	if(elapsed > fpsInterval) {
 		then = now - (elapsed % fpsInterval)
-		for(let s in spriteList) {
+		for(let s in spriteList) { // perform code for each sprite
 			s = spriteList[s]
 			s.graphicUpdate()
 			s.positionUpdate()
@@ -33,10 +37,12 @@ function gameLoop() {
 	}
 }
 
+// prints text, most code taken from config.fprint()
 async function rpgPrint(text, color) {
 	const span = createSpan(color)
 	textOutput.appendChild(span)
 	for(let c of text) {
+		if(c == "｡") c = "<span>.</span>"
 		span.innerHTML += c
 		switch(c) {
 			case ".":
@@ -58,10 +64,12 @@ async function rpgPrint(text, color) {
 	span.remove()
 }
 
-var currentLayer = 0
+var currentLayer = 0 // how many menus deep are you
 
-async function rpgMenu(array, menuLayer) {
+// menu, most code taken from config.menu()
+async function rpgMenu(array, menuLayer, flag = false) {
 	currentLayer = menuLayer
+	// create and append the menu list elements
 	return new Promise(async (resolve, reject) => {
 		const span = createSpan("cyan")
 		span.classList.add("choice")
@@ -74,10 +82,10 @@ async function rpgMenu(array, menuLayer) {
 		let answer = await new Promise(async (resolve, reject) => {
 			span.childNodes[0].classList.add("menuSelected")
 			let count = 1
-			rpgMenuPrint(array[0][1])
+			rpgMenuPrint(array[0][1]) // print description of currently selected item
 			document.addEventListener("keydown", e => {
 				if(currentLayer == menuLayer) {
-					if(e.key == "Enter" || e.key == " ") resolve(count)
+					if(e.key == "Enter" || e.key == " ") resolve(count) // selected
 					if(e.key == "ArrowDown" || e.key == "s") {
 						count++
 						if(!(count < 1 || count > array.length)) rpgMenuPrint(array[count - 1][1])
@@ -93,10 +101,11 @@ async function rpgMenu(array, menuLayer) {
 				}
 			})
 		})
+		// after something has been selected
 		menuIter++
 		menuTextOutput.innerHTML = ""
-		span.remove()
-		currentLayer--
+		span.remove() // delete self
+		currentLayer-- // go back to previous layer
 		if(currentLayer < 0) currentLayer = 0
 		resolve(answer)
 	})
@@ -104,12 +113,14 @@ async function rpgMenu(array, menuLayer) {
 
 var menuIter = 0
 
-async function rpgMenuPrint(text) {
+// most code taken from config.fprint()
+async function rpgMenuPrint(text, flag = false) {
 	menuTextOutput.innerHTML = ""
 	menuIter++
-	let currentIter = menuIter
+	let currentIter = menuIter // basically here so repeat print calls doesn't happen
 	for(let c of text) {
-		if(currentIter != menuIter) break
+		if(currentIter != menuIter) break // will break if new print call happens cause currentIter has changed
+		if(c == "｡") c = "<span>.</span>"
 		menuTextOutput.innerHTML += c
 		switch(c) {
 			case ".":
@@ -128,26 +139,49 @@ async function rpgMenuPrint(text) {
 	}
 }
 
+// start fight
 function loadFight(thePlayer, theEnemy) {
+	gameStarted = true
+	gameLoop()
 	thePlayer.yOffset = 200
 	enemy = theEnemy
 	player = thePlayer
 	id("rpg").style.display = "block"
 }
 
+// somewhat self explanatory
 function unloadFight() {
+	gameStarted = false
 	id("rpg").style.display = "none"
 }
 
+function loadShop(a, b) {
+	menuOutput = a
+	menuTextOutput = b
+	id("rpg").style.display = "block"
+}
+
+function unloadShop() {
+	menuOutput = menuOutputDefault
+	menuTextOutput = menuTextOutputDefault
+	id("rpg").style.display = "none"
+}
+
+// sprite class
 class Sprite {
+	// color is CSS class
+	// sprites is an array of text fields
+	// width offset is how many pixels to offset text by so it gets centered properly
 	constructor(color, sprites, widthOffset) {
-		if(!sprites) sprites = ["X"]
+		if(!sprites) sprites = ["X"] // default sprite
 		if(typeof sprites == "string") sprites = [sprites]
 		this.sprites = sprites
 		let spr = createSpan(color)
 		spr.classList.add("sprite")
 		spr.innerHTML = this.sprites[0]
 		this.spriteID = Math.random()
+		// [x acceleration, y acceleration, x acceleration acceleration, y acceleration acceleration]
+		// weird, I'm learning about this shit in calc right now
 		this.deltaPosition = [null, null, null, null]
 		spriteList[this.spriteID] = this
 		id("rpg").appendChild(spr)
@@ -184,9 +218,11 @@ class Sprite {
 			return
 		} else {
 			return new Promise(async resolve => {
+				// calculates how much to move per frame
 				this.deltaPosition = [(x2 - this.x) / (time * 60), (y2 - this.y) / (time * 60), 0, 0]
 				await realSleep(time)
-				this.deltaPosition = [null, null, null, null]
+				this.deltaPosition = [null, null, null, null] // done moving
+				// hard set position just incase code has rounding errors or whatever
 				this.x = x2
 				this.y = y2
 				resolve()
@@ -195,7 +231,7 @@ class Sprite {
 
 	}
 
-	updateSprite(num) {
+	updateSprite(num) { // changes sprite to new one in the text array given on construction
 		this.sprite.innerHTML = this.sprites[num]
 	}
 
@@ -205,7 +241,7 @@ class Sprite {
 	}
 }
 
-class Character extends Sprite {
+class Character extends Sprite { // sprite but has hp
 	constructor(color, sprites, widthOffset, maxHp) {
 		super(color, sprites, widthOffset)
 		this.maxHp = maxHp
@@ -229,6 +265,7 @@ class Character extends Sprite {
 	}
 }
 
+// player on first encounter
 class PlayerNew extends Character {
 	constructor() {
 		super("cyan", null, 50, 75)
@@ -334,6 +371,7 @@ X       X
 	}
 }
 
+// little text that pops up when you get hurt
 class HurtText extends Sprite {
 	constructor(x, y, amount) {
 		super("hurtText", "-" + amount, 100)
@@ -349,6 +387,7 @@ class HurtText extends Sprite {
 	}
 }
 
+// spy
 class Spy extends Character {
 
 	bulletSprite = String.raw`
@@ -409,6 +448,58 @@ String.raw`
 	}
 }
 
+function shopDisplay(itemList) {
+	let val = []
+	for(let i in itemList) {
+		let ref = itemList[i][0]
+		if(ref == "Exit") {
+			val.push(itemList[i])
+			continue
+		}
+		let name = itemishList[ref][2]
+		let description = itemishList[ref][1] + " dollars : "
+		switch(itemishList[ref][0]) {
+			case 0:
+				description += itemishList[ref][3] + " dmg : "
+				break
+			case 1:
+				description += itemishList[ref][3] + " dmg (" + (itemishList[ref][4] * 100) + "% miss rate) : "
+				break
+			case 2:
+				description += "+" + itemishList[ref][3] + " hp : "
+				break
+			case 3:
+				description += "+" + dotReplace(itemishList[ref][3]) + "x atk : "
+				break
+		}
+		description += itemList[i][1]
+		val.push([name, description])
+	}
+	return val
+}
+
+function dotReplace(text) {
+	text += ""
+	return text.replace(/\./g, "｡")
+}
+
+/*
+[itemType, price, displayName, modify, addModify]
+
+itemType
+0 - weapon,      modify = dmg
+1 - spell,       modify = dmg,                 addModify = miss rate
+2 - healable,    modify = hp healed
+3 - status item, modify = attack modification
+*/
+const itemishList = {
+	shove: [0, 0, "Shove", 1],
+	knife: [0, 10, "Knife", 8],
+	gun: [1, 15, "Gun", 10, .3],
+	apple: [2, 5, "Apple", 5],
+	pills: [3, 5, "Bottle of pills", 1.2]
+}
+
 export {
 	PlayerNew,
 	Spy,
@@ -416,5 +507,9 @@ export {
 	rpgMenu,
 	rpgPrint,
 	loadFight,
-	unloadFight
+	unloadFight,
+	loadShop,
+	unloadShop,
+	shopDisplay,
+	itemishList
 }

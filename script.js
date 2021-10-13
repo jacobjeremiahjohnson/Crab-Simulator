@@ -8,6 +8,7 @@
 - Onomonopoeia and other sounds are "red"
 - God and stat level ups are "rainbow"
 - Use "rainbow" and "white" very sparingly
+- Use "｡" character if you want a period to not pause like a full stop with fprint()
 
 - Carlos (Carlos Sandchez) is a reoccurring friend character for the crab now
 
@@ -57,7 +58,7 @@ window.rpg = {
 	money: 0,
 	weapons: [],
 	spells: [],
-	inventory: []
+	items: []
 }
 
 // flag means its a resume

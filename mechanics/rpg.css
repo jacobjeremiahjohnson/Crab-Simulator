@@ -24,11 +24,23 @@
 	top: 500px;
 }
 
-#rpgMenu {
+.shopWrapper {
+	width: 100%;
+}
+
+.shopWrapper .rpgMenu {
+	width: 250px;
+}
+
+.shopText {
+	margin-left: 266px;
+}
+
+.rpgMenu {
 	float: left;
 }
 
-#rpgMenuText {
+.rpgMenuText {
 	margin-left: 16px;
 	float: right;
 	color: DimGray;

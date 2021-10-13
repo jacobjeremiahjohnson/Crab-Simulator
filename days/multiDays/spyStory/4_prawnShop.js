@@ -2,6 +2,7 @@ import { fprint, choice, clear, pause } from "/waterWorks.js"
 import * as config from "/waterWorks.js"
 
 // originally made when the beefy fritos burrito was still an available menu item
+// lol doesn't have any reference to the beefy fritos burrito anymore
 
 export async function execute(queue) {
   await fprint("Damn, wish I had some money.\n", "cyan")
