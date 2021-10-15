@@ -141,6 +141,8 @@ async function rpgMenuPrint(text, flag = false) {
 
 // start fight
 function loadFight(thePlayer, theEnemy) {
+	menuOutput = menuOutputDefault
+	menuTextOutput = menuTextOutputDefault
 	gameStarted = true
 	gameLoop()
 	thePlayer.yOffset = 200

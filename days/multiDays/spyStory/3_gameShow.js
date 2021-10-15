@@ -17,6 +17,7 @@ export async function execute(queue) {
   await fprint("Hey you feeling okay..?\n", "green", 2)
   config.pause()
   await config.sleep(2)
+	await fprint("", "cyan", 0)
   await fprint("Holy shit dude, I thought you died.\n", "green", 1)
   await fprint("You wake up in a foreign TV studio surrounded by crabs wearing business suits.\n", "dim")
   await fprint("2 minutes everybody!", "yellow", 0)

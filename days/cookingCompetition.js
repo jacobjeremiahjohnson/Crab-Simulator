@@ -97,7 +97,7 @@ export async function execute(queue) {
   await fprint("Resentment for restaurants + 1", "rainbow", 1)
   await fprint("Experience + 1\n", "rainbow", 2)
   window.experience++
-  queue.unshift("./days/multiDays/restaurat/restaurant_1.js")
+  queue.unshift("./days/multiDays/restaurant/restaurant_1.js")
   queue = config.shuffleArray(queue)
 	return queue
 }

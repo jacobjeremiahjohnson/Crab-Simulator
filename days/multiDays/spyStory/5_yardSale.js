@@ -81,5 +81,6 @@ export async function execute(queue) {
 	window.experience++
 	window.rpg = tempRpg
 
+	queue.unshift("./days/multiDays/spyStory/6_rightSecretAgent.js")
 	return queue
 }

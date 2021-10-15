@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	queueListTest = ["./days/cardGame.js"]
+	//queueListTest = ["./days/multiDays/spyStory/2_alleyway.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -35,7 +35,6 @@ function generateQueue() {
 		"./days/pirates.js",
 		"./days/prisonersDilemma.js",
 		"./days/coolCrabs.js",
-		"./days/multiDays/restaurant/restaurant_1.js",
 		"./days/mcDolphins.js",
 		"./days/coding.js"
 	]
@@ -168,6 +167,7 @@ const menu = array => new Promise(async (resolve, reject) => {
 		span.appendChild(index)
 	}
 	output.appendChild(span)
+	scrollToBottom()
 	// input handling
 	let answer = await new Promise(async (resolve, reject) => {
 		span.childNodes[0].classList.add("menuSelected")

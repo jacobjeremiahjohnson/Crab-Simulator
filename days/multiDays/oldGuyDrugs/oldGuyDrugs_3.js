@@ -3,7 +3,7 @@ import * as config from "../../../waterWorks.js"
 
 export async function execute(queue) {
   await fprint("You wake up bright and early, excited to hang up your awesome posters.\n", "dim")
-  await fprint("Your hang up your posters haphazardly along the way to the alley, where you set up shop.", "dim", 1)
+  await fprint("You hang up your posters haphazardly along the way to the alley, where you set up shop.", "dim", 1)
   await fprint("A shady red crab shuffles in soon after.\n", "dim")
   await fprint("H-h-h-hey man I saw your posters, p-pretty cool.\n", "yellow")
   await fprint("Hey, that's awesome. Thanks dude.\n", "cyan")

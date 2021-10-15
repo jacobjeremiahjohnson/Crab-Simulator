@@ -46,7 +46,7 @@ async function meeting() {
     await fprint("So it is as we feared. \"[REDACTED]\" \"[REDACTED]\", I'm sorry for what we have to do.\n", "yellow")
     await fprint("What? What do you mean?\n", "cyan")
     await fprint("Common mental illness in Chesapeake Bay crabs. They can't cope with the work required so they conjure up memories of a fake past life. Truly, it's better this way.\n", "yellow", 2)
-    window.state = "While you were contemplating your reality one of the hooded ants pushed you into the small fire. You should really pay more atention next time.14"
+    window.state = "While you were contemplating your reality one of the hooded crabs pushed you into the small fire. You should really pay more atention next time.14"
   } else {
     await fprint("What? No, really don't know what you're talking about.\n", "cyan")
     await fprint("Oh, that's a relief. Uhh, make sure you don't tell anyone about this, then.\n", "yellow")

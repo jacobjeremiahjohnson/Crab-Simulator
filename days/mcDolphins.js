@@ -69,7 +69,7 @@ export async function execute(queue) {
 		await fprint("Your army lets out a cry and charges forth.", "dim", 3)
 		await fprint("After the dust settles, the King Crab is lying facedown on the ground.\n", "dim", 1)
 
-		await fprint("Men! Let us enact our four-stage economic rebuilding plan at once!", "blue")
+		await fprint("Men! Let us enact our four-stage economic rebuilding plan at once!\n", "blue")
 		await fprint("You quietly slip out of the PlayPlace and order some nuggets.\n", "dim", 1)
 		await fprint("Nuggets + 6", "rainbow", 1)
 	} else {
