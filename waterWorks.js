@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	//queueListTest = ["./days/multiDays/spyStory/2_alleyway.js"]
+	//queueListTest = ["./days/multiDays/spyStory/6_rightSecretAgent.js"]
 	var queueList = [
 		"./days/oldMan.js",
 		"./days/depression.js",
@@ -335,7 +335,6 @@ const settings = async () => new Promise((resolve, reject) => {
 	let oldSettings = JSON.parse(window.localStorage.getItem("settings"))
 	selections[0][0] = oldSettings[0]
 	selections[1][0] = Math.round(Math.abs(1.5 - oldSettings[1]) * 10) // floating point precision :whyyy:
-	console.log(oldSettings[1], selections[1][0])
 	updateSettingsScreen(selections)
 	id("settings").style.display = "block" // make settings screen visible
 
@@ -351,7 +350,8 @@ const settings = async () => new Promise((resolve, reject) => {
 				}
 			} else if(count == 3) { // exit settings
 				id("settings").style.display = "none"
-				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], 1.5 - (selections[1][0] * 0.1)]))
+				// TODO fix floating point rounding issues in text speed
+				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], Math.round((1.5 - (selections[1][0] * 0.1)) * 10) / 10]))
 				loadSettings()
 				resolve()
 			}
@@ -409,7 +409,7 @@ async function fprintSettings(speed = 1) {
 				await sleep(0.04 * speed)
 		}
 	}
-	if(currentIteration == fprintSettingsIter) span.innerHTML += "<br><br>"
+	//if(currentIteration == fprintSettingsIter) span.innerHTML += "<br><br>"
 }
 
 function updateSettingsScreen(selections) {

@@ -44,7 +44,7 @@ export async function execute(queue) {
     await fprint("Ayyyy\n", "cyan")
     await fprint("Ayyyy\n", "blue", 1)
     await fprint("Whew, you got pretty lucky there.\n", "green", 1)
-  } else if(answer == 2 && carlos == 1) {
+  } else if(answer == 1 && carlos == 2) {
     // free
     clear()
     await fprint("Ok, the other guy did it.\n", "cyan")
@@ -58,7 +58,7 @@ export async function execute(queue) {
     await fprint("Oh, that's the same Carlos Sandchez that you've known since prawn school.\n", "green")
     await fprint("Uhh, cool. Don't know him. Never heard of him.\n", "cyan", 1)
     await fprint("...Right. Anyway, yeah, go home.\n", "yellow", 1)
-  } else if(answer == 1 && carlos == 2) {
+  } else if(answer == 2 && carlos == 1) {
     // three years
     clear()
     await fprint("You just kind of sit there, silently.\n", "dim", 1)

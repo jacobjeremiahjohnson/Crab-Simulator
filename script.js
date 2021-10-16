@@ -89,8 +89,10 @@ async function game(flag = false) {
     await fprint("DAY " + window.days + "\n", "white", 1, 0)
     dayString = queue.shift()
     if(window.debug) fprint(dayString)
-    var day = await import(dayString)
-    queue = await day.execute(queue)
+		if(dayString !== undefined) { // saving and quiting on the last day results in undefined queue
+			var day = await import(dayString)
+			queue = await day.execute(queue)
+		}
     if(queue.length == 0 && window.state == 0) { // if queue is empty and not dead on the last day
       window.state = -1 // set state to win
     }
@@ -145,7 +147,7 @@ async function game(flag = false) {
     await fprint("Hope you liked our game. Gotta run now, bye.\n", "yellow", 10)
 		window.localStorage.removeItem("save")
 		await fprint("Refresh this page btw. There isn't anything after this.\n", "green", 30)
-		await fprint("No, I'm serious. There's not.", "green", 30)
+		await fprint("No, I'm serious. There's not.\n", "green", 30)
 		await fprint("Truly, this is the last funny little text that appears.\n", "green", 30)
 		await fprint("Ok I lied, this is. But actually nothing after this.\n", "green", 120)
 		await fprint("You're taking too long, lemme just do it for you.\n", "green", 1)
