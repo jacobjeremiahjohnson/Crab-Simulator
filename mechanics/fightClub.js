@@ -10,8 +10,8 @@ var menuOutput = menuOutputDefault
 var menuTextOutput = menuTextOutputDefault
 
 var spriteList = {} // object with key of Math.random() "spirteID", value of sprite element
-var hurtBox = [false, false, false] // active hitbox
-var positionBox = [false, true, false] // where player currently is
+var hurtBox = [false, false, false, false] // active hitbox
+var positionBox = [false, true, false, false] // where player currently is
 var enemy = null // enemy and player are sprite elements
 var player = null
 var enemyDamageOutput = 0 // how much hp to decrease when hit
@@ -79,6 +79,7 @@ async function rpgMenu(array, menuLayer, flag = false) {
 			span.appendChild(index)
 		}
 		menuOutput.appendChild(span)
+		const controller = new AbortController()
 		let answer = await new Promise(async (resolve, reject) => {
 			span.childNodes[0].classList.add("menuSelected")
 			let count = 1
@@ -100,7 +101,8 @@ async function rpgMenu(array, menuLayer, flag = false) {
 					span.childNodes[count - 1].classList.add("menuSelected")
 				}
 			})
-		})
+		}, { signal: controller.signal })
+		controller.abort()
 		// after something has been selected
 		menuIter++
 		menuTextOutput.innerHTML = ""
@@ -285,6 +287,27 @@ X       X
  /\___/\
  //   \\
 `,
+String.raw`
++      +
+ \ ]]_ |
+  /   \
+ /\___/\
+ //   \\
+`,
+String.raw`
+ +     +
+ | _[[ /
+  /   \
+ /\___/\
+ //   \\
+`,
+String.raw`
+
++  |_|  +
+ \/   \/
+ /\___/\
+ //   \\
+`
 ]
 		this.y = 300
 		this.updateSprite(0)
@@ -343,11 +366,12 @@ X       X
 					currentMoving = -1
 					let curX = this.x
 					let curY = this.y
-					this.deltaPosition = [-10, 0, 0.34, 0]
-					positionBox = [true, false, false]
-					await realSleep(0.9)
-					positionBox = [false, true, false]
-					await realSleep(0.1)
+					this.deltaPosition = [-10, 0, 0.46, 0]
+					positionBox = [true, false, false, false]
+					this.updateSprite(2)
+					await realSleep(0.75)
+					this.updateSprite(0)
+					positionBox = [false, true, false, false]
 					this.deltaPosition = [null, null, null, null]
 					this.x = curX
 					this.y = curY
@@ -358,11 +382,28 @@ X       X
 					currentMoving = 1
 					let curX = this.x
 					let curY = this.y
-					this.deltaPosition = [10, 0, -0.34, 0]
-					positionBox = [false, false, true]
-					await realSleep(0.9)
-					positionBox = [false, true, false]
-					await realSleep(0.1)
+					this.deltaPosition = [10, 0, -0.46, 0]
+					positionBox = [false, false, true, false]
+					this.updateSprite(3)
+					await realSleep(0.75)
+					this.updateSprite(0)
+					positionBox = [false, true, false, false]
+					this.deltaPosition = [null, null, null, null]
+					this.x = curX
+					this.y = curY
+					currentMoving = 0
+				}
+				if((e.key == "ArrowDown" || e.key == "s") && currentMoving == 0) {
+					// initiate duck
+					currentMoving = 1
+					let curX = this.x
+					let curY = this.y
+					this.deltaPosition = [0, 10, 0, -0.7]
+					positionBox = [false, false, false, true]
+					this.updateSprite(4)
+					await realSleep(0.5)
+					this.updateSprite(0)
+					positionBox = [false, true, false, false]
 					this.deltaPosition = [null, null, null, null]
 					this.x = curX
 					this.y = curY
@@ -435,13 +476,13 @@ String.raw`
 		await realSleep(1)
 		let bullet = new Sprite("blue", this.bulletSprite, 0)
 		await bullet.moveTo(direction == 1 ? this.x - 64 : this.x + 52, this.y + 55)
-		bullet.moveTo(bullet.x, bullet.y + 300, 1.5)
-		await realSleep(0.9)
-		if(direction == 1) hurtBox = [1, 1, 0]
-		else hurtBox = [0, 1, 1]
-		await realSleep(0.6)
+		bullet.moveTo(bullet.x, bullet.y + 300, 1.2)
+		await realSleep(0.8)
+		if(direction == 1) hurtBox = [true, true, false, false]
+		else hurtBox = [false, true, true, false]
+		await realSleep(0.4)
 		bullet.remove()
-		hurtBox = [0, 0, 0]
+		hurtBox = [false, false, false, false]
 		await realSleep(0.5)
 		this.updateSprite(0)
 		await realSleep(0.5)
@@ -450,34 +491,72 @@ String.raw`
 	}
 }
 
+function itemInspect(iden) {
+	let description
+	switch(itemishList[iden].type) {
+		case 0:
+			description = itemishList[iden].stat_1 + " dmg"
+			break
+		case 1:
+			description = itemishList[iden].stat_1 + " dmg (" + (itemishList[iden].stat_2 * 100) + "% miss rate)"
+			break
+		case 2:
+			description = "+" + itemishList[iden].stat_1 + " hp"
+			break
+		case 3:
+			description = "+" + dotReplace(itemishList[iden].stat_1) + "x atk"
+			break
+	}
+	return description
+}
+
 function shopDisplay(itemList) {
 	let val = []
 	for(let i in itemList) {
 		let ref = itemList[i][0]
-		if(ref == "Exit") {
+		if(ref == "Exit" || ref == "View Inventory") {
 			val.push(itemList[i])
 			continue
 		}
-		let name = itemishList[ref][2]
-		let description = itemishList[ref][1] + " dollars : "
-		switch(itemishList[ref][0]) {
-			case 0:
-				description += itemishList[ref][3] + " dmg : "
-				break
-			case 1:
-				description += itemishList[ref][3] + " dmg (" + (itemishList[ref][4] * 100) + "% miss rate) : "
-				break
-			case 2:
-				description += "+" + itemishList[ref][3] + " hp : "
-				break
-			case 3:
-				description += "+" + dotReplace(itemishList[ref][3]) + "x atk : "
-				break
-		}
-		description += itemList[i][1]
+		let name = itemishList[ref].displayName
+		let description = itemishList[ref].price + " dollars : "
+		description += itemInspect(ref)
+		description += " : " + itemList[i][1]
 		val.push([name, description])
 	}
 	return val
+}
+
+function alreadyHave(iden, temp) {
+	return (
+		window.rpg.weapons.findIndex(i => i == iden) !== -1 ||
+		window.rpg.spells.findIndex(i => i == iden) !== -1 ||
+		temp.weapons.findIndex(i => i == iden) !== -1 ||
+		temp.spells.findIndex(i => i == iden) !== -1
+	)
+}
+
+async function viewInventory(inven) {
+	while(true) {
+		let answer = await rpgMenu([["Weapons", "View your weapons."], ["Spells", "View your spells."], ["Items", "View your items."], ["Back", ""]], 1)
+		let menuArray = []
+
+		if(answer == 1) {
+			inven.weapons.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w)]))
+		} else if(answer == 2) {
+			inven.spells.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w)]))
+		} else if(answer == 3) {
+			inven.items.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w)]))
+		} else {
+			break
+		}
+
+		menuArray.push(["Back", ""])
+		while(true) {
+			let answer2 = await rpgMenu(menuArray, 2)
+			if(answer2 == menuArray.length) break
+		}
+	}
 }
 
 function dotReplace(text) {
@@ -485,21 +564,38 @@ function dotReplace(text) {
 	return text.replace(/\./g, "｡")
 }
 
-/*
-[itemType, price, displayName, modify, addModify]
-
-itemType
-0 - weapon,      modify = dmg
-1 - spell,       modify = dmg,                 addModify = miss rate
-2 - healable,    modify = hp healed
-3 - status item, modify = attack modification
-*/
 const itemishList = {
-	shove: [0, 0, "Shove", 1],
-	knife: [0, 10, "Knife", 8],
-	gun: [1, 15, "Gun", 10, .3],
-	apple: [2, 5, "Apple", 5],
-	pills: [3, 5, "Bottle of pills", 1.2]
+	shove: {
+		type: 0, // 0 is weapon
+		price: 0, // cost in shops
+		displayName: "Shove", // display name
+		stat_1: 1 // for weapons, dmg
+	},
+	knife: {
+		type: 0,
+		price: 10,
+		displayName: "Knife",
+		stat_1: 8
+	},
+	gun: {
+		type: 1, // 1 is spell
+		price: 15,
+		displayName: "Gun",
+		stat_1: 10, // for spells, dmg
+		stat_2: .3 // for spells, miss rate
+	},
+	apple: {
+		type: 2, // 2 is healable
+		price: 5,
+		displayName: "Apple",
+		stat_1: 5 // for healables, +hp
+	},
+	pills: {
+		type: 3, // 3 is status item
+		price: 5,
+		displayName: "Bottle of pills",
+		stat_1: 1.2 // for status items, atk modifier
+	}
 }
 
 export {
@@ -513,5 +609,7 @@ export {
 	loadShop,
 	unloadShop,
 	shopDisplay,
-	itemishList
+	itemishList,
+	alreadyHave,
+	viewInventory
 }

@@ -12,11 +12,16 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	//queueListTest = ["./days/multiDays/spyStory/6_rightSecretAgent.js"]
+	queueListTest = ["/mechanics/rpgTestDay.js"]
 	var queueList = [
+		"./days/multiDays/spyStory/1_wrongSecretAgent.js",
+		"./days/pirates.js",
+		"./days/peerPressure.js",
+		"./days/firstContact.js",
+		"./days/fisherman.js",
+		"./days/coolCrabs.js",
 		"./days/oldMan.js",
 		"./days/depression.js",
-		"./days/multiDays/spyStory/1_wrongSecretAgent.js",
 		"./days/multiDays/oldGuyDrugs/oldGuyDrugs_1.js",
 		"./days/tasteTesting.js",
 		"./days/multiDays/presidentialCampaign/presidentialCampaign_1.js",
@@ -27,14 +32,9 @@ function generateQueue() {
 		"./days/purchaseSomeGoods.js",
 		"./days/cookingCompetition.js",
 		"./days/crabExam.js",
-		"./days/firstContact.js",
-		"./days/fisherman.js",
 		"./days/forwardScuttle.js",
 		"./days/paneraBreadGiftcard.js",
-		"./days/peerPressure.js",
-		"./days/pirates.js",
 		"./days/prisonersDilemma.js",
-		"./days/coolCrabs.js",
 		"./days/mcDolphins.js",
 		"./days/coding.js"
 	]
@@ -209,9 +209,18 @@ const awaitInput = () => new Promise(async (resolve, reject) => {
 
 const dayPlural = () => window.days == 1 ? "day" : "days"
 
+// shuffles first third, shuffles last two thirds, then concats
+// this is so shuffled unshifted days appear soon
+function shuffleArray(array) {
+	let split = Math.ceil(array.length / 3) - 1
+  let array1 = array.slice(0, split)
+  let array2 = array.slice(split)
+  return arrayShuffle(array.slice(0, split)).concat(arrayShuffle(array2))
+}
+
 // taken from https://stackoverflow.com/a/6274398
 // why doesn't JavaScript have a built in array shuffle method?
-function shuffleArray(array) {
+function arrayShuffle(array) {
 	let counter = array.length
 	while(counter > 0) {
 		let index = Math.floor(Math.random() * counter)
