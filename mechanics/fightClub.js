@@ -289,14 +289,14 @@ X       X
 `,
 String.raw`
 +      +
- \ ]]_ |
+ \ ]_] |
   /   \
  /\___/\
  //   \\
 `,
 String.raw`
  +     +
- | _[[ /
+ | [_[ /
   /   \
  /\___/\
  //   \\
@@ -527,12 +527,10 @@ function shopDisplay(itemList) {
 	return val
 }
 
-function alreadyHave(iden, temp) {
+function alreadyHave(iden) {
 	return (
 		window.rpg.weapons.findIndex(i => i == iden) !== -1 ||
-		window.rpg.spells.findIndex(i => i == iden) !== -1 ||
-		temp.weapons.findIndex(i => i == iden) !== -1 ||
-		temp.spells.findIndex(i => i == iden) !== -1
+		window.rpg.spells.findIndex(i => i == iden) !== -1
 	)
 }
 

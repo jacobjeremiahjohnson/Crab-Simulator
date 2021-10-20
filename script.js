@@ -43,8 +43,8 @@ fast text speed is recommended to be 0.02
 import { fprint, choice, clear, pause, id } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-const skipIntro = true // goes straight into the game if true
-var inGame = false // if is in game or not
+const skipIntro = false // goes straight into the game if true
+var quitable = false // if can quit rn
 var atEndOfDay = false
 var quitVar = 0 // save and quit stuff
 var quitDotInterval // save and quit stuff
@@ -80,15 +80,16 @@ async function game(flag = false) {
 		queue = flag
 	}
   while(true) {
+		quitable = true
 		atEndOfDay = true
     await pause()
 		atEndOfDay = false
     window.days++
     clear()
-		inGame = true
     await fprint("DAY " + window.days + "\n", "white", 1, 0)
     dayString = queue.shift()
     if(window.debug) fprint(dayString)
+		quitable = false
 		if(dayString !== undefined) { // saving and quiting on the last day results in undefined queue
 			var day = await import(dayString)
 			queue = await day.execute(queue)
@@ -97,11 +98,12 @@ async function game(flag = false) {
       window.state = -1 // set state to win
     }
     if(window.state != 0) { // if state isn't default, break out of game loop (dead or win)
+			quitable = false
       await pause()
       break
     }
   }
-	inGame = false
+	quitable = false
   if(window.state == -1) {
     // win game
     clear()
@@ -176,7 +178,6 @@ async function game(flag = false) {
 		}
 
     if(answer == 1) {
-			inGame = true
 			queue.unshift(dayString)
 			game(queue)
     } else {
@@ -240,7 +241,7 @@ async function credits() {
 }
 
 async function titleScreen(flag = false) {
-	inGame = false
+	quitable = false
   clear()
   const span = config.createSpan("red")
   const pre = document.createElement("pre")
@@ -295,7 +296,7 @@ function startQuiting() {
 		let dots = document.getElementById("quitingDots")
 		div.style.display = "block"
 		quitDotInterval = setInterval(() => {
-			if(!inGame) return stopQuiting()
+			if(!quitable) return stopQuiting()
 			dots.innerHTML += "."
 			if(dots.innerHTML.length == 10) {
 				window.days--
@@ -336,7 +337,7 @@ window.addEventListener("load", async () => {
 	audio.play()
 
 	document.addEventListener("keydown", e => {
-		if(e.key == "Escape" && inGame) startQuiting()
+		if(e.key == "Escape" && quitable) startQuiting()
 	})
 	document.addEventListener("keyup", e => {
 		if(e.key == "Escape") stopQuiting()

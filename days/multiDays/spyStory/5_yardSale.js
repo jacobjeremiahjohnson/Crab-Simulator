@@ -8,7 +8,6 @@ import { loadShop, unloadShop, rpgMenu, itemishList, shopDisplay, alreadyHave, v
 export async function execute(queue) {
 
 	window.rpg.money = 100
-	var tempRpg = JSON.parse(JSON.stringify(window.rpg)) // gross hack to make an object copy without reference
 
 	/*
 
@@ -47,32 +46,32 @@ export async function execute(queue) {
 		if(answer < 5) {
 			let itemID = firstLayer[answer - 1][0]
 			let item = itemishList[itemID]
-			if(tempRpg.money < item.price) { // not enough money
-				await rpgMenu([["Back", "You only have " + tempRpg.money + " dollars, sorry."]])
-			} else if(alreadyHave(itemID, tempRpg)) { // already have weapon or spell
+			if(window.rpg.money < item.price) { // not enough money
+				await rpgMenu([["Back", "You only have " + window.rpg.money + " dollars, sorry."]])
+			} else if(alreadyHave(itemID)) { // already have weapon or spell
 				await rpgMenu([["Back", "Pretty sure you already own that."]])
 			} else { // purchase dialog
-				let answer2 = await rpgMenu([["Purchase", "You'll have " + tempRpg.money + " - " + item.price + " = " + (tempRpg.money - item.price) + " dollars left."], ["Back", ""]], 1)
+				let answer2 = await rpgMenu([["Purchase", "You'll have " + window.rpg.money + " - " + item.price + " = " + (window.rpg.money - item.price) + " dollars left."], ["Back", ""]], 1)
 				if(answer2 == 1) { // purchase item
-					tempRpg.money -= item.price // take money
+					window.rpg.money -= item.price // take money
 					switch(item.type) {
 						case 0: // weapon
-							tempRpg.weapons.push(itemID)
+							window.rpg.weapons.push(itemID)
 							firstLayer[5][1] = ""
 							break
 						case 1: // spell
-							tempRpg.spells.push(itemID)
+							window.rpg.spells.push(itemID)
 							firstLayer[5][1] = ""
 							break
 						case 2: // item
 						case 3:
-							tempRpg.items.push(itemID)
+							window.rpg.items.push(itemID)
 							break
 					}
 				}
 			}
 	  } else if(answer == 5) { // view inventory
-			await viewInventory(tempRpg)
+			await viewInventory()
 		} else if(firstLayer[5][1] == "") { // exit
 			break
 		}
@@ -89,7 +88,6 @@ export async function execute(queue) {
 	await fprint("Experience + 1\n", "rainbow", 2)
 
 	window.experience++
-	window.rpg = tempRpg
 
 	queue.unshift("./days/multiDays/spyStory/6_rightSecretAgent.js")
 	return queue
