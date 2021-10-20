@@ -327,7 +327,7 @@ function saveAndQuit() {
 
 window.addEventListener("load", async () => {
 	// if no settings loaded, set default ones
-	if(window.localStorage.getItem("settings") === null) window.localStorage.setItem("settings", JSON.stringify([0, 1.0]))
+	if(window.localStorage.getItem("settings") === null) window.localStorage.setItem("settings", JSON.stringify([0, 1.0, 0]))
 	config.loadSettings()
 
 	fprint("Press ENTER to start Crab Simulator 2", "dim", 0, 0)

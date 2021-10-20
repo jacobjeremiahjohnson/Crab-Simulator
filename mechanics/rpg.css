@@ -43,7 +43,7 @@
 .rpgMenuText {
 	margin-left: 16px;
 	float: right;
-	color: DimGray;
+	color: var(--colorDim);
 }
 
 #rpg .sprite.hurt {

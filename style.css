@@ -1,13 +1,28 @@
+:root {
+	--colorDim: DimGray;
+	--colorRed: Red;
+	--colorYellow: Gold;
+	--colorGreen: Green;
+	--colorBlue: DodgerBlue;
+	--colorPurple: MediumOrchid;
+	--colorCyan: DarkCyan;
+	--colorOrange: OrangeRed;
+	--colorLightYellow: #FFEA7F;
+	--colorPink: #FF8AFF;
+	--colorWhite: White;
+	--colorBlack: Black;
+}
+
 body {
-	background-color: black;
-  color: DarkCyan;
+	background-color: var(--colorBlack);
+  color: var(--colorCyan);
 	word-wrap: break-word;
   font-family: Consolas, monaco, monospace;
 	margin: 8px 10vw;
 }
 
 a {
-	color: Green;
+	color: var(--colorGreen);
 }
 
 p {
@@ -51,7 +66,7 @@ img.emoji {
 }
 
 #quiting {
-	color: white;
+	color: var(--colorWhite);
 	position: fixed;
 	display: none;
 	margin-left: calc(-10vw + 8px);
@@ -92,6 +107,10 @@ img.emoji {
 	text-align: center;
 }
 
+#colorTypeDisp {
+	text-align: center;
+}
+
 #input.visible {
   display: flex;
 	bottom: 0;
@@ -108,48 +127,56 @@ img.emoji {
 }
 
 .menuSelected.menu {
-	background-color: DarkCyan;
-	color: Black;
+	background-color: var(--colorCyan);
+	color: var(--colorBlack);
 }
 
 .menu {
-	color: DarkCyan;
+	color: var(--colorCyan);
 	text-align: center;
 	padding: 0 1em;
 }
 
 .dim {
-	color: DimGray;
+	color: var(--colorDim);
 }
 
 .red {
-  color: Red;
+  color: var(--colorRed);
 }
 
 .yellow {
-	color: Gold;
+	color: var(--colorYellow);
 }
 
 .green {
-	color: Green;
+	color: var(--colorGreen);
 }
 
 .blue {
-  color: DodgerBlue;
+  color: var(--colorBlue);
 }
 
 .purple {
-  color: MediumOrchid;
+  color: var(--colorPurple);
 }
 
 .cyan {
-	color: DarkCyan;
+	color: var(--colorCyan);
 }
 
 .orange {
-	color: OrangeRed;
+	color: var(--colorOrange);
+}
+
+.lightYellow {
+	color: var(--colorLightYellow);
+}
+
+.pink {
+	color: var(--colorPink);
 }
 
 .white {
-	color: White;
+	color: var(--colorWhite);
 }

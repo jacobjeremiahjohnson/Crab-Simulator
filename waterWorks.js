@@ -5,9 +5,9 @@ var speed = 1
 
 var textSpeedAdjustment = 1
 
-const rainbowList = ["red", "orange", "yellow", "green", "blue", "purple"]
+var rainbowList = ["red", "orange", "yellow", "green", "blue", "purple"]
 let rainbowInt = Math.floor(Math.random() * rainbowList.length)
-const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % 5
+const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % (rainbowList.length - 1)
 
 function generateQueue() {
 	var queueListTest = false
@@ -303,7 +303,33 @@ function loadSettings() {
 	let settings = JSON.parse(window.localStorage.getItem("settings"))
 	if(settings[0] === 0) choice = menu
 	else choice = choiceClassic
-	textSpeedAdjustment = settings[1]
+	textSpeedAdjustment = settings[2]
+	settingsUpdateColors(settings[1])
+}
+
+function settingsUpdateColors(type) {
+	let style = document.documentElement.style
+	if(type == 0) {
+		style.setProperty("--colorDim", "DimGray");
+		style.setProperty("--colorRed", "Red");
+		style.setProperty("--colorYellow", "Gold");
+		style.setProperty("--colorGreen", "Green");
+		style.setProperty("--colorBlue", "DodgerBlue");
+		style.setProperty("--colorPurple", "MediumOrchid");
+		style.setProperty("--colorCyan", "DarkCyan");
+		style.setProperty("--colorOrange", "OrangeRed");
+		rainbowList = ["red", "orange", "yellow", "green", "blue", "purple"]
+	} else {
+		style.setProperty("--colorDim", "#898E97");
+		style.setProperty("--colorRed", "#FF8585");
+		style.setProperty("--colorYellow", "#FFEA7F");
+		style.setProperty("--colorGreen", "#2FC448");
+		style.setProperty("--colorBlue", "#7FBFFF");
+		style.setProperty("--colorPurple", "#E55AE5");
+		style.setProperty("--colorCyan", "#3DB4CC");
+		style.setProperty("--colorOrange", "#CCAD14");
+		rainbowList = ["lightYellow", "green", "blue", "pink", "purple", "red", "yellow"]
+	}
 }
 
 var fprintSettingsIter = 0
@@ -327,12 +353,14 @@ const settings = async () => new Promise((resolve, reject) => {
 
 	let options = [ // elements for menu items
 		id("menuOptions"),
+		id("colorType"),
 		id("textSpeed"),
 		id("deleteSave"),
 		id("exitSettings")
 	]
 	let selections = [ // all possible menu selections
 		[0, id("menuOptionsSelect"), ["&nbsp;&nbsp;Modern >&nbsp;", "< Classic&nbsp;&nbsp;"]],
+		[0, id("colorTypeSelect"), ["&nbsp;&nbsp;Modern >&nbsp;", "< Classic&nbsp;&nbsp;"]],
 		[5, id("textSpeedSelect"), ["&nbsp;&nbsp;x0.5 >", "< x0.6 >", "< x0.7 >", "< x0.8 >", "< x0.9 >", "< x1.0 >", "< x1.1 >", "< x1.2 >", "< x1.3 >", "< x1.4 >", "< x1.5&nbsp;&nbsp;"]],
 		null, // no menu selection attached to delete save or exit settings
 		null
@@ -343,29 +371,31 @@ const settings = async () => new Promise((resolve, reject) => {
 
 	let oldSettings = JSON.parse(window.localStorage.getItem("settings"))
 	selections[0][0] = oldSettings[0]
-	selections[1][0] = Math.round(Math.abs(1.5 - oldSettings[1]) * 10) // floating point precision :whyyy:
+	selections[1][0] = oldSettings[1]
+	selections[2][0] = Math.round(Math.abs(1.5 - oldSettings[2]) * 10) // floating point precision :whyyy:
 	updateSettingsScreen(selections)
 	id("settings").style.display = "block" // make settings screen visible
+	fprintSettings(1.5 - (selections[2][0] * 0.1))
 
 	let count = 0 // currently selected menu item
 	document.addEventListener("keydown", e => {
 		if(e.key == "Enter" || e.key == " ") {
-			if(count == 2) { // delete save file
-				if(options[2].innerHTML == "Delete save file") {
-					options[2].innerHTML = "Click again to delete"
-				} else if(options[2].innerHTML == "Click again to delete") {
+			if(count == 3) { // delete save file
+				if(options[3].innerHTML == "Delete save file") {
+					options[3].innerHTML = "Click again to delete"
+				} else if(options[3].innerHTML == "Click again to delete") {
 					window.localStorage.removeItem("save")
-					options[2].innerHTML = "Deleted!"
+					options[3].innerHTML = "Deleted!"
 				}
-			} else if(count == 3) { // exit settings
+			} else if(count == 4) { // exit settings
 				id("settings").style.display = "none"
 				// TODO fix floating point rounding issues in text speed
-				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], Math.round((1.5 - (selections[1][0] * 0.1)) * 10) / 10]))
+				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], selections[1][0], Math.round((1.5 - (selections[2][0] * 0.1)) * 10) / 10]))
 				loadSettings()
 				resolve()
 			}
 		} else {
-			options[2].innerHTML = "Delete save file"
+			options[3].innerHTML = "Delete save file"
 		}
 		if(e.key == "ArrowLeft" || e.key == "a") {
 			if(selections[count] != null) { // if menu selection attached to current item
@@ -373,7 +403,7 @@ const settings = async () => new Promise((resolve, reject) => {
 				if(selections[count][0] < 0) selections[count][0] = 0 // out of bounds
 				selections[count][1].innerHTML = selections[count][2][selections[count][0]] // lol
 			}
-			if(count == 1) fprintSettings(1.5 - (selections[1][0] * 0.1))
+			if(count == 2) fprintSettings(1.5 - (selections[2][0] * 0.1))
 		}
 		if(e.key == "ArrowRight" || e.key == "d") {
 			if(selections[count] != null) {
@@ -381,7 +411,7 @@ const settings = async () => new Promise((resolve, reject) => {
 				if(selections[count][0] > selections[count][2].length - 1) selections[count][0] = selections[count][2].length - 1
 				selections[count][1].innerHTML = selections[count][2][selections[count][0]]
 			}
-			if(count == 1) fprintSettings(1.5 - (selections[1][0] * 0.1))
+			if(count == 2) fprintSettings(1.5 - (selections[2][0] * 0.1))
 		}
 		if(e.key == "ArrowDown" || e.key == "s") count++
 		if(e.key == "ArrowUp" || e.key == "w") count--
@@ -418,12 +448,12 @@ async function fprintSettings(speed = 1) {
 				await sleep(0.04 * speed)
 		}
 	}
-	//if(currentIteration == fprintSettingsIter) span.innerHTML += "<br><br>"
 }
 
 function updateSettingsScreen(selections) {
 	selections[0][1].innerHTML = selections[0][2][selections[0][0]] // lol
-	selections[1][1].innerHTML = selections[1][2][selections[1][0]]
+	selections[1][1].innerHTML = selections[1][2][selections[1][0]] // lol
+	selections[2][1].innerHTML = selections[2][2][selections[2][0]] // lmao
 	let saveDays = JSON.parse(window.localStorage.getItem("save"))
 	id("deleteSaveDisp").innerHTML = "Days : " + ((saveDays === null) ? "X" : saveDays[0])
 	if(selections[0][0] == 0) {
@@ -431,7 +461,17 @@ function updateSettingsScreen(selections) {
 	} else {
 		id("menuOptionsDisp").innerHTML = '<p class="cyan">[1] New Game&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[2] Resume Game : X</p><p class="cyan">[3] Settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[4] Credits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br>'
 	}
+	if(selections[1][0] == 0) {
+		settingsUpdateColors(0)
+		id("colorTypeDisp").innerHTML = '<span class="red">A</span><span class="orange"> </span><span class="yellow">p</span><span class="green">r</span><span class="blue">e</span><span class="red">t</span><span class="orange">t</span><span class="yellow">y</span><span class="green"> </span><span class="blue">r</span><span class="red">a</span><span class="orange">i</span><span class="yellow">n</span><span class="green">b</span><span class="blue">o</span><span class="red">w</span><span class="orange"> </span><span class="yellow">f</span><span class="green">o</span><span class="blue">r</span><span class="red"> </span><span class="orange">y</span><span class="yellow">o</span><span class="green">u</span><span class="blue"> </span><span class="red">t</span><span class="orange">o</span><span class="yellow"> </span><span class="green">s</span><span class="blue">e</span><span class="red">e</span><span class="orange"> </span><span class="yellow">t</span><span class="green">h</span><span class="blue">e</span><span class="red"> </span><span class="orange">c</span><span class="yellow">o</span><span class="green">l</span><span class="blue">o</span><span class="red">r</span><span class="orange">s</span><span class="yellow">.</span>'
+	} else {
+		settingsUpdateColors(1)
+		id("colorTypeDisp").innerHTML = '<span class="pink">A</span><span class="purple"> </span><span class="red">p</span><span class="lightYellow">r</span><span class="green">e</span><span class="blue">t</span><span class="pink">t</span><span class="purple">y</span><span class="red"> </span><span class="lightYellow">r</span><span class="green">a</span><span class="blue">i</span><span class="pink">n</span><span class="purple">b</span><span class="red">o</span><span class="lightYellow">w</span><span class="green"> </span><span class="blue">f</span><span class="pink">o</span><span class="purple">r</span><span class="red"> </span><span class="lightYellow">y</span><span class="green">o</span><span class="blue">u</span><span class="pink"> </span><span class="purple">t</span><span class="red">o</span><span class="lightYellow"> </span><span class="green">s</span><span class="blue">e</span><span class="pink">e</span><span class="purple"> </span><span class="red">t</span><span class="lightYellow">h</span><span class="green">e</span><span class="blue"> </span><span class="pink">c</span><span class="purple">o</span><span class="red">l</span><span class="lightYellow">o</span><span class="green">r</span><span class="blue">s</span><span class="pink">.</span>'
+	}
 }
+
+// ["red", "orange", "yellow", "green", "blue", "purple"]
+// ["lightYellow", "green", "blue", "pink", "purple", "red", "yellow"]
 
 window.addEventListener("load", () => {
 	window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
