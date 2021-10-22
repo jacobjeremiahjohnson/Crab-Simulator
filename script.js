@@ -4,7 +4,7 @@
 - Informational text is "dim"
 - Narrator speech is "green"
 - Character's speech is "cyan"
-- Other character's speech are "yellow", "blue", and "purple" in that order
+- Other character's speech are "yellow", "blue", "purple", and "orange" in that order
 - Onomonopoeia and other sounds are "red"
 - God and stat level ups are "rainbow"
 - Use "rainbow" and "white" very sparingly
@@ -36,8 +36,9 @@ fast text speed is recommended to be 0.02
 14 - /chainDays/secretMeeting.js Ouch ow fire
 15 - /multiDays/restaurant_2.js Stalking and choking
 16 - coding.js Code error
-17 - mcDolphins.js village uprising
-18 - slideWhistle.js crushed by a piano
+17 - mcDolphins.js Village uprising
+18 - slideWhistle.js Crushed by a piano
+19 - hostage.js Called in a nuke for some reason lol
 */
 
 import { fprint, choice, clear, pause, id } from "./waterWorks.js"
@@ -198,7 +199,8 @@ async function intro() {
     await fprint("Luckily...", "green", 1)
   }
   await fprint("You've been reincarnated as a crab!", "green", 1)
-  await fprint("There's a lot to do as a crab these days, so strap in and enjoy the ride!\n", "green", 2)
+  await fprint("There's a lot to do as a crab these days, so strap in and enjoy the ride!\n", "green", 1)
+	await fprint("Hold ESCAPE to save and quit at the end of a day. Once you're ready to start, go ahead and", "dim", 0.5)
   window.days = 0
   window.experience = 0
   window.personality = 0
