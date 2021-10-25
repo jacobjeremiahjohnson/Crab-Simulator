@@ -912,7 +912,7 @@ const itemishList = {
 		type: 1, // 1 is spell
 		price: 15,
 		displayName: "Gun",
-		stat_1: 10, // for spells, dmg
+		stat_1: 14, // for spells, dmg
 		stat_2: .3, // for spells, miss rate
 		description: "Yeowch."
 	},

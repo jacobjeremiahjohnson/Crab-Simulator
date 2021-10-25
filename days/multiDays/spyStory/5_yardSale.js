@@ -7,10 +7,6 @@ import { loadShop, unloadShop, rpgMenu, itemishList, shopDisplay, alreadyHave, v
 
 export async function execute(queue) {
 
-	window.rpg.money = 100
-
-	/*
-
 	await fprint("Morning jogs are so nice.", "cyan", 0)
 	await fprint("You think to yourself while jogging in the morning.\n", "dim", 1)
 
@@ -18,8 +14,6 @@ export async function execute(queue) {
 	await fprint("Guess I'll go then.\n", "cyan", 1)
 	await fprint("Heaps of trash and other superfluous items litter a crab's front lawn.\n", "dim")
 	await fprint("Hi! What can I get for you?\n", "yellow")
-
-	*/
 
 	const shopWrapper = config.createSpan("shopWrapper")
 	const menuOutput = config.createSpan("rpgMenu")
@@ -34,7 +28,7 @@ export async function execute(queue) {
 	var firstLayer = [
 		["knife", "That rusty thing? Found it in a river."],
 		["gun", "Ol' reliable. Except about 30% of the time."],
-		["apple", "On a scale of 1 to 75, I'd say it heals about 10."],
+		["apple", "On a scale of 1 to 50, I'd say it heals about 15."],
 		["pills", "Increases your attacks by 1｡2x, whatever that means."],
 		["View Inventory", "Take a look at what you already have."],
 		["Exit", "Don't you want to buy something to attack with?"]

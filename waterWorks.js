@@ -282,7 +282,15 @@ function randomDeath() {
 		"as an ant",
 		"from an angry weasel",
 		"in a \"suicide\"",
-		"from good, clean, fun"
+		"from good, clean, fun",
+		"due to a freak defibrillator accident",
+		"in a skydiving accident",
+		"in the electric chair",
+		"from an iron lung failure",
+		"due to a series of miscommunincations",
+		"in a game of Russian Roulette",
+		"in a duel of wits",
+		"while testing a new type of pepper spray"
 	]
 	return randomDeathList[Math.floor(Math.random() * randomDeathList.length)]
 }
