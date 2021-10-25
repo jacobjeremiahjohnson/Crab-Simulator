@@ -56,7 +56,7 @@ export async function execute(queue) {
 		window.personality--
 	}
 
-	queue.push("./days/multiDays/spyStory/5_yardSale.js")
+	queue.unshift("./days/multiDays/spyStory/5_yardSale.js")
 	queue = config.shuffleArray(queue)
 
   return queue

@@ -17,8 +17,8 @@ export async function execute(queue){
 	await pause()
 	clear()
 
-	const crab = new PlayerNew()
 	const spy = new Spy()
+	const crab = new PlayerNew()
 
 	loadFight(crab, spy)
 
@@ -31,17 +31,17 @@ export async function execute(queue){
 
 	await crab.takeTurn()
 	await rpgPrint("Seriously? I'm almost gonna feel bad for doing this.", "blue")
-	await spy.shoot()
+	await spy.oldShoot()
 
 	if(crab.hp == 75) await rpgPrint("Wow, you know how to dodge with the left and right arrow keys.", "blue")
 	else await rpgPrint("Hah, you don't even know how to dodge with the left and right arrow keys.", "blue")
 	await crab.takeTurn()
 	await rpgPrint("Ow! Aaah! That hurt so much!", "blue")
 	await rpgPrint("NOT! Hahahah.", "blue")
-	await spy.shoot()
+	await spy.oldShoot()
 	await crab.takeTurn()
 	await rpgPrint("Oh man, this is easy! I hope nothing weird or uncharacteristic interrupts this fight.", "blue")
-	await spy.shoot()
+	await spy.oldShoot()
 	await crab.takeTurn()
 	await rpgPrint("Pssh, I don't even have a scratch on me. Is this really all you can do?", "blue")
 	const pot = new Sprite("white", flowerPotSprite, 10)
@@ -65,7 +65,7 @@ export async function execute(queue){
 	await fprint("Experience + 1\n", "rainbow", 2)
 	window.experience++
 
-	queue.push("./days/multiDays/spyStory/3_gameShow.js")
+	queue.unshift("./days/multiDays/spyStory/3_gameShow.js")
 	queue = config.shuffleArray(queue)
 	return queue
 }

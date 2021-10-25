@@ -58,7 +58,7 @@ export async function execute(queue) {
   window.experience++
 	window.rpg.money += money
 
-	queue.push("./days/multiDays/spyStory/4_prawnShop.js")
+	queue.unshift("./days/multiDays/spyStory/4_prawnShop.js")
 	queue = config.shuffleArray(queue)
   return queue
 }

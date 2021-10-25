@@ -39,12 +39,13 @@ fast text speed is recommended to be 0.02
 17 - mcDolphins.js Village uprising
 18 - slideWhistle.js Crushed by a piano
 19 - hostage.js Called in a nuke for some reason lol
+20 - spyStory/ Died in combat
 */
 
 import { fprint, choice, clear, pause, id } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-const skipIntro = false // goes straight into the game if true
+const skipIntro = true // goes straight into the game if true
 var quitable = false // if can quit rn
 var atEndOfDay = false
 var quitVar = 0 // save and quit stuff
@@ -58,9 +59,9 @@ window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
 window.rpg = {
 	money: 0,
-	weapons: [],
-	spells: [],
-	items: []
+	weapons: ["shove", "knife"],
+	spells: ["gun"],
+	items: ["apple", "apple", "pills"]
 }
 
 // flag means its a resume if true

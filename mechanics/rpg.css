@@ -51,7 +51,21 @@
 	transition: color 0s;
 }
 
+#rpg .sprite.healed {
+	color: #27A023;
+	transition: color 0s;
+}
+
 .hurtText {
 	color: #892400;
 	font-size: 2em;
+}
+
+.healedText {
+	color: #27A023;
+	font-size: 2em;
+}
+
+.hpText {
+	margin-bottom: 1em;
 }

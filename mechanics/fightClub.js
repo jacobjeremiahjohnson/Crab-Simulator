@@ -156,7 +156,19 @@ function loadFight(thePlayer, theEnemy) {
 // somewhat self explanatory
 function unloadFight() {
 	gameStarted = false
+	for(let i in spriteList) {
+		spriteList[i].remove()
+	}
+	enemy = null
+	player = null
+	enemyDamageOutput = 0
 	id("rpg").style.display = "none"
+	for(let i = 0; i < id("rpg").children.length; i++) {
+		let e = id("rpg").children[i]
+		if(e.tagName == "DIV") continue
+		e.remove()
+		i--
+	}
 }
 
 function loadShop(a, b) {
@@ -176,7 +188,7 @@ class Sprite {
 	// color is CSS class
 	// sprites is an array of text fields
 	// width offset is how many pixels to offset text by so it gets centered properly
-	constructor(color, sprites, widthOffset) {
+	constructor(color, sprites, widthOffset = 0) {
 		if(!sprites) sprites = ["X"] // default sprite
 		if(typeof sprites == "string") sprites = [sprites]
 		this.sprites = sprites
@@ -250,18 +262,38 @@ class Character extends Sprite { // sprite but has hp
 		super(color, sprites, widthOffset)
 		this.maxHp = maxHp
 		this.hp = maxHp
+		this.hpTextElement = createSpan(color)
+		this.hpTextElement.classList.add("hpText")
+		this.hpTextUpdate()
+		id("rpg").appendChild(this.hpTextElement)
+	}
+
+	hpTextUpdate() {
+		this.hpTextElement.innerHTML = this.hp + "/" + this.maxHp
 	}
 
 	async getHurt(amount) {
-		this.stunned = true
-		this.sprite.classList.add("hurt")
-		new HurtText(this.x, this.y, amount)
-		this.hp -= amount
-		if(this.hp < 0) return this.die()
-		await realSleep(0.5)
-		this.sprite.classList.remove("hurt")
-		await realSleep(0.5)
-		this.stunned = false
+		if(amount > 0) {
+			this.stunned = true
+			this.sprite.classList.add("hurt")
+			new HurtText(this.x, this.y, amount)
+			this.hp -= amount
+			if(this.hp < 0) return await this.die()
+			this.hpTextUpdate()
+			await realSleep(0.5)
+			this.sprite.classList.remove("hurt")
+			await realSleep(0.5)
+			this.stunned = false
+		} else {
+			this.sprite.classList.add("healed")
+			new HealedText(this.x, this.y, amount)
+			this.hp -= amount
+			if(this.hp > this.maxHp) this.hp = this.maxHp
+			this.hpTextUpdate()
+			await realSleep(0.5)
+			this.sprite.classList.remove("healed")
+			await realSleep(0.5)
+		}
 	}
 
 	die() {
@@ -272,7 +304,7 @@ class Character extends Sprite { // sprite but has hp
 // player on first encounter
 class PlayerNew extends Character {
 	constructor() {
-		super("cyan", null, 50, 75)
+		super("cyan", null, 50, 50)
 		this.sprites = [ String.raw`
 +       +
  \ |_| /
@@ -312,6 +344,22 @@ String.raw`
 		this.y = 300
 		this.updateSprite(0)
 		this.stunned = false
+		this.keys = {
+			left: false,
+			right: false,
+			down: false
+		}
+		this.currentMoving = 0
+		document.addEventListener("keydown", e => {
+			if(e.key == "ArrowLeft" || e.key == "a") this.keys.left = true
+			if(e.key == "ArrowRight" || e.key == "d") this.keys.right = true
+			if(e.key == "ArrowDown" || e.key == "s") this.keys.down = true
+		})
+		document.addEventListener("keyup", e => {
+			if(e.key == "ArrowLeft" || e.key == "a") this.keys.left = false
+			if(e.key == "ArrowRight" || e.key == "d") this.keys.right = false
+			if(e.key == "ArrowDown" || e.key == "s") this.keys.down = false
+		})
 	}
 
 	positionUpdate() {
@@ -327,6 +375,56 @@ String.raw`
 		if(this.isHurt && !this.stunned) {
 			this.getHurt(enemyDamageOutput)
 		}
+		if(this.isEnemyTurn) {
+			if(this.keys.left && this.currentMoving == 0 && this.state == 1) {
+				// initiate move left
+				this.currentMoving = -1
+				let curX = this.x
+				let curY = this.y
+				this.deltaPosition = [-10, 0, 0.46, 0]
+				positionBox = [true, false, false, false]
+				this.updateSprite(2)
+				await realSleep(0.75)
+				this.updateSprite(0)
+				positionBox = [false, true, false, false]
+				this.deltaPosition = [null, null, null, null]
+				this.x = curX
+				this.y = curY
+				this.currentMoving = 0
+			}
+			if(this.keys.right && this.currentMoving == 0 && this.state == 1) {
+				// initiate move right
+				this.currentMoving = 1
+				let curX = this.x
+				let curY = this.y
+				this.deltaPosition = [10, 0, -0.46, 0]
+				positionBox = [false, false, true, false]
+				this.updateSprite(3)
+				await realSleep(0.75)
+				this.updateSprite(0)
+				positionBox = [false, true, false, false]
+				this.deltaPosition = [null, null, null, null]
+				this.x = curX
+				this.y = curY
+				this.currentMoving = 0
+			}
+			if(this.keys.down && this.currentMoving == 0 && this.state == 1) {
+				// initiate duck
+				this.currentMoving = 1
+				let curX = this.x
+				let curY = this.y
+				this.deltaPosition = [0, 10, 0, -0.7]
+				positionBox = [false, false, false, true]
+				this.updateSprite(4)
+				await realSleep(0.5)
+				this.updateSprite(0)
+				positionBox = [false, true, false, false]
+				this.deltaPosition = [null, null, null, null]
+				this.x = curX
+				this.y = curY
+				this.currentMoving = 0
+			}
+		}
 	}
 
 	async takeTurn() {
@@ -334,16 +432,16 @@ String.raw`
 		while(true) {
 			answer = await rpgMenu([["Attack", "Use your Weapons to attack the enemy."], ["Items", "Use your Items to gain an advantage."]], 0)
 			if(answer == 1) {
-				answer = await rpgMenu([["Shove", "1 dmg : Not very useful."], ["Exit", ""]], 1)
+				answer = await rpgMenu([["Shove", "1 dmg : Not very useful."], ["Back", ""]], 1)
 				if(answer == 1) break
 			} else {
-				await rpgMenu([["Exit", "You don't have any items!"]], 1)
+				await rpgMenu([["Back", "You don't have any items!"]], 1)
 			}
 		}
-		await this.shove()
+		await this.take_action_shove()
 	}
 
-	async shove() {
+	async take_action_shove() {
 		await this.moveTo(this.x, this.y - 190, 1)
 		this.updateSprite(1)
 		enemy.getHurt(1)
@@ -354,71 +452,188 @@ String.raw`
 		await rpgPrint("You shove the enemy. It doesn't seem like it did much...", "dim")
 	}
 
-	async enemyTurn(turnFlag) {
+	enemyTurn(turnFlag) {
 		this.isEnemyTurn = turnFlag
-		let currentMoving = 0
-		let keys = [false, false]
-		if(turnFlag) {
-			document.addEventListener("keydown", async e => {
-				if(!this.isEnemyTurn) return
-				if((e.key == "ArrowLeft" || e.key == "a") && currentMoving == 0) {
-					// initiate move left
-					currentMoving = -1
-					let curX = this.x
-					let curY = this.y
-					this.deltaPosition = [-10, 0, 0.46, 0]
-					positionBox = [true, false, false, false]
-					this.updateSprite(2)
-					await realSleep(0.75)
-					this.updateSprite(0)
-					positionBox = [false, true, false, false]
-					this.deltaPosition = [null, null, null, null]
-					this.x = curX
-					this.y = curY
-					currentMoving = 0
-				}
-				if((e.key == "ArrowRight" || e.key == "d") && currentMoving == 0) {
-					// initiate move right
-					currentMoving = 1
-					let curX = this.x
-					let curY = this.y
-					this.deltaPosition = [10, 0, -0.46, 0]
-					positionBox = [false, false, true, false]
-					this.updateSprite(3)
-					await realSleep(0.75)
-					this.updateSprite(0)
-					positionBox = [false, true, false, false]
-					this.deltaPosition = [null, null, null, null]
-					this.x = curX
-					this.y = curY
-					currentMoving = 0
-				}
-				if((e.key == "ArrowDown" || e.key == "s") && currentMoving == 0) {
-					// initiate duck
-					currentMoving = 1
-					let curX = this.x
-					let curY = this.y
-					this.deltaPosition = [0, 10, 0, -0.7]
-					positionBox = [false, false, false, true]
-					this.updateSprite(4)
-					await realSleep(0.5)
-					this.updateSprite(0)
-					positionBox = [false, true, false, false]
-					this.deltaPosition = [null, null, null, null]
-					this.x = curX
-					this.y = curY
-					currentMoving = 0
-				}
-			})
-		}
+		this.currentMoving = 0
 	}
 }
 
-// little text that pops up when you get hurt
-class HurtText extends Sprite {
-	constructor(x, y, amount) {
-		super("hurtText", "-" + amount, 100)
-		this.x = x
+// player on first encounter
+class Player extends PlayerNew {
+
+bulletSprite = String.raw`
+∩
+‾
+`
+
+	constructor() {
+		super()
+// 5, knife
+this.sprites.push(String.raw`
++       |X
+ \ |_| /
+  /   \
+ /\___/\
+ //   \\
+`)
+// 6, sword
+this.sprites.push(String.raw`
++       |\
+ \ |_| /|
+  /   \
+ /\___/\
+ //   \\
+`)
+// 7, gun
+this.sprites.push(String.raw`
++       ||
+ \ |_| /|/
+  /   \ .?
+ /\___/\
+ //   \\
+`)
+// 8, cannon
+this.sprites.push(String.raw`
++        _.
+ \ |_| / ||
+  /   \  ||
+ /\___/\ O/
+ //   \\
+`)
+// 9, necromica
+this.sprites.push(String.raw`
++        _
+ \ |_| /|N|
+  /   \
+ /\___/\
+ //   \\
+`)
+// 10, necromica
+this.sprites.push(String.raw`
++       +
+ \ X_X /
+  /   \
+ /\___/\
+ //   \\
+`)
+		this.dmgModifier = 1
+		this.state = 1 // 1 is alive, 0 is dead
+	}
+
+	async die() {
+		this.hpTextUpdate()
+		this.state = 0
+		window.state = "You died in combat like a heroic warrior. Well, sort of heroic.20"
+	}
+
+	async takeTurn() {
+		let answer
+		while(true) {
+			answer = await rpgMenu([["Attack", "Use your Weapons to attack the enemy."], ["Spells", "Use your Spells to attack the enemy."], ["Items", "Use your Items to gain an advantage."]], 0)
+			let ref
+			if(answer == 1) {
+				ref = window.rpg.weapons
+			} else if(answer == 2) {
+				ref = window.rpg.spells
+			} else {
+				ref = window.rpg.items
+			}
+			let array = []
+			ref.forEach(a => {
+				array.push([itemishList[a].displayName, itemInspect(a) + " : " + itemishList[a].description])
+			})
+			array.push(["Back", ""])
+			answer = await rpgMenu(array)
+			if(answer - 1 !== ref.length) { // use it
+				await this["take_action_" + ref[answer - 1]]()
+				break
+			}
+		}
+		return enemy.hp < 1
+	}
+
+	codeUpdate() {
+		super.codeUpdate()
+		if(this.state == 0) {
+			this.updateSprite(10)
+		}
+	}
+
+	calcHit(miss) {
+		return Math.floor(Math.random() * 10) + 1 > miss * 10
+	}
+
+	calcDmg(amount) {
+		return Math.ceil(amount *= this.dmgModifier)
+	}
+
+	// weapons
+	async take_action_shove() {
+		await this.moveTo(this.x, this.y - 190, 1)
+		this.updateSprite(1)
+		enemy.getHurt(this.calcDmg(1))
+		await realSleep(0.5)
+		this.updateSprite(0)
+		await this.moveTo(this.x, this.y + 190, 1)
+		await realSleep(0.5)
+		await rpgPrint("You shove the enemy. It doesn't seem like it did much...", "dim")
+	}
+
+	async take_action_knife() {
+		await this.moveTo(this.x, this.y - 190, 1)
+		this.updateSprite(5)
+		enemy.getHurt(this.calcDmg(itemishList["knife"].stat_1))
+		await realSleep(0.5)
+		this.updateSprite(0)
+		await this.moveTo(this.x, this.y + 190, 1)
+		await realSleep(0.5)
+		await rpgPrint("They cry out in pain, presumably from the stab wound.", "dim")
+	}
+
+	// spells
+	async take_action_gun() {
+		let hit = this.calcHit(itemishList["gun"].stat_2)
+		await realSleep(0.2)
+		this.updateSprite(7)
+		await realSleep(1)
+		let bullet = new Sprite("cyan", this.bulletSprite, 0)
+		await bullet.moveTo(this.x + 45, this.y - 40)
+		bullet.moveTo(bullet.x, 10, 0.7)
+		await realSleep(0.5)
+		if(hit) enemy.getHurt(this.calcDmg(itemishList["gun"].stat_1))
+		await realSleep(0.2)
+		bullet.remove()
+		await realSleep(0.5)
+		this.updateSprite(0)
+		await realSleep(0.5)
+		if(hit) await rpgPrint("Hit for " + this.calcDmg(itemishList["gun"].stat_1) + " dmg.", "dim")
+		else await rpgPrint("The bullet missed.", "dim")
+	}
+
+	// items
+	async take_action_apple() {
+		this.getHurt(itemishList["apple"].stat_1 * -1)
+		window.rpg.items.splice(window.rpg.items.indexOf("apple"), 1)
+		await rpgPrint("Healed for " + itemishList["apple"].stat_1 + " hp.", "dim")
+	}
+
+	async take_action_pills() {
+		this.dmgModifier += itemishList["pills"].stat_1 - 1
+		this.sprite.classList.add("healed")
+		new HealedText(this.x, this.y, itemishList["pills"].stat_1, true)
+		await realSleep(0.5)
+		this.sprite.classList.remove("healed")
+		await realSleep(0.5)
+		window.rpg.items.splice(window.rpg.items.indexOf("pills"), 1)
+		await rpgPrint("Attack modifier is now at " + dotReplace(this.dmgModifier) + "x.", "dim")
+	}
+
+}
+
+class CharacterText extends Sprite {
+	constructor(className, x, y, text) {
+		super(className, text)
+		this.x = x - 50
 		this.y = y
 		this.deltaPosition = [-2.5, -3, 0, 0.17]
 		this.lifeTime = 60
@@ -427,6 +642,19 @@ class HurtText extends Sprite {
 	codeUpdate() {
 		this.lifeTime--
 		if(this.lifeTime < 0) this.remove()
+	}
+}
+
+// little text that pops up when you get hurt
+class HurtText extends CharacterText {
+	constructor(x, y, amount) {
+		super("hurtText", x, y, "-" + amount)
+	}
+}
+
+class HealedText extends CharacterText {
+	constructor(x, y, amount, flag = false) {
+		super("healedText", x, y, "+" + Math.abs(amount) + (flag ? "x" : ""))
 	}
 }
 
@@ -439,7 +667,7 @@ U
 `
 
 	constructor() {
-		super("blue", null, 90, 75)
+		super("blue", null, 90, 60)
 		this.sprites = [ String.raw`
      \ || /
       /  \
@@ -463,12 +691,24 @@ String.raw`
       /  \
      /\__/\
      //  \\
+`,
+String.raw`
+       ||
+   X--/  \--X
+     /\__/\
+     //  \\
+`,
+String.raw`
+     X || X
+      /  \
+     /\__/\
+     //  \\
 `
 ]
 		this.updateSprite(0)
 	}
 
-	async shoot() {
+	async oldShoot() {
 		player.enemyTurn(true)
 		enemyDamageOutput = 15
 		let direction = (Math.floor(Math.random() * 2) + 1) // 1 left, 2 right
@@ -489,6 +729,97 @@ String.raw`
 		enemyDamageOutput = 0
 		player.enemyTurn(false)
 	}
+
+	async shoot_1() {
+		player.enemyTurn(true)
+		enemyDamageOutput = 15
+		let directions = [(Math.floor(Math.random() * 2) + 1), (Math.floor(Math.random() * 2) + 1), (Math.floor(Math.random() * 2) + 1)]
+		for(let i in directions) {
+			this.updateSprite(directions[i])
+			await realSleep(0.3)
+			this.updateSprite(0)
+			await realSleep(0.1)
+		}
+		await realSleep(1)
+		for(let i in directions) {
+			let direction = directions[i]
+			this.updateSprite(direction)
+			let bullet = new Sprite("blue", this.bulletSprite, 0)
+			await bullet.moveTo(direction == 1 ? this.x - 64 : this.x + 52, this.y + 55)
+			bullet.moveTo(bullet.x, bullet.y + 300, 0.3)
+			await realSleep(0.2)
+			if(direction == 1) hurtBox = [true, true, false, false]
+			else hurtBox = [false, true, true, false]
+			await realSleep(0.1)
+			bullet.remove()
+			hurtBox = [false, false, false, false]
+			await realSleep(0.5)
+		}
+		this.updateSprite(0)
+		await realSleep(0.5)
+		await this.moveTo(this.x, this.y + 180, 0.6)
+		await realSleep(Math.random() + 0.5)
+		this.updateSprite(5)
+		await realSleep(0.3)
+		this.updateSprite(4)
+		hurtBox = [true, true, true, false]
+		await realSleep(0.1)
+		hurtBox = [false, false, false]
+		await realSleep(0.2)
+		this.updateSprite(0)
+		await realSleep(0.4)
+		await this.moveTo(this.x, this.y - 180, 0.6)
+		await realSleep(0.5)
+		player.enemyTurn(false)
+	}
+
+	async shoot_2() {
+		for(let i = 0; i < 3; i++) {
+			player.enemyTurn(true)
+			enemyDamageOutput = 15
+			let direction = (Math.floor(Math.random() * 2) + 1) // 1 left, 2 right
+			let facing = (Math.floor(Math.random() * 2) + 1)
+			this.updateSprite(facing)
+			await realSleep(1)
+			let bullet = new Sprite("blue", this.bulletSprite, 0)
+			await bullet.moveTo(facing == 1 ? this.x - 64 : this.x + 52, this.y + 55)
+			if(direction == 1) {
+				bullet.moveTo(facing == 1 ? bullet.x : bullet.x - 150, bullet.y + 300, 0.8)
+				await realSleep(0.6)
+				hurtBox = [true, true, false, false]
+				await realSleep(0.2)
+				bullet.remove()
+				hurtBox = [false, false, false, false]
+				await realSleep(0.5)
+				this.updateSprite(0)
+				await realSleep(0.5)
+				enemyDamageOutput = 0
+			} else {
+				bullet.moveTo(facing == 1 ? bullet.x + 150 : bullet.x, bullet.y + 300, 0.8)
+				await realSleep(0.6)
+				hurtBox = [false, true, true, false]
+				await realSleep(0.2)
+				bullet.remove()
+				hurtBox = [false, false, false, false]
+				await realSleep(0.5)
+				this.updateSprite(0)
+				await realSleep(0.5)
+				enemyDamageOutput = 0
+			}
+		}
+		player.enemyTurn(false)
+	}
+
+	async takeTurn() {
+		if(Math.random() > 0.5) await this.shoot_1()
+		else await this.shoot_2()
+		return player.hp < 1
+	}
+
+	async die() {
+		this.hpTextUpdate()
+	}
+
 }
 
 function itemInspect(iden) {
@@ -540,11 +871,11 @@ async function viewInventory(inven) {
 		let menuArray = []
 
 		if(answer == 1) {
-			inven.weapons.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w)]))
+			inven.weapons.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
 		} else if(answer == 2) {
-			inven.spells.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w)]))
+			inven.spells.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
 		} else if(answer == 3) {
-			inven.items.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w)]))
+			inven.items.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
 		} else {
 			break
 		}
@@ -567,37 +898,43 @@ const itemishList = {
 		type: 0, // 0 is weapon
 		price: 0, // cost in shops
 		displayName: "Shove", // display name
-		stat_1: 1 // for weapons, dmg
+		stat_1: 1, // for weapons, dmg
+		description: "Not very useful."
 	},
 	knife: {
 		type: 0,
 		price: 10,
 		displayName: "Knife",
-		stat_1: 8
+		stat_1: 8,
+		description: "Ouch."
 	},
 	gun: {
 		type: 1, // 1 is spell
 		price: 15,
 		displayName: "Gun",
 		stat_1: 10, // for spells, dmg
-		stat_2: .3 // for spells, miss rate
+		stat_2: .3, // for spells, miss rate
+		description: "Yeowch."
 	},
 	apple: {
 		type: 2, // 2 is healable
 		price: 5,
 		displayName: "Apple",
-		stat_1: 5 // for healables, +hp
+		stat_1: 15, // for healables
+		description: "Not your favorite fruit."
 	},
 	pills: {
 		type: 3, // 3 is status item
 		price: 5,
 		displayName: "Bottle of pills",
-		stat_1: 1.2 // for status items, atk modifier
+		stat_1: 1.2, // for status items, atk modifier
+		description: "Illegal to take without a prescription."
 	}
 }
 
 export {
 	PlayerNew,
+	Player,
 	Spy,
 	Sprite,
 	rpgMenu,

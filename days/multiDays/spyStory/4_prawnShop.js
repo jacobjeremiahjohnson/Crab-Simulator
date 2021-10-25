@@ -25,7 +25,7 @@ export async function execute(queue) {
     await fprint("Deal.\n", "cyan", 1)
     await fprint("Old laptop - 1", "rainbow", 1)
     await fprint("Money + 20", "rainbow", 1)
-		queue.push("./days/multiDays/spyStory/5_yardSale.js")
+		queue.unshift("./days/multiDays/spyStory/5_yardSale.js")
 		queue = config.shuffleArray(queue)
 		window.rpg.money += 20
   } else if(answer == 2) {
@@ -41,7 +41,7 @@ export async function execute(queue) {
     await fprint("Oh dope.\n", "cyan", 2)
     await fprint("Watch - 1", "rainbow", 1)
     await fprint("Money + 30", "rainbow", 1)
-		queue.push("./days/multiDays/spyStory/5_yardSale.js")
+		queue.unshift("./days/multiDays/spyStory/5_yardSale.js")
 		queue = config.shuffleArray(queue)
 		window.rpg.money += 30
   }
