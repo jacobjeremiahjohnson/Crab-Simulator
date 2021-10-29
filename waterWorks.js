@@ -44,6 +44,26 @@ function generateQueue() {
 	return queueListTest || queueList
 }
 
+class Blip {
+	constructor(source) {
+		this.channels = []
+		this.max = 5
+		this.index = 0
+		for(let i = 0; i < this.max; i++) {
+			this.channels.push(new Audio(source))
+			this.channels[i].volume = 0.4
+		}
+	}
+	play() {
+		this.channels[this.index].play()
+		if(++this.index == this.max) this.index = 0
+	}
+}
+
+const blips = {
+	blip: new Blip("./audio/blips/sfx-blipold.wav")
+}
+
 // converts string to an array + converts \n to <br>
 function tokenize(string, color) {
 	if(color == "rainbow") return rainbowTokenize(string)
@@ -93,6 +113,8 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isC
 	const span = createSpan(color)
 	if(isChoice) span.classList.add("choice")
 	output.appendChild(span) // make and put an empty span of the specified color on the dom
+	let blipper = textSpeed != 0 ? source => blips[source].play() : true // function that plays blips if textSpeed isn't 0
+	let blipping = 0 // if 1, plays a blip for that character
 	for(let c of tokenize(string, color)) { // loop through all characters
 		span.innerHTML += c.outerHTML || c // add character
 		scrollToBottom()
@@ -102,13 +124,22 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isC
 				case "!":
 				case "?":
 				case ";":
+					blipping = 0
 					await sleep(0.5) // full stop sleep
 					break
 				case ",":
 				case ":":
+					blipping = 0
 					await sleep(0.25) // soft stop sleep
 					break
+				case "<br>":
+					await sleep(textSpeed * textSpeedAdjustment)
+					break
+				case " ":
+					blipping = -1 // spaces never blip but the character after them always will
 				default:
+					if(++blipping == 1) blipper("blip")
+					if(blipping == 2) blipping = 0
 					await sleep(textSpeed * textSpeedAdjustment) // default sleep for characters
 			}
 		}
