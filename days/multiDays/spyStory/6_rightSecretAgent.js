@@ -5,20 +5,23 @@ import { Player, Spy, Sprite, rpgPrint, rpgMenu, loadFight, unloadFight } from "
 export async function execute(queue){
 
 	// saves copy of rpg in window.message so restart day works
-	if(typeof window.message === "string" && window.message.startsWith("rpgTest")) window.rpg = JSON.parse(window.message.substring(7))
-	window.message = "rpgTest" + JSON.stringify(window.rpg)
+	if(typeof window.message === "string" && window.message.startsWith("rpgTest")) {
+		window.rpg = JSON.parse(window.message.substring(7))
+	} else {
+		window.message = "rpgTest" + JSON.stringify(window.rpg)
+		await fprint("You're walking downtown again and chance upon that one alleyway.", "dim", 1)
+		await fprint("As if on queue, your phone starts to ring.\n", "dim", 1)
+		await fprint("A call from... \"That one spy guy\"?\n", "green")
 
-	await fprint("You're walking downtown again and chance upon that one alleyway.", "dim", 1)
-	await fprint("As if on queue, your phone starts to ring.\n", "dim", 1)
-	await fprint("A call from... \"That one spy guy\"?\n", "green")
+		await fprint("Hey, what's it this time?\n", "cyan")
+		await fprint("He's found your location. My team can't reach you this time. Good luck.\n", "yellow")
+		await fprint("You look over into the alleyway. Someone looks back.\n", "dim", 1)
+		await fprint("Fu-\n", "cyan", 0)
+		await fprint("SECRET AGENT approaches!\n", "white", 1, 0.06)
 
-	await fprint("Hey, what's it this time?\n", "cyan")
-	await fprint("He's found your location. My team can't reach you this time. Good luck.\n", "yellow")
-	await fprint("You look over into the alleyway. Someone looks back.\n", "dim", 1)
-	await fprint("Fu-\n", "cyan", 0)
-	await fprint("SECRET AGENT approaches!\n", "white", 1, 0.06)
+		await pause()
+	}
 
-	await pause()
 	clear()
 
 	const spy = new Spy()

@@ -1,6 +1,6 @@
 import { fprint, choice, clear, pause, sleep, realSleep } from "/waterWorks.js"
 import * as config from "/waterWorks.js"
-import { PlayerNew, Spy, Sprite, rpgPrint, rpgMenu, loadFight, unloadFight } from "/mechanics/fightClub.js"
+import { Player, Spy, Sprite, rpgPrint, rpgMenu, loadFight, unloadFight } from "/mechanics/fightClub.js"
 
 export async function execute(queue){
 
@@ -18,7 +18,7 @@ export async function execute(queue){
 	clear()
 
 	const spy = new Spy()
-	const crab = new PlayerNew()
+	const crab = new Player()
 
 	loadFight(crab, spy)
 
@@ -33,7 +33,7 @@ export async function execute(queue){
 	await rpgPrint("Seriously? I'm almost gonna feel bad for doing this.", "blue")
 	await spy.oldShoot()
 
-	if(crab.hp == 75) await rpgPrint("Wow, you know how to dodge with the left and right arrow keys.", "blue")
+	if(crab.hp == 50) await rpgPrint("Impressive, you know how to dodge with the left and right arrow keys.", "blue")
 	else await rpgPrint("Hah, you don't even know how to dodge with the left and right arrow keys.", "blue")
 	await crab.takeTurn()
 	await rpgPrint("Ow! Aaah! That hurt so much!", "blue")
@@ -47,7 +47,7 @@ export async function execute(queue){
 	const pot = new Sprite("white", flowerPotSprite, 10)
 	await pot.moveTo(spy.x, spy.y - 200, 0)
 	await pot.moveTo(spy.x, spy.y + 50, 2)
-	spy.updateSprite(3)
+	spy.updateSprite(5)
 	await realSleep(3)
 	await rpgPrint("Press ENTER", "dim")
 

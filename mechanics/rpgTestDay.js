@@ -14,7 +14,14 @@ export async function execute(queue){
 
 	loadFight(crab, spy)
 
-	await sleep(1)
+	//await sleep(1)
+
+	while(true) {
+		await spy.shoot_1()
+		await sleep(1)
+	}
+
+	await crab.takeTurn()
 
 	let result
 	while(true) {

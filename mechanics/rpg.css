@@ -22,6 +22,11 @@
 #rpgOutput {
 	position: absolute;
 	top: 500px;
+	width: 80vw;
+}
+
+#rpgMenuText {
+	width: calc(80vw - 316px)
 }
 
 .shopWrapper {

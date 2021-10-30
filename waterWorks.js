@@ -190,7 +190,6 @@ const choiceClassic = array => new Promise(async (resolve, reject) => {
 })
 
 const menu = array => new Promise(async (resolve, reject) => {
-	const controller = new AbortController()
 	// displays text to screen
 	const span = createSpan("cyan")
 	span.classList.add("choice")
@@ -205,7 +204,7 @@ const menu = array => new Promise(async (resolve, reject) => {
 	let answer = await new Promise(async (resolve, reject) => {
 		span.childNodes[0].classList.add("menuSelected")
 		let count = 1
-		document.addEventListener("keydown", e => {
+		document.addEventListener("keydown", document.menuKeyDown = e => {
 			if(e.key == "Enter" || e.key == " ") resolve(count)
 			if(e.key == "ArrowDown" || e.key == "s") count++
 			if(e.key == "ArrowUp" || e.key == "w") count--
@@ -213,10 +212,10 @@ const menu = array => new Promise(async (resolve, reject) => {
 			if(count < 1) count = 1
 			span.childNodes.forEach(span => span.classList.remove("menuSelected"))
 			span.childNodes[count - 1].classList.add("menuSelected")
-		}, { signal: controller.signal })
+		})
 	})
+	document.removeEventListener("keydown", document.menuKeyDown)
 	fprint("", "cyan", 0, 0)
-	controller.abort()
 	resolve(answer)
 })
 
@@ -263,6 +262,10 @@ function arrayShuffle(array) {
 		array[index] = temp
 	}
 	return array
+}
+
+function randomIndex(array) {
+	return array[Math.floor(Math.random() * array.length)]
 }
 
 function randomGreeting() {
@@ -498,9 +501,9 @@ function updateSettingsScreen(selections) {
 	let saveDays = JSON.parse(window.localStorage.getItem("save"))
 	id("deleteSaveDisp").innerHTML = "Days : " + ((saveDays === null) ? "X" : saveDays[0])
 	if(selections[0][0] == 0) {
-		id("menuOptionsDisp").innerHTML = '<p class="cyan choice"><p class="menu menuSelected">Option one</p><p class="menu">Option 2</p></p><br><br><br>'
+		id("menuOptionsDisp").innerHTML = '<p class="cyan choice"><p class="menu menuSelected">Option one</p><p class="menu">Option 2</p></p><br>'
 	} else {
-		id("menuOptionsDisp").innerHTML = '<p class="cyan">[1] New Game&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[2] Resume Game : X</p><p class="cyan">[3] Settings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="cyan">[4] Credits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br>'
+		id("menuOptionsDisp").innerHTML = '<p class="cyan">[1] Red Option&nbsp;</p><p class="cyan">[2] Blue Option</p><br>'
 	}
 	if(selections[1][0] == 0) {
 		settingsUpdateColors(0)
@@ -541,6 +544,7 @@ export {
 	dayPlural,
 	generateQueue,
 	shuffleArray,
+	randomIndex,
 	randomDeath,
 	randomGreeting,
 	randomAgree,

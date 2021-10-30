@@ -58,11 +58,12 @@ window.personality = 0 // positive = good, negative = bad
 window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
 window.rpg = {
-	money: 0,
-	weapons: ["shove"],
-	spells: [],
-	items: []
+	money: 100,
+	weapons: ["shove", "knife"],
+	spells: ["gun"],
+	items: ["apple", "apple"]
 }
+
 
 // flag means its a resume if true
 // flag means normal if false
