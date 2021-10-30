@@ -865,17 +865,17 @@ function alreadyHave(iden) {
 	)
 }
 
-async function viewInventory(inven) {
+async function viewInventory() {
 	while(true) {
 		let answer = await rpgMenu([["Weapons", "View your weapons."], ["Spells", "View your spells."], ["Items", "View your items."], ["Back", ""]], 1)
 		let menuArray = []
 
 		if(answer == 1) {
-			inven.weapons.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
+			window.rpg.weapons.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
 		} else if(answer == 2) {
-			inven.spells.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
+			window.rpg.spells.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
 		} else if(answer == 3) {
-			inven.items.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
+			window.rpg.items.forEach(w => menuArray.push([itemishList[w].displayName, itemInspect(w) + " : " + itemishList[w].description]))
 		} else {
 			break
 		}
@@ -912,7 +912,7 @@ const itemishList = {
 		type: 1, // 1 is spell
 		price: 15,
 		displayName: "Gun",
-		stat_1: 14, // for spells, dmg
+		stat_1: 10, // for spells, dmg
 		stat_2: .3, // for spells, miss rate
 		description: "Yeowch."
 	},
