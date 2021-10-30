@@ -59,9 +59,9 @@ window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
 window.rpg = {
 	money: 0,
-	weapons: ["shove", "knife"],
-	spells: ["gun"],
-	items: ["apple", "apple", "pills"]
+	weapons: ["shove"],
+	spells: [],
+	items: []
 }
 
 // flag means its a resume if true
@@ -330,7 +330,7 @@ function saveAndQuit() {
 
 window.addEventListener("load", async () => {
 	// if no settings loaded, set default ones
-	if(window.localStorage.getItem("settings") === null) window.localStorage.setItem("settings", JSON.stringify([0, 1.0, 0]))
+	if(window.localStorage.getItem("settings") === null) window.localStorage.setItem("settings", JSON.stringify([0, 0, 1.0]))
 	config.loadSettings()
 
 	fprint("Press ENTER to start Crab Simulator 2", "dim", 0, 0)
