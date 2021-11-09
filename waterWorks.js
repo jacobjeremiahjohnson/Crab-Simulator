@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % (rainbowList.length -
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	queueListTest = ["./days/multiDays/spyStory/6_rightSecretAgent.js"]
+	queueListTest = ["./days/multiDays/spyStory/7_surveys.js"]
 	var queueList = [
 		"./days/multiDays/spyStory/1_wrongSecretAgent.js",
 		"./days/pirates.js",
@@ -174,13 +174,31 @@ const choiceClassic = array => new Promise(async (resolve, reject) => {
 	output.appendChild(span)
 	fprint("", "cyan", 0, 0)
 	while(true) {
-		let answer = await awaitInput()
+		let answer = await awaitInput(true)
 		fprint(answer, "cyan", 0, 0, true)
 		answer = parseInt(answer.slice(3))
 		if(answer >= 1 && answer <= array.length) {
 			input.classList.remove("visible")
 			fprint("", "cyan", 0, 0)
 			resolve(answer)
+			break
+		} else {
+			fprint("Invalid input...", "red", 0, 0, true)
+			continue
+		}
+	}
+})
+
+const textInput = () => new Promise(async r => {
+	input.classList.add("visible")
+	fprint("", "cyan", 0, 0)
+	while(true) {
+		let answer = await awaitInput(true)
+		fprint(answer, "cyan", 0, 0, true)
+		if(answer.trim() !== ">>") {
+			input.classList.remove("visible")
+			fprint("", "cyan", 0, 0)
+			r(answer.slice(3))
 			break
 		} else {
 			fprint("Invalid input...", "red", 0, 0, true)
@@ -219,18 +237,20 @@ const menu = array => new Promise(async (resolve, reject) => {
 	resolve(answer)
 })
 
-const awaitInput = () => new Promise(async (resolve, reject) => {
+const awaitInput = (flag = false) => new Promise(async (resolve, reject) => {
 	input.innerHTML = ">> "
 	let text = ">> "
-	document.addEventListener("keypress", e => {
-		if(e.key == "Enter" || e.key == " ") {
+	document.addEventListener("keypress", document.awaitInputKeyPress = e => {
+		if(e.key == "Enter" || (!flag && e.key == " ")) {
+			document.removeEventListener("keypress", document.awaitInputKeyPress)
+			document.removeEventListener("keydown", document.awaitInputKeyDown)
 			resolve(text)
 		} else {
 			text += e.key
 			input.innerHTML = text
 		}
 	})
-	document.addEventListener("keydown", e => {
+	document.addEventListener("keydown", document.awaitInputKeyDown = e => {
 		if(e.key == "Backspace") {
 			if(text.length < 4) return
 			text = text.slice(0, text.length - 1)
@@ -555,5 +575,6 @@ export {
 	loadSettings,
 	id,
 	settings,
-	realSleep
+	realSleep,
+	textInput
 }
