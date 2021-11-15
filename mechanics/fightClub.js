@@ -866,7 +866,8 @@ function shopDisplay(itemList) {
 function alreadyHave(iden) {
 	return (
 		window.rpg.weapons.findIndex(i => i == iden) !== -1 ||
-		window.rpg.spells.findIndex(i => i == iden) !== -1
+		window.rpg.spells.findIndex(i => i == iden) !== -1 ||
+		window.rpg.items.findIndex(i => i == "mint") !== -1
 	)
 }
 
@@ -913,6 +914,13 @@ const itemishList = {
 		stat_1: 8,
 		description: "Ouch."
 	},
+	sword: {
+		type: 0,
+		price: 30,
+		displayName: "Sword",
+		stat_1: 20,
+		description: "Vaguely pointy."
+	},
 	gun: {
 		type: 1, // 1 is spell
 		price: 15,
@@ -921,12 +929,27 @@ const itemishList = {
 		stat_2: .3, // for spells, miss rate
 		description: "Yeowch."
 	},
+	cannon: {
+		type: 1,
+		price: 25,
+		displayName: "Cannon",
+		stat_1: 20,
+		stat_2: .1,
+		description: "Not fit for a landlubber like yeself."
+	},
 	apple: {
 		type: 2, // 2 is healable
 		price: 5,
 		displayName: "Apple",
 		stat_1: 15, // for healables
 		description: "Not your favorite fruit."
+	},
+	mint: {
+		type: 2,
+		price: 0,
+		displayName: "Mint",
+		stat_1: 1,
+		description: "Ugh, spearmint."
 	},
 	pills: {
 		type: 3, // 3 is status item

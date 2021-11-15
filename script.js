@@ -40,6 +40,7 @@ fast text speed is recommended to be 0.02
 18 - slideWhistle.js Crushed by a piano
 19 - hostage.js Called in a nuke for some reason lol
 20 - spyStory/ Died in combat
+21 - spyStory/8_armsDealer.js shot by security guard
 */
 
 import { fprint, choice, clear, pause, id } from "./waterWorks.js"
@@ -342,6 +343,9 @@ window.addEventListener("load", async () => {
 
 	document.addEventListener("keydown", e => {
 		if(e.key == "Escape" && quitable) startQuiting()
+		if(e.keyCode == 38 || e.keyCode == 40) e.preventDefault() // prevent up down arrow key scrolling
+	}, {
+		capture: true // idk what this really means but I need it for scroll prevention
 	})
 	document.addEventListener("keyup", e => {
 		if(e.key == "Escape") stopQuiting()
