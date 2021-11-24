@@ -4,7 +4,7 @@
 - Informational text is "dim"
 - Narrator speech is "green"
 - Character's speech is "cyan"
-- Other character's speech are "yellow", "blue", "purple", and "orange" in that order
+- Other character's speech are "yellow", "blue", "purple", "orange", and "light yellow" in that order
 - Onomonopoeia and other sounds are "red"
 - God and stat level ups are "rainbow"
 - Use "rainbow" and "white" very sparingly

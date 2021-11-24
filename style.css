@@ -137,6 +137,11 @@ img.emoji {
 	padding: 0 1em;
 }
 
+.preWhite {
+	white-space: pre;
+	color: var(--colorWhite);
+}
+
 .dim {
 	color: var(--colorDim);
 }
