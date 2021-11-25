@@ -38,7 +38,9 @@ function generateQueue() {
 		"./days/mcDolphins.js",
 		"./days/coding.js",
 		"./days/hostage.js",
-		"./days/slideWhistle.js"
+		"./days/slideWhistle.js",
+		"./days/oceanicExpress.js",
+		"./days/cardGame.js"
 	]
 	queueList = shuffleArray(queueList)
 	return queueListTest || queueList
