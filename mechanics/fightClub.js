@@ -308,6 +308,11 @@ bulletSprite = String.raw`
 ∩
 ‾
 `
+cannonSprite = String.raw`
+ _
+(_)
+`
+
 shoveResponses = [
 	"It doesn't seem like it did much...",
 	"They look annoyed.",
@@ -583,6 +588,17 @@ String.raw`
 		await rpgPrint(randomIndex(this.weaponResponses), "dim")
 	}
 
+	async take_action_sword() {
+		await this.moveTo(this.x, this.y - 190, 1)
+		this.updateSprite(6)
+		enemy.getHurt(this.calcDmg(itemishList["sword"].stat_1))
+		await realSleep(0.5)
+		this.updateSprite(0)
+		await this.moveTo(this.x, this.y + 190, 1)
+		await realSleep(0.5)
+		await rpgPrint(randomIndex(this.weaponResponses), "dim")
+	}
+
 	// spells
 
 	async take_action_gun() {
@@ -604,6 +620,25 @@ String.raw`
 		else await rpgPrint("The bullet missed. " + randomIndex(this.missResponses), "dim")
 	}
 
+	async take_action_cannon() {
+		let hit = this.calcHit(itemishList["cannon"].stat_2)
+		await realSleep(0.2)
+		this.updateSprite(8)
+		await realSleep(1)
+		let bullet = new Sprite("cyan", this.cannonSprite, 0)
+		await bullet.moveTo(this.x + 45, this.y - 40)
+		bullet.moveTo(bullet.x, 10, 0.7)
+		await realSleep(0.5)
+		if(hit) enemy.getHurt(this.calcDmg(itemishList["cannon"].stat_1))
+		await realSleep(0.2)
+		bullet.remove()
+		await realSleep(0.5)
+		this.updateSprite(0)
+		await realSleep(0.5)
+		if(hit) await rpgPrint("Hit for " + this.calcDmg(itemishList["cannon"].stat_1) + " dmg. " + randomIndex(this.hitResponses), "dim")
+		else await rpgPrint("The cannon missed. " + randomIndex(this.missResponses), "dim")
+	}
+
 	// items
 
 	async take_action_apple() {
@@ -621,6 +656,12 @@ String.raw`
 		await realSleep(0.5)
 		window.rpg.items.splice(window.rpg.items.indexOf("pills"), 1)
 		await rpgPrint("Attack modifier is now at " + dotReplace(this.dmgModifier) + "x.", "dim")
+	}
+
+	async take_action_mint() {
+		this.getHurt(itemishList["mint"].stat_1 * -1)
+		window.rpg.items.splice(window.rpg.items.indexOf("mint"), 1)
+		await rpgPrint("Healed for " + itemishList["mint"].stat_1 + " hp.", "dim")
 	}
 
 }
@@ -827,6 +868,172 @@ String.raw`
 
 }
 
+class HigherUp extends Character {
+	attackMod = 1
+	phase = 0 // 0 eggroll, 1 hook, 2 kick,
+
+	exclaimSprite = String.raw`
+ _
+| |
+|_|
+ _
+[_]
+`
+
+	constructor() {
+		super("yellow", null, 67, 180)
+this.sprites = [ String.raw`
+   .|_|.
+  +     +
+ / \___/ \
+ C // \\ C
+`,
+String.raw`
+   .|_|.
+  +     +_/
+ / \___/
+ C // \\
+`,
+String.raw`
+C  .|_|.  C
+\_+     +_/
+   \___/
+   // \\
+`,
+String.raw`
+C  .-_|.  C
+\_+     +_/
+   \___/
+   // \\
+`,
+String.raw`
+C  .|_-.  C
+\_+     +_/
+   \___/
+   // \\
+`,
+String.raw`
+C\K .|_|.
+  \_/   \+
+    \___/C
+    // \\
+`,
+String.raw`
+ .|_|. K/C
++/   \_/
+C\___/
+ // \\
+`,
+String.raw`
+ C,.|_|. C
+  +     +/
+,-/\___/
+ /     \\
+`
+]
+		this.updateSprite(0)
+	}
+
+	calcDmg(amount) {
+		return Math.ceil(amount *= this.attackMod)
+	}
+
+	async takeTurn() {
+		this.phase += 1
+		if(this.phase > 2) this.phase = 0
+		switch(this.phase) {
+			case 0:
+				await this.egg()
+				break
+			case 1:
+				await this.hook()
+				break
+			case 2:
+				await this.kick()
+				break
+		}
+		return player.hp < 1
+	}
+
+	async die() {
+		this.hpTextUpdate()
+	}
+
+	async hook() {
+		enemyDamageOutput = this.calcDmg(13)
+		player.enemyTurn(true)
+		for(let i = 0; i < 3; i++) {
+			let direction = Math.random() > 0.5 ? 1 : -1
+			this.updateSprite(2)
+			await realSleep(1)
+			if(direction == 1)  { // right punch
+				this.updateSprite(3)
+				await realSleep(0.45)
+				this.x = 120
+				this.y = 300
+				this.updateSprite(5)
+				hurtBox = [false, true, true, true]
+			} else { // left punch
+				this.updateSprite(4)
+				await realSleep(0.45)
+				this.x = -120
+				this.y = 300
+				this.updateSprite(6)
+				hurtBox = [true, true, false, true]
+			}
+			await realSleep(0.3)
+			this.updateSprite(2)
+			hurtBox = [false, false, false, false]
+			await realSleep(1)
+			await this.moveTo(0, 30, 1)
+		}
+		await realSleep(0.4)
+		player.enemyTurn(false)
+	}
+
+	async kick() {
+		enemyDamageOutput = this.calcDmg(15)
+		player.enemyTurn(true)
+		await this.moveTo(this.x, -400, 1.5)
+		this.moveTo(1100, 300)
+		await realSleep(1 + Math.random() * 1.2)
+		let indicator = new Sprite("red", this.exclaimSprite, 16)
+		indicator.y = 150
+		this.updateSprite(7)
+		this.moveTo(-1100, this.y, 0.9)
+		await realSleep(0.27)
+		hurtBox = [true, true, true, false]
+		await realSleep(0.22)
+		hurtBox = [false, false, false, false]
+		await realSleep(1)
+		indicator.remove()
+		await this.moveTo(0, -400)
+		this.updateSprite(0)
+		await this.moveTo(this.x, 30, 1.5)
+		await realSleep(0.5)
+		player.enemyTurn(false)
+	}
+
+	async egg() {
+		let eggroll = new Sprite("yellow", "E")
+		eggroll.x = 50
+		eggroll.y = 60
+		this.updateSprite(1)
+		await realSleep(1)
+		eggroll.deltaPosition = [-1.5, -1.5, 0, 0.1]
+		await realSleep(0.7)
+		eggroll.remove()
+		this.updateSprite(0)
+		this.sprite.classList.add("healed")
+		new HealedText(this.x, this.y, 1.2, true)
+		await realSleep(0.5)
+		this.sprite.classList.remove("healed")
+		this.attackMod += 0.2
+		await rpgPrint("She eats an eggroll, increasing her attack by 1｡2x.", "dim")
+	}
+
+}
+
 function itemInspect(iden) {
 	let description
 	switch(itemishList[iden].type) {
@@ -963,6 +1170,7 @@ const itemishList = {
 export {
 	Player,
 	Spy,
+	HigherUp,
 	Sprite,
 	rpgMenu,
 	rpgPrint,

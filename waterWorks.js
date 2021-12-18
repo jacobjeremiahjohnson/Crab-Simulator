@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % (rainbowList.length -
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	queueListTest = ["./days/oceanicExpress.js"]
+	queueListTest = ["./days/multiDays/spyStory/9_higherUp.js"]
 	var queueList = [
 		"./days/multiDays/spyStory/1_wrongSecretAgent.js",
 		"./days/pirates.js",

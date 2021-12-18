@@ -60,9 +60,9 @@ window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
 window.rpg = {
 	money: 100,
-	weapons: ["shove", "knife"],
-	spells: ["gun"],
-	items: ["apple", "apple"]
+	weapons: ["shove", "knife", "sword"],
+	spells: ["gun", "cannon"],
+	items: ["apple", "apple", "mint"]
 }
 
 

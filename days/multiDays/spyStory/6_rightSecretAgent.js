@@ -69,6 +69,7 @@ export async function execute(queue){
 
 	queue.unshift("./days/multiDays/spyStory/7_surveys.js")
 	queue = config.shuffleArray(queue)
+	window.message = false
 
 	return queue
 }
