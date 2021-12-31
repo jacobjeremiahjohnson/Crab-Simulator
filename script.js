@@ -41,6 +41,7 @@ fast text speed is recommended to be 0.02
 19 - hostage.js Called in a nuke for some reason lol
 20 - spyStory/ Died in combat
 21 - spyStory/8_armsDealer.js shot by security guard
+22 - spyStory/10_fishWalking.js stray cinder block
 */
 
 import { fprint, choice, clear, pause, id } from "./waterWorks.js"
