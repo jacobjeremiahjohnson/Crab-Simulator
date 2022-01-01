@@ -185,3 +185,7 @@ img.emoji {
 .white {
 	color: var(--colorWhite);
 }
+
+.black {
+	color: var(--colorBlack);
+}

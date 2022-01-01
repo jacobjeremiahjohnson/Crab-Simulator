@@ -54,6 +54,7 @@ export async function execute(queue) {
 			await fprint("ok geez\n", "yellow", 1)
 			await fprint("You race past him, snatching up the jellyfish in the nick of time. The rest of your walk is pleasant and uneventful.\n", "dim")
 			await fprint("Badness + 1", "rainbow", 1)
+			window.personality--
 		}
 	} else if(answer == 2) {
 		await fprint("They probably wandered off into that bigass mall they just built.", "cyan", 0)
@@ -69,10 +70,12 @@ export async function execute(queue) {
 			await fprint("You both make out with a hat and some quality pens.\n", "dim", 1)
 			await fprint("Drip + 1", "rainbow", 1)
 			await fprint("Badness + 1", "rainbow", 1)
+			window.personality--
 		} else {
 			await fprint("HEY! BAD JELLYFISH! NO!\n", "cyan")
 			await fprint("The jellyfish looks at you with contempt now, but you understand that with a more mature mindset ten years down the road, they will thank you for instilling such just morals unto them.\n", "dim", 1)
 			await fprint("Goodness + 1", "rainbow", 1)
+			window.personality++
 		}
 	} else {
 		await fprint("They probably wandered off into that grocery store over there.", "cyan", 0)
