@@ -1073,8 +1073,7 @@ function shopDisplay(itemList) {
 function alreadyHave(iden) {
 	return (
 		window.rpg.weapons.findIndex(i => i == iden) !== -1 ||
-		window.rpg.spells.findIndex(i => i == iden) !== -1 ||
-		window.rpg.items.findIndex(i => i == "mint") !== -1
+		window.rpg.spells.findIndex(i => i == iden) !== -1
 	)
 }
 
@@ -1144,6 +1143,14 @@ const itemishList = {
 		stat_2: .1,
 		description: "Not fit for a landlubber like yeself."
 	},
+	book: {
+		type: 1,
+		price: 40,
+		displayName: "Necronomicon",
+		stat_1: 50,
+		stat_2: .4,
+		description: "Smells weird."
+	},
 	apple: {
 		type: 2, // 2 is healable
 		price: 5,
@@ -1157,6 +1164,34 @@ const itemishList = {
 		displayName: "Mint",
 		stat_1: 1,
 		description: "Ugh, spearmint."
+	},
+	cookie: {
+		type: 2,
+		price: 10,
+		displayName: "Cookie",
+		stat_1: 20,
+		description: "A little overbaked."
+	},
+	cake: {
+		type: 2,
+		price: 15,
+		displayName: "Cake",
+		stat_1: 25,
+		description: "Too dense."
+	},
+	brownie: {
+		type: 2,
+		price: 20,
+		displayName: "Brownie",
+		stat_1: 30,
+		description: "Tastes illegal."
+	},
+	antacid: {
+		type: 3,
+		price: 20,
+		displayName: "Antacid",
+		stat_1: 1.5,
+		description: "Good for heartburn."
 	},
 	pills: {
 		type: 3, // 3 is status item
