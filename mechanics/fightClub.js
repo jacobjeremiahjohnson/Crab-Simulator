@@ -278,7 +278,7 @@ class Character extends Sprite { // sprite but has hp
 			this.sprite.classList.add("hurt")
 			new HurtText(this.x, this.y, amount)
 			this.hp -= amount
-			if(this.hp < 0) return await this.die()
+			if(this.hp <= 0) return await this.die()
 			this.hpTextUpdate()
 			await realSleep(0.5)
 			this.sprite.classList.remove("hurt")
@@ -313,6 +313,8 @@ cannonSprite = String.raw`
 (_)
 `
 
+bookText = "Stultus Fatuus"
+
 shoveResponses = [
 	"It doesn't seem like it did much...",
 	"They look annoyed.",
@@ -328,6 +330,14 @@ weaponResponses = [
 	"They stand there and take the attack for unknown reasons.",
 	"They marvel at how cool your weapon is. Through the pain, of course.",
 	"They're impressed you just walked up and stabbed them."
+]
+bookResponses = [
+	"Their eyes bleed blood, no, ketchup.",
+	"They fall to the ground, fearful of God's Wrath.",
+	"They're thoroughly shaken to the core.",
+	"They start crying in fear.",
+	"A small flame erupts on their clothes.",
+	"This book is crazy, dude."
 ]
 hitResponses = [
 	"Dub.",
@@ -639,6 +649,30 @@ String.raw`
 		else await rpgPrint("The cannon missed. " + randomIndex(this.missResponses), "dim")
 	}
 
+	async take_action_book() {
+		let hit = this.calcHit(itemishList["book"].stat_2)
+		await realSleep(0.2)
+		this.updateSprite(9)
+		await realSleep(1)
+		let text = new Sprite("cyan", " ", 0)
+		await text.moveTo(this.x - 90, this.y - 30)
+		for(let i of this.bookText) {
+			text.sprite.innerHTML += i
+			await sleep(0.04)
+		}
+		await realSleep(1)
+		text.moveTo(text.x, 10, 0.7)
+		await realSleep(0.5)
+		if(hit) enemy.getHurt(this.calcDmg(itemishList["book"].stat_1))
+		await realSleep(0.2)
+		text.remove()
+		await realSleep(0.5)
+		this.updateSprite(0)
+		await realSleep(0.5)
+		if(hit) await rpgPrint("Hit for " + this.calcDmg(itemishList["book"].stat_1) + " dmg. " + randomIndex(this.bookResponses), "dim")
+		else await rpgPrint("The Necronomicon missed. " + randomIndex(this.missResponses), "dim")
+	}
+
 	// items
 
 	async take_action_apple() {
@@ -658,10 +692,39 @@ String.raw`
 		await rpgPrint("Attack modifier is now at " + dotReplace(this.dmgModifier) + "x.", "dim")
 	}
 
+	async take_action_antacid() {
+		this.dmgModifier += itemishList["antacid"].stat_1 - 1
+		this.sprite.classList.add("healed")
+		new HealedText(this.x, this.y, itemishList["antacid"].stat_1, true)
+		await realSleep(0.5)
+		this.sprite.classList.remove("healed")
+		await realSleep(0.5)
+		window.rpg.items.splice(window.rpg.items.indexOf("antacid"), 1)
+		await rpgPrint("Attack modifier is now at " + dotReplace(this.dmgModifier) + "x.", "dim")
+	}
+
 	async take_action_mint() {
 		this.getHurt(itemishList["mint"].stat_1 * -1)
 		window.rpg.items.splice(window.rpg.items.indexOf("mint"), 1)
 		await rpgPrint("Healed for " + itemishList["mint"].stat_1 + " hp.", "dim")
+	}
+
+	async take_action_cookie() {
+		this.getHurt(itemishList["cookie"].stat_1 * -1)
+		window.rpg.items.splice(window.rpg.items.indexOf("cookie"), 1)
+		await rpgPrint("Healed for " + itemishList["cookie"].stat_1 + " hp.", "dim")
+	}
+
+	async take_action_cake() {
+		this.getHurt(itemishList["cake"].stat_1 * -1)
+		window.rpg.items.splice(window.rpg.items.indexOf("cake"), 1)
+		await rpgPrint("Healed for " + itemishList["cake"].stat_1 + " hp.", "dim")
+	}
+
+	async take_action_brownie() {
+		this.getHurt(itemishList["brownie"].stat_1 * -1)
+		window.rpg.items.splice(window.rpg.items.indexOf("brownie"), 1)
+		await rpgPrint("Healed for " + itemishList["brownie"].stat_1 + " hp.", "dim")
 	}
 
 }
@@ -702,8 +765,8 @@ _
 U
 `
 
-	constructor() {
-		super("blue", null, 90, 60)
+	constructor(final = false) {
+		super(final ? "purple" : "blue", null, 95, 60)
 this.sprites = [ String.raw`
      \ || /
       /  \
@@ -864,6 +927,15 @@ String.raw`
 
 	async die() {
 		this.hpTextUpdate()
+	}
+
+	async finalAttack() {
+		this.updateSprite(7)
+		await realSleep(0.3)
+		this.updateSprite(6)
+		await realSleep(0.3)
+		this.updateSprite(0)
+		await realSleep(1.5)
 	}
 
 }
@@ -1032,6 +1104,296 @@ String.raw`
 		await rpgPrint("She eats an eggroll, increasing her attack by 1｡2x.", "dim")
 	}
 
+}
+
+class Boss extends Character {
+	phase = 0 // 0 gatling twice, 1 tnt, 2 gatling once
+
+	bulletSprite = String.raw`
+ |
+| |
+ | |
+`
+	tntLSprite = String.raw`
+ **_
+[TNT]
+[___]
+`
+	tntRSprite = String.raw`
+ _**
+[TNT]
+[___]
+`
+
+explosionSprites = [ String.raw`
+
+ X
+
+`,
+String.raw`
+ X 
+XXX
+ X
+`,
+String.raw`
+X X
+ X 
+X X
+`,
+String.raw`
+X X
+
+X X
+`
+]
+
+	constructor() {
+		super("blue", null, 60, 200)
+this.sprites = [ String.raw`
+| ,I__I, |
+\_|    |_/
+  /\__/\
+  //  \\
+`,
+String.raw`
+| ,I__I,  _
+\_|    |_| |[]
+  /\__/\ |^|
+  //  \\ }}}
+`,
+String.raw`
+| ,I__I,  _
+\_|    |_| |[]
+  /\__/\ |^|
+  //  \\ {{{
+`
+]
+		this.updateSprite(0)
+	}
+
+	async takeTurn() {
+		this.phase += 1
+		if(this.phase > 2) this.phase = 0
+		switch(this.phase) {
+			case 0:
+				await this.gatTwice()
+				break
+			case 1:
+				await this.tnt()
+				break
+			case 2:
+				await this.gatOnce()
+				break
+		}
+		return player.hp < 1
+	}
+
+	async die() {
+		this.hpTextUpdate()
+	}
+
+	async gatTwice() {
+		player.enemyTurn(true)
+		enemyDamageOutput = 20
+		this.updateSprite(1)
+		this.spawnGatTwice()
+		await realSleep(1)
+		await this.spawnGatTwice()
+		this.updateSprite(0)
+		await realSleep(0.5)
+		enemyDamageOutput = 0
+		player.enemyTurn(false)
+	}
+
+	async spawnGatTwice() {
+		await realSleep(1)
+		let dir = Math.floor(Math.random() * 3) // 0 = SXX, 1 = XSX, 2 = XXS
+		let bulletL = new Sprite("blue", this.bulletSprite, 0)
+		let bulletR = new Sprite("blue", this.bulletSprite, 0)
+
+		const left = -150
+		const mid = -70
+		const right = 10
+		const time = 0.4
+
+		await bulletL.moveTo(this.x + 52, this.y + 55)
+		await bulletR.moveTo(this.x + 52, this.y + 55)
+		switch(dir) {
+			case 0: bulletL.moveTo(bulletL.x + mid, bulletL.y + 60, time); bulletR.moveTo(bulletR.x + right, bulletR.y + 60, time); break
+			case 1: bulletL.moveTo(bulletL.x + left, bulletL.y + 60, time); bulletR.moveTo(bulletR.x + right, bulletR.y + 60, time); break
+			case 2: bulletL.moveTo(bulletL.x + left, bulletL.y + 60, time); bulletR.moveTo(bulletR.x + mid, bulletR.y + 60, time)
+		}
+		await realSleep(time)
+		bulletL.moveTo(bulletL.x, bulletL.y + 240, 0.4)
+		bulletR.moveTo(bulletR.x, bulletR.y + 240, 0.4)
+		await realSleep(0.15)
+		switch(dir) {
+			case 0: hurtBox = [false, true, true, true]; break
+			case 1: hurtBox = [true, false, true, true]; break
+			case 2: hurtBox = [true, true, false, true]
+		}
+		await realSleep(0.25)
+		bulletL.remove()
+		bulletR.remove()
+		hurtBox = [false, false, false, false]
+		await realSleep(0.5)
+	}
+
+	async gatOnce() {
+		player.enemyTurn(true)
+		enemyDamageOutput = 30
+		this.updateSprite(2)
+		this.spawnGatOnce()
+		await realSleep(1)
+		this.spawnGatOnce()
+		await realSleep(1)
+		await this.spawnGatOnce()
+		this.updateSprite(0)
+		await realSleep(0.5)
+		enemyDamageOutput = 0
+		player.enemyTurn(false)
+	}
+
+	async spawnGatOnce() {
+		await realSleep(1)
+		let dir = Math.floor(Math.random() * 3) // 0 = Left, 1 = Mid, 2 = Right
+		let bullet = new Sprite("blue", this.bulletSprite, 0)
+
+		const left = -150
+		const mid = -70
+		const right = 10
+		const time = 0.4
+
+		await bullet.moveTo(this.x + 52, this.y + 55)
+
+		switch(dir) {
+			case 0: bullet.moveTo(bullet.x + (left * 0.8), bullet.y + 60, time); break
+			case 1: bullet.moveTo(bullet.x + mid, bullet.y + 60, time); break
+			case 2: bullet.moveTo(bullet.x + (right * -3), bullet.y + 60, time)
+		}
+		await realSleep(time)
+		bullet.moveTo(bullet.x, bullet.y + 240, 0.4)
+		await realSleep(0.15)
+		switch(dir) {
+			case 0: hurtBox = [true, true, false, true]; break
+			case 1: hurtBox = [false, true, false, true]; break
+			case 2: hurtBox = [false, true, true, true]
+		}
+		await realSleep(0.25)
+		bullet.remove()
+		hurtBox = [false, false, false, false]
+		await realSleep(0.5)
+	}
+
+	async tnt() {
+		await realSleep(1)
+		player.enemyTurn(true)
+		enemyDamageOutput = 40
+		let dir = Math.floor(Math.random() * 2) // 0 left, 1 right
+		let tnt = new Sprite("blue", dir == 0 ? this.tntLSprite : this.tntRSprite, 0)
+		await tnt.moveTo(this.x + 50, this.y - 50)
+		await realSleep(0.7)
+		await tnt.moveTo(tnt.x, tnt.y - 300, 1)
+		await tnt.moveTo(1100, 250)
+		tnt.moveTo(-500, tnt.y, 1)
+		if(dir == 0) {
+			await realSleep(0.73)
+			hurtBox = [true, true, false, true]
+		} else {
+			await realSleep(0.65)
+			hurtBox = [false, true, true, true]
+		}
+		tnt.remove()
+		await this.spawnExplosion(tnt.x, tnt.y)
+		hurtBox = [false, false, false, false]
+		await realSleep(0.5)
+		enemyDamageOutput = 0
+		player.enemyTurn(false)
+	}
+
+	async spawnExplosion(x, y) {
+		let sprite = new Sprite("red")
+		await sprite.moveTo(x, y)
+		for(let i = 0; i < this.explosionSprites.length; i++) {
+			sprite.sprite.innerHTML = this.explosionSprites[i]
+			await realSleep(0.1)
+		}
+		sprite.remove()
+	}
+
+	async finalAttack() {
+		await realSleep(1)
+		player.enemyTurn(true)
+		let tntDir = Math.floor(Math.random() * 2) // 0 left, 1 right
+		let tnt = new Sprite("blue", tntDir == 0 ? this.tntLSprite : this.tntRSprite, 0)
+		await tnt.moveTo(this.x + 50, this.y - 50)
+		await realSleep(0.7)
+		await tnt.moveTo(tnt.x, tnt.y - 300, 1)
+
+		enemyDamageOutput = 30
+		this.updateSprite(2)
+		await this.spawnGatOnce()
+		this.updateSprite(0)
+		enemyDamageOutput = 40
+
+		await tnt.moveTo(1100, 250)
+		tnt.moveTo(-500, tnt.y, 1)
+		if(tntDir == 0) {
+			await realSleep(0.73)
+			hurtBox = [true, true, false, true]
+		} else {
+			await realSleep(0.65)
+			hurtBox = [false, true, true, true]
+		}
+		tnt.remove()
+
+		let tntDir2 = Math.floor(Math.random() * 2) // 0 left, 1 right
+		let tnt2 = new Sprite("blue", tntDir2 == 0 ? this.tntLSprite : this.tntRSprite, 0)
+		await tnt2.moveTo(this.x + 50, this.y - 50)
+		await this.spawnExplosion(tnt.x, tnt.y)
+		hurtBox = [false, false, false, false]
+		await tnt2.moveTo(tnt2.x, tnt2.y - 300, 1)
+
+		enemyDamageOutput = 25
+		this.updateSprite(1)
+		await this.spawnGatTwice()
+		this.updateSprite(0)
+		enemyDamageOutput = 40
+
+		await tnt2.moveTo(1100, 250)
+		tnt2.moveTo(-500, tnt2.y, 1)
+		if(tntDir2 == 0) {
+			await realSleep(0.73)
+			hurtBox = [true, true, false, true]
+		} else {
+			await realSleep(0.65)
+			hurtBox = [false, true, true, true]
+		}
+		tnt2.remove()
+		await this.spawnExplosion(tnt2.x, tnt2.y)
+		hurtBox = [false, false, false, false]
+		await realSleep(2)
+
+		enemyDamageOutput = 0
+		player.enemyTurn(false)
+	}
+
+	async protein() {
+		let bar = new Sprite("blue", "P")
+		bar.x = 50
+		bar.y = 50
+		await realSleep(1)
+		bar.deltaPosition = [-1.5, -1.5, 0, 0.1]
+		await realSleep(0.7)
+		bar.remove()
+		this.sprite.classList.add("healed")
+		new HealedText(this.x, this.y, 1 - this.hp)
+		this.hp = 1
+		this.sprite.classList.remove("hurt")
+		this.hpTextUpdate()
+		await realSleep(0.5)
+		this.sprite.classList.remove("healed")
+	}
 }
 
 function itemInspect(iden) {
@@ -1207,6 +1569,7 @@ export {
 	Spy,
 	HigherUp,
 	Sprite,
+	Boss,
 	rpgMenu,
 	rpgPrint,
 	loadFight,
@@ -1214,7 +1577,7 @@ export {
 	loadShop,
 	unloadShop,
 	shopDisplay,
-	itemishList,
 	alreadyHave,
-	viewInventory
+	viewInventory,
+	itemishList
 }

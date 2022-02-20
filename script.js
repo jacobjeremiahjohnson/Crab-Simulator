@@ -60,10 +60,10 @@ window.personality = 0 // positive = good, negative = bad
 window.state = 0 // 0 = alive, -1 = win, string = death message
 window.message = 0 // used to communicate short term between days, typically used in multidays
 window.rpg = {
-	money: 100,
-	weapons: ["shove", "knife", "sword"],
-	spells: ["gun", "cannon"],
-	items: ["apple", "apple", "mint"]
+	money: 0,
+	weapons: ["shove"],
+	spells: [],
+	items: []
 }
 
 
@@ -214,7 +214,7 @@ async function intro() {
 
 async function credits() {
   clear()
-  await fprint("Made by Jacob Johnson and Roger Cronin\n", "green", 1)
+  await fprint("Made by Roger Cronin\n", "green", 1)
 	await fprint("Shoutout to RomeroShwarz and their 1300s Peasant Simulator for insipration\n", "green", 1)
   const span = config.createSpan("green")
   config.output.appendChild(span)

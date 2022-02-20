@@ -1,6 +1,6 @@
 import { fprint, choice, clear, pause, sleep, realSleep } from "/waterWorks.js"
 import * as config from "/waterWorks.js"
-import { Player, Spy, Sprite, rpgPrint, rpgMenu, loadFight, unloadFight } from "/mechanics/fightClub.js"
+import { Player, Boss, Sprite, rpgPrint, rpgMenu, loadFight, unloadFight } from "/mechanics/fightClub.js"
 
 export async function execute(queue){
 
@@ -9,20 +9,27 @@ export async function execute(queue){
 
 	clear()
 
-	const spy = new Spy()
+	const spy = new Boss()
 	const crab = new Player()
 
 	loadFight(crab, spy)
 
 	//await sleep(1)
 
+	/*
 	while(true) {
 		await spy.shoot_1()
 		await sleep(1)
 	}
+	*/
 
+	while(true) {
+		await spy.finalAttack()
+		await realSleep(1)
+	}
 	await crab.takeTurn()
 
+	/*
 	let result
 	while(true) {
 		if(await spy.takeTurn() === true) { // dead
@@ -40,6 +47,7 @@ export async function execute(queue){
 			break
 		}
 	}
+	*/
 
 	await fprint("Neat.", "cyan")
 
