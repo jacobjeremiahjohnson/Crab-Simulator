@@ -541,7 +541,9 @@ function updateSettingsScreen(selections) {
 		id("colorTypeDisp").innerHTML = '<span class="pink">A</span><span class="purple"> </span><span class="red">p</span><span class="lightYellow">r</span><span class="green">e</span><span class="blue">t</span><span class="pink">t</span><span class="purple">y</span><span class="red"> </span><span class="lightYellow">r</span><span class="green">a</span><span class="blue">i</span><span class="pink">n</span><span class="purple">b</span><span class="red">o</span><span class="lightYellow">w</span><span class="green"> </span><span class="blue">f</span><span class="pink">o</span><span class="purple">r</span><span class="red"> </span><span class="lightYellow">y</span><span class="green">o</span><span class="blue">u</span><span class="pink"> </span><span class="purple">t</span><span class="red">o</span><span class="lightYellow"> </span><span class="green">s</span><span class="blue">e</span><span class="pink">e</span><span class="purple"> </span><span class="red">t</span><span class="lightYellow">h</span><span class="green">e</span><span class="blue"> </span><span class="pink">c</span><span class="purple">o</span><span class="red">l</span><span class="lightYellow">o</span><span class="green">r</span><span class="blue">s</span><span class="pink">.</span>'
 	}
 	if(selections[3][0] == 1) {
-
+		id("difficultyDisp").innerHTML = '<span class="green">The game as it was intended.</span>'
+	} else {
+		id("difficultyDisp").innerHTML = '<span class="green">For a more casual audience.</span>'
 	}
 }
 

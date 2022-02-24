@@ -47,7 +47,7 @@ fast text speed is recommended to be 0.02
 import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-const skipIntro = true // goes straight into the game if true
+const skipIntro = false // goes straight into the game if true
 var quitable = false // if can quit rn
 var atEndOfDay = false
 var quitVar = 0 // save and quit stuff
