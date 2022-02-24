@@ -1,5 +1,5 @@
-import { fprint, choice, clear, pause, textInput } from "/waterWorks.js"
-import * as config from "/waterWorks.js"
+import { fprint, textInput } from "../../../waterWorks.js"
+import * as config from "../../../waterWorks.js"
 
 export async function execute(queue) {
 

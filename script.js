@@ -44,7 +44,7 @@ fast text speed is recommended to be 0.02
 22 - spyStory/10_fishWalking.js stray cinder block
 */
 
-import { fprint, choice, clear, pause, id } from "./waterWorks.js"
+import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
 const skipIntro = true // goes straight into the game if true
@@ -344,7 +344,7 @@ window.addEventListener("load", async () => {
 
 	document.addEventListener("keydown", e => {
 		if(e.key == "Escape" && quitable) startQuiting()
-		if(e.keyCode == 38 || e.keyCode == 40) e.preventDefault() // prevent up down arrow key scrolling
+		if(e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) e.preventDefault() // prevent up down arrow key scrolling
 	}, {
 		capture: true // idk what this really means but I need it for scroll prevention
 	})

@@ -1,4 +1,4 @@
-import { awaitInput, createSpan, id, sleep, randomIndex } from "/waterWorks.js"
+import { awaitInput, createSpan, id, sleep, randomIndex } from "../../waterWorks.js"
 
 const fps = 60
 const realSleep = s => new Promise(r => setTimeout(r, s * 1000)) // sleep unaffected by shift key
@@ -821,7 +821,7 @@ String.raw`
 	async oldShoot() {
 		player.enemyTurn(true)
 		enemyDamageOutput = 15
-		let direction = (Math.floor(Math.random() * 2) + 1) // 1 left, 2 right
+		let direction = Math.floor(Math.random() * 2 + 1) // 1 left, 2 right
 		this.updateSprite(direction)
 		await realSleep(1)
 		let bullet = new Sprite("blue", this.bulletSprite, 0)
@@ -1148,7 +1148,7 @@ X X
 ]
 
 	constructor() {
-		super("blue", null, 60, 200)
+		super("blue", null, 60, 215)
 this.sprites = [ String.raw`
 | ,I__I, |
 \_|    |_/

@@ -1,6 +1,6 @@
-import { fprint, choice, clear, pause } from "/waterWorks.js"
-import * as config from "/waterWorks.js"
-import { loadShop, unloadShop, rpgMenu, itemishList, shopDisplay, alreadyHave, viewInventory } from "/mechanics/fightClub.js"
+import { fprint } from "../../../waterWorks.js"
+import * as config from "../../../waterWorks.js"
+import { loadShop, unloadShop, rpgMenu, itemishList, shopDisplay, alreadyHave, viewInventory } from "../../../mechanics/fightClub.js"
 
 // originally made when the beefy fritos burrito was still an available menu item
 // lol doesn't have any reference to the beefy fritos burrito anymore

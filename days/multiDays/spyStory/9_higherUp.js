@@ -1,6 +1,6 @@
-import { fprint, choice, clear, pause, sleep, realSleep } from "/waterWorks.js"
-import * as config from "/waterWorks.js"
-import { Player, HigherUp, rpgPrint, rpgMenu, loadFight, unloadFight } from "/mechanics/fightClub.js"
+import { fprint, clear, pause, sleep, realSleep } from "../../../waterWorks.js"
+import * as config from "../../../waterWorks.js"
+import { Player, HigherUp, rpgPrint, loadFight, unloadFight } from "../../../mechanics/spy/fightClub.js"
 
 export async function execute(queue) {
 

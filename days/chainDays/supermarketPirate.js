@@ -1,5 +1,4 @@
-import { fprint, choice, clear, pause } from "../../waterWorks.js"
-import * as config from "../../waterWorks.js"
+import { fprint, choice } from "../../waterWorks.js"
 
 const responseList = ["SHIVER ME TIMBERS LADDIE, YE DID IT!", "YO HO HO AND A BOTTLE OF RUM, YE DID IT!", "SINK ME, LADDIE, YE DID IT!", "SPLICE THE MAINBRACE, YE DID IT!"]
 

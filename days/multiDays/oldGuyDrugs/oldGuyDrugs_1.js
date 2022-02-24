@@ -1,5 +1,4 @@
-import { fprint, choice, clear, pause } from "../../../waterWorks.js"
-import * as config from "../../../waterWorks.js"
+import { fprint } from "../../../waterWorks.js"
 
 const geezerResponses = ["scram why don'tcha.", "whadda lookin at, eh?", "you look a little red for this part of town."]
 

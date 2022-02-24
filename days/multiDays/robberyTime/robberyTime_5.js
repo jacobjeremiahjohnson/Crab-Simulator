@@ -1,5 +1,4 @@
-import { fprint, choice, clear, pause } from "../../../waterWorks.js"
-import * as config from "../../../waterWorks.js"
+import { fprint, choice } from "../../../waterWorks.js"
 
 const gangList = ["red", "blue"]
 var bad

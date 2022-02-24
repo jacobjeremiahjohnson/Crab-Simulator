@@ -1,6 +1,6 @@
-import { fprint, choice, clear, pause } from "/waterWorks.js"
-import * as config from "/waterWorks.js"
-import { loadShop, unloadShop, rpgMenu, itemishList, shopDisplay, alreadyHave, viewInventory } from "/mechanics/fightClub.js"
+import { fprint, choice } from "../../../waterWorks.js"
+import * as config from "../../../waterWorks.js"
+import { loadShop, unloadShop, rpgMenu, itemishList, shopDisplay, alreadyHave, viewInventory } from "../../../mechanics/fightClub.js"
 
 export async function execute(queue) {
 

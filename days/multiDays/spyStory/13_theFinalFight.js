@@ -1,6 +1,5 @@
-import { fprint, choice, clear, pause, sleep, realSleep } from "/waterWorks.js"
-import * as config from "/waterWorks.js"
-import { Player, Boss, Spy, rpgPrint, rpgMenu, loadFight, unloadFight } from "/mechanics/fightClub.js"
+import { fprint, clear, pause, realSleep } from "../../../waterWorks.js"
+import { Player, Boss, Spy, rpgPrint, loadFight, unloadFight } from "../../../mechanics/spy/fightClub.js"
 
 const months = [
 	"January",
@@ -21,7 +20,7 @@ const date = months[d.getMonth()] + " " + d.getDate()
 
 export async function execute(queue) {
 
-	if(typeof window.message === "string" && (window.message.startsWith("s_final") || window.message.startsWith("s_fina2"))) {
+	if(typeof window.message === "string" && window.message.startsWith("s_final")) {
 		window.rpg = JSON.parse(window.message.substring(7))
 	} else {
 		window.message = "s_final" + JSON.stringify(window.rpg)
@@ -74,38 +73,33 @@ export async function execute(queue) {
 
 	loadFight(crab, spy)
 
-	if(typeof window.message === "string" && !window.message.startsWith("s_fina2")) {
+	await realSleep(1)
+	await rpgPrint("You're in a featureless room with concrete walls. A solitary lightbulb hangs down from the ceiling, illuminating the drab landscape.", "dim")
+	await rpgPrint("Don't forget what I said earlier. I'll kill you with or without help.", "cyan")
+	await rpgPrint("An attitude like that has kept me the Boss for over 40 years, heh heh heh. Ready yerself, son.", "blue")
 
+	let startHP = crab.hp
+	await spy.tnt()
+	if(startHP !== crab.hp) {
 		await realSleep(1)
-		await rpgPrint("You're in a featureless room with concrete walls. A solitary lightbulb hangs down from the ceiling, illuminating the drab landscape.", "dim")
-		await rpgPrint("Don't forget what I said earlier. I'll kill you with or without help.", "cyan")
-		await rpgPrint("An attitude like that has kept me the Boss for over 40 years, heh heh heh. Ready yerself, son.", "blue")
+		await rpgPrint("Don't beat yerself up, son. You can telegraph my attacks, but not easily. Heh heh heh.", "blue")
+	}
 
-		let startHP = crab.hp
-		await spy.tnt()
-		if(startHP !== crab.hp) {
-			await realSleep(1)
-			await rpgPrint("Don't beat yerself up, son. You can telegraph my attacks, but not easily. Heh heh heh.", "blue")
+	while(true) {
+		if(await crab.takeTurn() === true) {
+			// win
+			break
 		}
-
-		while(true) {
-			if(await crab.takeTurn() === true) {
-				// win
-				window.message = "s_fina2" + JSON.stringify(window.rpg)
-				break
-			}
-			if(await spy.takeTurn() === true) {
-				// dead
-				await realSleep(1)
-				unloadFight()
-				clear()
-				await realSleep(1)
-				return queue
-			}
+		if(await spy.takeTurn() === true) {
+			// dead
+			await realSleep(1)
+			unloadFight()
+			clear()
+			await realSleep(1)
+			return queue
 		}
 	}
 
-	spy.sprite.classList.add("hurt")
 	await realSleep(1)
 	await rpgPrint("Urrgh.. I really didn't want ta resort ta this.", "blue")
 	await rpgPrint("Resort to what? Didn't I just beat you?", "cyan")
