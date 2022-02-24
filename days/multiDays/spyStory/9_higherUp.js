@@ -4,6 +4,8 @@ import { Player, HigherUp, rpgPrint, loadFight, unloadFight } from "../../../mec
 
 export async function execute(queue) {
 
+	window.rpg.battleID = 2
+
 	if(typeof window.message === "string" && window.message.startsWith("s_highe")) {
 		window.rpg = JSON.parse(window.message.substring(7))
 	} else {
@@ -20,7 +22,7 @@ export async function execute(queue) {
 		await fprint("No? You don't recognize my jersey?\n", "yellow")
 		await fprint("Her baseball jersey is emblazoned with \"The Organization\" on the front.\n", "dim")
 		await fprint("Ohhhh I get it now.\n", "cyan", 1)
-		await fprint("SECRET AGENT approaches!\n", "white", 1, 0.06)
+		await fprint("HIGHER UP approaches!\n", "white", 1, 0.06)
 
 		await pause()
 	}
@@ -35,12 +37,11 @@ export async function execute(queue) {
 	await sleep(1)
 	await rpgPrint("So you're here to kill me, right? You want to do your little monologue first?", "cyan")
 	await rpgPrint("Yeah, could I? Thanks.", "yellow")
-	await rpgPrint("Big Man sent me to personally take you out. I guess we can't rely on our underlings for anything, geez.", "yellow")
+	await rpgPrint("The Boss sent me to personally take you out. I guess we can't rely on our underlings for anything, geez.", "yellow")
 	await rpgPrint("Dip. Let's get this battle started then.", "cyan")
 	await rpgPrint("Wait first I gotta eat this.", "yellow")
 	await spy.egg()
 
-	let result
 	while(true) {
 		if(await crab.takeTurn() === true) {
 			// win

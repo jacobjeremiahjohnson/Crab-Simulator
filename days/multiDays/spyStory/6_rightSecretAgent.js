@@ -4,6 +4,8 @@ import { Player, Spy, rpgPrint, loadFight, unloadFight } from "../../../mechanic
 
 export async function execute(queue){
 
+	window.rpg.battleID = 1
+
 	// saves copy of rpg in window.message so restart day works
 	if(typeof window.message === "string" && window.message.startsWith("rpgTest")) {
 		window.rpg = JSON.parse(window.message.substring(7))

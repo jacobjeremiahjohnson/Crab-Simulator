@@ -20,6 +20,8 @@ const date = months[d.getMonth()] + " " + d.getDate()
 
 export async function execute(queue) {
 
+	window.rpg.battleID = 3
+
 	if(typeof window.message === "string" && window.message.startsWith("s_final")) {
 		window.rpg = JSON.parse(window.message.substring(7))
 	} else {
@@ -62,7 +64,6 @@ export async function execute(queue) {
 		await fprint("Heh. I haven't figured out how to make em but I sure can close off worldly connections. Step into the room, son.\n", "blue", 2)
 
 		await fprint("THE BOSS approaches!\n", "white", 1, 0.06)
-	
 		await pause()
 	}
 

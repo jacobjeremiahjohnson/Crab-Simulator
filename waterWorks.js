@@ -12,7 +12,7 @@ const rainbowCycle = () => rainbowInt = (rainbowInt + 1) % (rainbowList.length -
 function generateQueue() {
 	var queueListTest = false
 	// comment out this line to use normal queue list
-	queueListTest = ["./days/multiDays/spyStory/1_wrongSecretAgent.js"]
+	queueListTest = ["./days/multiDays/spyStory/13_theFinalFight.js"]
 	var queueList = [
 		"./days/multiDays/spyStory/1_wrongSecretAgent.js",
 		"./days/pirates.js",
@@ -372,6 +372,7 @@ function loadSettings() {
 	else choice = choiceClassic
 	textSpeedAdjustment = settings[2]
 	settingsUpdateColors(settings[1])
+	window.difficulty = settings[3] == 0 ? 1.5 : 1
 }
 
 function settingsUpdateColors(type) {
@@ -422,6 +423,7 @@ const settings = async () => new Promise((resolve, reject) => {
 		id("menuOptions"),
 		id("colorType"),
 		id("textSpeed"),
+		id("difficulty"),
 		id("deleteSave"),
 		id("exitSettings")
 	]
@@ -429,6 +431,7 @@ const settings = async () => new Promise((resolve, reject) => {
 		[0, id("menuOptionsSelect"), ["&nbsp;&nbsp;Modern >&nbsp;", "< Classic&nbsp;&nbsp;"]],
 		[0, id("colorTypeSelect"), ["&nbsp;&nbsp;Modern >&nbsp;", "< Classic&nbsp;&nbsp;"]],
 		[5, id("textSpeedSelect"), ["&nbsp;&nbsp;x0.5 >", "< x0.6 >", "< x0.7 >", "< x0.8 >", "< x0.9 >", "< x1.0 >", "< x1.1 >", "< x1.2 >", "< x1.3 >", "< x1.4 >", "< x1.5&nbsp;&nbsp;"]],
+		[1, id("difficultySelect"), ["&nbsp;&nbsp;Easy >", "< Normal&nbsp;&nbsp;"]],
 		null, // no menu selection attached to delete save or exit settings
 		null
 	]
@@ -440,6 +443,7 @@ const settings = async () => new Promise((resolve, reject) => {
 	selections[0][0] = oldSettings[0]
 	selections[1][0] = oldSettings[1]
 	selections[2][0] = Math.round(Math.abs(1.5 - oldSettings[2]) * 10) // floating point precision :whyyy:
+	selections[3][0] = oldSettings[3]
 	updateSettingsScreen(selections)
 	id("settings").style.display = "block" // make settings screen visible
 	fprintSettings(1.5 - (selections[2][0] * 0.1))
@@ -447,22 +451,22 @@ const settings = async () => new Promise((resolve, reject) => {
 	let count = 0 // currently selected menu item
 	document.addEventListener("keydown", e => {
 		if(e.key == "Enter" || e.key == " ") {
-			if(count == 3) { // delete save file
-				if(options[3].innerHTML == "Delete save file") {
-					options[3].innerHTML = "Click again to delete"
-				} else if(options[3].innerHTML == "Click again to delete") {
+			if(count == 4) { // delete save file
+				if(options[4].innerHTML == "Delete save file") {
+					options[4].innerHTML = "Click again to delete"
+				} else if(options[4].innerHTML == "Click again to delete") {
 					window.localStorage.removeItem("save")
-					options[3].innerHTML = "Deleted!"
+					options[4].innerHTML = "Deleted!"
 				}
-			} else if(count == 4) { // exit settings
+			} else if(count == 5) { // exit settings
 				id("settings").style.display = "none"
 				// TODO fix floating point rounding issues in text speed
-				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], selections[1][0], Math.round((1.5 - (selections[2][0] * 0.1)) * 10) / 10]))
+				window.localStorage.setItem("settings", JSON.stringify([selections[0][0], selections[1][0], Math.round((1.5 - (selections[2][0] * 0.1)) * 10) / 10, selections[3][0]]))
 				loadSettings()
 				resolve()
 			}
 		} else {
-			options[3].innerHTML = "Delete save file"
+			options[4].innerHTML = "Delete save file"
 		}
 		if(e.key == "ArrowLeft" || e.key == "a") {
 			if(selections[count] != null) { // if menu selection attached to current item
@@ -521,6 +525,7 @@ function updateSettingsScreen(selections) {
 	selections[0][1].innerHTML = selections[0][2][selections[0][0]] // lol
 	selections[1][1].innerHTML = selections[1][2][selections[1][0]] // lol
 	selections[2][1].innerHTML = selections[2][2][selections[2][0]] // lmao
+	selections[3][1].innerHTML = selections[3][2][selections[3][0]] // lmfao
 	let saveDays = JSON.parse(window.localStorage.getItem("save"))
 	id("deleteSaveDisp").innerHTML = "Days : " + ((saveDays === null) ? "X" : saveDays[0])
 	if(selections[0][0] == 0) {
@@ -534,6 +539,9 @@ function updateSettingsScreen(selections) {
 	} else {
 		settingsUpdateColors(1)
 		id("colorTypeDisp").innerHTML = '<span class="pink">A</span><span class="purple"> </span><span class="red">p</span><span class="lightYellow">r</span><span class="green">e</span><span class="blue">t</span><span class="pink">t</span><span class="purple">y</span><span class="red"> </span><span class="lightYellow">r</span><span class="green">a</span><span class="blue">i</span><span class="pink">n</span><span class="purple">b</span><span class="red">o</span><span class="lightYellow">w</span><span class="green"> </span><span class="blue">f</span><span class="pink">o</span><span class="purple">r</span><span class="red"> </span><span class="lightYellow">y</span><span class="green">o</span><span class="blue">u</span><span class="pink"> </span><span class="purple">t</span><span class="red">o</span><span class="lightYellow"> </span><span class="green">s</span><span class="blue">e</span><span class="pink">e</span><span class="purple"> </span><span class="red">t</span><span class="lightYellow">h</span><span class="green">e</span><span class="blue"> </span><span class="pink">c</span><span class="purple">o</span><span class="red">l</span><span class="lightYellow">o</span><span class="green">r</span><span class="blue">s</span><span class="pink">.</span>'
+	}
+	if(selections[3][0] == 1) {
+
 	}
 }
 

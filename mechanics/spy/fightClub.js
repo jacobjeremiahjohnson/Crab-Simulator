@@ -1,7 +1,8 @@
-import { awaitInput, createSpan, id, sleep, randomIndex } from "../../waterWorks.js"
+import { awaitInput, createSpan, id, sleep, randomIndex, clear, fprint, pause } from "../../waterWorks.js"
 
 const fps = 60
 const realSleep = s => new Promise(r => setTimeout(r, s * 1000)) // sleep unaffected by shift key
+const rpgSleep = s => new Promise(r => setTimeout(r, s * window.difficulty * 1000))
 
 const textOutput = id("rpgText") // main text field
 const menuOutputDefault = id("rpgMenu") // left section for menu choice
@@ -823,19 +824,19 @@ String.raw`
 		enemyDamageOutput = 15
 		let direction = Math.floor(Math.random() * 2 + 1) // 1 left, 2 right
 		this.updateSprite(direction)
-		await realSleep(1)
+		await rpgSleep(1)
 		let bullet = new Sprite("blue", this.bulletSprite, 0)
 		await bullet.moveTo(direction == 1 ? this.x - 64 : this.x + 52, this.y + 55)
-		bullet.moveTo(bullet.x, bullet.y + 300, 1.2)
-		await realSleep(0.8)
+		bullet.moveTo(bullet.x, bullet.y + 300, 1.2 * window.difficulty)
+		await rpgSleep(0.8)
 		if(direction == 1) hurtBox = [true, true, false, true]
 		else hurtBox = [false, true, true, true]
 		await realSleep(0.4)
 		bullet.remove()
 		hurtBox = [false, false, false, false]
-		await realSleep(0.5)
+		await rpgSleep(0.5)
 		this.updateSprite(0)
-		await realSleep(0.5)
+		await rpgSleep(0.5)
 		enemyDamageOutput = 0
 		player.enemyTurn(false)
 	}
@@ -846,41 +847,41 @@ String.raw`
 		let directions = [(Math.floor(Math.random() * 2) + 1)**2, (Math.floor(Math.random() * 2) + 1)**2, (Math.floor(Math.random() * 2) + 1)**2]
 		for(let i in directions) {
 			this.updateSprite(directions[i])
-			await realSleep(0.3)
+			await rpgSleep(0.3)
 			this.updateSprite(0)
-			await realSleep(0.1)
+			await rpgSleep(0.1)
 		}
-		await realSleep(1)
+		await rpgSleep(1)
 		for(let i in directions) {
 			let direction = directions[i]
 			this.updateSprite(direction)
 			let bullet = new Sprite("blue", this.bulletSprite, 0)
 			await bullet.moveTo(direction == 1 ? this.x - 64 : this.x + 52, this.y + 55)
-			bullet.moveTo(bullet.x, bullet.y + 300, 0.3)
-			await realSleep(0.2)
+			bullet.moveTo(bullet.x, bullet.y + 300, 0.3 * window.difficulty)
+			await rpgSleep(0.2)
 			if(direction == 1) hurtBox = [true, true, false, true]
 			else hurtBox = [false, true, true, true]
-			await realSleep(0.1)
+			await rpgSleep(0.1)
 			bullet.remove()
 			hurtBox = [false, false, false, false]
-			await realSleep(0.5)
+			await rpgSleep(0.5)
 		}
 		this.updateSprite(0)
-		await realSleep(0.5)
-		await this.moveTo(this.x, this.y + 180, 0.6)
-		await realSleep(Math.random() + 1)
+		await rpgSleep(0.5)
+		await this.moveTo(this.x, this.y + 180, 0.6 * window.difficulty)
+		await rpgSleep(Math.random() + 1)
 		this.updateSprite(7)
-		await realSleep(0.3)
+		await rpgSleep(0.3)
 		this.updateSprite(6)
 		enemyDamageOutput = 10
 		hurtBox = [true, true, true, false]
 		await realSleep(0.1)
-		hurtBox = [false, false, false]
-		await realSleep(0.2)
+		hurtBox = [false, false, false, false]
+		await rpgSleep(0.2)
 		this.updateSprite(0)
-		await realSleep(0.4)
-		await this.moveTo(this.x, this.y - 180, 0.6)
-		await realSleep(0.5)
+		await rpgSleep(0.4)
+		await this.moveTo(this.x, this.y - 180, 0.6 * window.difficulty)
+		await rpgSleep(0.5)
 		player.enemyTurn(false)
 	}
 
@@ -891,29 +892,29 @@ String.raw`
 			let direction = (Math.floor(Math.random() * 2) + 1) // 1 left, 2 right
 			let facing = (Math.floor(Math.random() * 2) + 1) // 1 left, 2 right
 			this.updateSprite(direction * 2 + facing - 2)
-			await realSleep(0.5)
+			await rpgSleep(0.5)
 			let bullet = new Sprite("blue", this.bulletSprite, 0)
 			await bullet.moveTo(facing == 1 ? this.x - 64 : this.x + 52, this.y + 55)
 			if(direction == 1) {
-				bullet.moveTo(facing == 1 ? bullet.x : bullet.x - 150, bullet.y + 300, 0.6)
-				await realSleep(0.4)
+				bullet.moveTo(facing == 1 ? bullet.x : bullet.x - 150, bullet.y + 300, 0.6 * window.difficulty)
+				await rpgSleep(0.4)
 				hurtBox = [true, true, false, true]
-				await realSleep(0.2)
+				await rpgSleep(0.2)
 				bullet.remove()
 				hurtBox = [false, false, false, false]
-				await realSleep(0.5)
+				await rpgSleep(0.5)
 				this.updateSprite(0)
-				await realSleep(0.5)
+				await rpgSleep(0.5)
 			} else {
-				bullet.moveTo(facing == 1 ? bullet.x + 150 : bullet.x, bullet.y + 300, 0.6)
-				await realSleep(0.4)
+				bullet.moveTo(facing == 1 ? bullet.x + 150 : bullet.x, bullet.y + 300, 0.6 * window.difficulty)
+				await rpgSleep(0.4)
 				hurtBox = [false, true, true, true]
-				await realSleep(0.2)
+				await rpgSleep(0.2)
 				bullet.remove()
 				hurtBox = [false, false, false, false]
-				await realSleep(0.5)
+				await rpgSleep(0.5)
 				this.updateSprite(0)
-				await realSleep(0.5)
+				await rpgSleep(0.5)
 			}
 		}
 		player.enemyTurn(false)
@@ -1037,17 +1038,17 @@ String.raw`
 		for(let i = 0; i < 3; i++) {
 			let direction = Math.random() > 0.5 ? 1 : -1
 			this.updateSprite(2)
-			await realSleep(1)
+			await rpgSleep(1)
 			if(direction == 1)  { // right punch
 				this.updateSprite(3)
-				await realSleep(0.45)
+				await rpgSleep(0.45)
 				this.x = 120
 				this.y = 300
 				this.updateSprite(5)
 				hurtBox = [false, true, true, true]
 			} else { // left punch
 				this.updateSprite(4)
-				await realSleep(0.45)
+				await rpgSleep(0.45)
 				this.x = -120
 				this.y = 300
 				this.updateSprite(6)
@@ -1056,10 +1057,10 @@ String.raw`
 			await realSleep(0.3)
 			this.updateSprite(2)
 			hurtBox = [false, false, false, false]
-			await realSleep(1)
+			await rpgSleep(1)
 			await this.moveTo(0, 30, 1)
 		}
-		await realSleep(0.4)
+		await rpgSleep(0.4)
 		player.enemyTurn(false)
 	}
 
@@ -1068,21 +1069,22 @@ String.raw`
 		player.enemyTurn(true)
 		await this.moveTo(this.x, -400, 1.5)
 		this.moveTo(1100, 300)
-		await realSleep(1 + Math.random() * 1.2)
+		await rpgSleep(1 + Math.random() * 1.2)
 		let indicator = new Sprite("red", this.exclaimSprite, 16)
 		indicator.y = 150
 		this.updateSprite(7)
+		if(window.difficulty == 1.5) await realSleep(0.1)
 		this.moveTo(-1100, this.y, 0.9)
 		await realSleep(0.27)
 		hurtBox = [true, true, true, false]
-		await realSleep(0.22)
+		await realSleep(0.15)
 		hurtBox = [false, false, false, false]
-		await realSleep(1)
+		await rpgSleep(1)
 		indicator.remove()
 		await this.moveTo(0, -400)
 		this.updateSprite(0)
-		await this.moveTo(this.x, 30, 1.5)
-		await realSleep(0.5)
+		await this.moveTo(this.x, 30, 1.5 * window.difficulty)
+		await rpgSleep(0.5)
 		player.enemyTurn(false)
 	}
 
@@ -1197,16 +1199,16 @@ String.raw`
 		enemyDamageOutput = 20
 		this.updateSprite(1)
 		this.spawnGatTwice()
-		await realSleep(1)
+		await rpgSleep(1)
 		await this.spawnGatTwice()
 		this.updateSprite(0)
-		await realSleep(0.5)
+		await rpgSleep(0.5)
 		enemyDamageOutput = 0
 		player.enemyTurn(false)
 	}
 
 	async spawnGatTwice() {
-		await realSleep(1)
+		await rpgSleep(1)
 		let dir = Math.floor(Math.random() * 3) // 0 = SXX, 1 = XSX, 2 = XXS
 		let bulletL = new Sprite("blue", this.bulletSprite, 0)
 		let bulletR = new Sprite("blue", this.bulletSprite, 0)
@@ -1214,7 +1216,7 @@ String.raw`
 		const left = -150
 		const mid = -70
 		const right = 10
-		const time = 0.4
+		const time = 0.4 * window.difficulty
 
 		await bulletL.moveTo(this.x + 52, this.y + 55)
 		await bulletR.moveTo(this.x + 52, this.y + 55)
@@ -1223,7 +1225,7 @@ String.raw`
 			case 1: bulletL.moveTo(bulletL.x + left, bulletL.y + 60, time); bulletR.moveTo(bulletR.x + right, bulletR.y + 60, time); break
 			case 2: bulletL.moveTo(bulletL.x + left, bulletL.y + 60, time); bulletR.moveTo(bulletR.x + mid, bulletR.y + 60, time)
 		}
-		await realSleep(time)
+		await rpgSleep(time)
 		bulletL.moveTo(bulletL.x, bulletL.y + 240, 0.4)
 		bulletR.moveTo(bulletR.x, bulletR.y + 240, 0.4)
 		await realSleep(0.15)
@@ -1244,25 +1246,25 @@ String.raw`
 		enemyDamageOutput = 30
 		this.updateSprite(2)
 		this.spawnGatOnce()
-		await realSleep(1)
+		await rpgSleep(1)
 		this.spawnGatOnce()
-		await realSleep(1)
+		await rpgSleep(1)
 		await this.spawnGatOnce()
 		this.updateSprite(0)
-		await realSleep(0.5)
+		await rpgSleep(0.5)
 		enemyDamageOutput = 0
 		player.enemyTurn(false)
 	}
 
 	async spawnGatOnce() {
-		await realSleep(1)
+		await rpgSleep(1)
 		let dir = Math.floor(Math.random() * 3) // 0 = Left, 1 = Mid, 2 = Right
 		let bullet = new Sprite("blue", this.bulletSprite, 0)
 
 		const left = -150
 		const mid = -70
 		const right = 10
-		const time = 0.4
+		const time = 0.4 * window.difficulty
 
 		await bullet.moveTo(this.x + 52, this.y + 55)
 
@@ -1271,7 +1273,7 @@ String.raw`
 			case 1: bullet.moveTo(bullet.x + mid, bullet.y + 60, time); break
 			case 2: bullet.moveTo(bullet.x + (right * -3), bullet.y + 60, time)
 		}
-		await realSleep(time)
+		await rpgSleep(time)
 		bullet.moveTo(bullet.x, bullet.y + 240, 0.4)
 		await realSleep(0.15)
 		switch(dir) {
@@ -1286,13 +1288,13 @@ String.raw`
 	}
 
 	async tnt() {
-		await realSleep(1)
+		await rpgSleep(1)
 		player.enemyTurn(true)
 		enemyDamageOutput = 40
 		let dir = Math.floor(Math.random() * 2) // 0 left, 1 right
 		let tnt = new Sprite("blue", dir == 0 ? this.tntLSprite : this.tntRSprite, 0)
 		await tnt.moveTo(this.x + 50, this.y - 50)
-		await realSleep(0.7)
+		await rpgSleep(0.7)
 		await tnt.moveTo(tnt.x, tnt.y - 300, 1)
 		await tnt.moveTo(1100, 250)
 		tnt.moveTo(-500, tnt.y, 1)
@@ -1322,12 +1324,12 @@ String.raw`
 	}
 
 	async finalAttack() {
-		await realSleep(1)
+		await rpgSleep(1)
 		player.enemyTurn(true)
 		let tntDir = Math.floor(Math.random() * 2) // 0 left, 1 right
 		let tnt = new Sprite("blue", tntDir == 0 ? this.tntLSprite : this.tntRSprite, 0)
 		await tnt.moveTo(this.x + 50, this.y - 50)
-		await realSleep(0.7)
+		await rpgSleep(0.7)
 		await tnt.moveTo(tnt.x, tnt.y - 300, 1)
 
 		enemyDamageOutput = 30
