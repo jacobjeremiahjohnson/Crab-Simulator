@@ -91,7 +91,7 @@ export async function execute(queue) {
     await fprint("He says to himself.\n", "dim")
     await fprint("What?\n", "cyan")
     await fprint("Other guy also said nothing, that's pretty cool.\n", "yellow")
-    await fprint("Fuck, that means prison for a year right?\n", "cyan")
+    await fprint("Fuck, that means prison for a year?\n", "cyan")
     await fprint("No, no, you won the game. You can leave.\n", "yellow")
     await fprint("Oh, you're one of those social experiment guys, right?\n", "cyan")
     await fprint("Sure, sure. Just leave.\n", "yellow")
