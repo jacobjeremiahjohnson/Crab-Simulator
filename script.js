@@ -42,12 +42,13 @@ fast text speed is recommended to be 0.02
 20 - spyStory/ Died in combat
 21 - spyStory/8_armsDealer.js shot by security guard
 22 - spyStory/10_fishWalking.js stray cinder block
+23 - sinkhole.js false idol
 */
 
 import { fprint, choice, clear, pause } from "./waterWorks.js"
 import * as config from "./waterWorks.js"
 
-const skipIntro = false // goes straight into the game if true
+const skipIntro = true // goes straight into the game if true
 var quitable = false // if can quit rn
 var atEndOfDay = false
 var quitVar = 0 // save and quit stuff
