@@ -4,8 +4,8 @@ import * as config from "../waterWorks.js"
 export async function execute(queue) {
 
 	alert(`Uncaught (in promise) ReferenceError: depression.js:0
-			at Module.execute (depression.js:0)
-			at game (script.js:24)`)
+at Module.execute (depression.js:0)
+at game (script.js:24)`)
 
 	await config.sleep(1.5)
 

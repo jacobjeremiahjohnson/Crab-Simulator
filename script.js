@@ -43,6 +43,7 @@ fast text speed is recommended to be 0.02
 21 - spyStory/8_armsDealer.js shot by security guard
 22 - spyStory/10_fishWalking.js stray cinder block
 23 - sinkhole.js false idol
+24 - riddles.js wrong answer
 */
 
 import { fprint, choice, clear, pause } from "./waterWorks.js"

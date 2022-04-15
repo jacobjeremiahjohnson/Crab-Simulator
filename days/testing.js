@@ -8,13 +8,13 @@ export async function execute(queue) {
 	if(answer == 1) {
 		await fprint("You choice Option A.\n", "green")
 	} else {
-		await fprint("You choice Option B. This kills you\n", "green")
+		await fprint("You choice Option B. This kills you\n", "green", 2)
 		window.state = "This is the death message. The last two digits is the ending number.99"
 		return queue
 	}
 
 	await fprint("Experience + 1\n", "rainbow", 2)
-  window.experience += 1
+	window.experience += 1
 
 	queue.unshift("./days/oldMan.js")
 	queue = config.shuffleArray(queue)
