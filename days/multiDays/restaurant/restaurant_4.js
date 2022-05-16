@@ -27,5 +27,5 @@ export async function execute(queue) {
 	await fprint("Experience + 1\n", "rainbow", 2)
 	window.experience++
 
-  return queue
+	return queue
 }

@@ -1,3 +1,5 @@
+import audioController from "./audio/audioController.js"
+
 var output // output div
 var input // input div
 var sleep
@@ -50,25 +52,7 @@ function generateQueue() {
 	return queueListTest || queueList
 }
 
-class Blip {
-	constructor(source) {
-		this.channels = []
-		this.max = 5
-		this.index = 0
-		for(let i = 0; i < this.max; i++) {
-			this.channels.push(new Audio(source))
-			this.channels[i].volume = 0.4
-		}
-	}
-	play() {
-		this.channels[this.index].play()
-		if(++this.index == this.max) this.index = 0
-	}
-}
-
-const blips = {
-	blip: new Blip("./audio/blips/sfx-blipold.wav")
-}
+const blips = audioController.blips
 
 // converts string to an array + converts \n to <br>
 function tokenize(string, color) {
@@ -114,12 +98,61 @@ function createSpan(color) {
 	return span
 }
 
+/*
 // fancy print
 async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false) {
 	const span = createSpan(color)
 	if(isChoice) span.classList.add("choice")
 	output.appendChild(span) // make and put an empty span of the specified color on the dom
-	let blipper = textSpeed != 0 ? source => blips[source].play() : true // function that plays blips if textSpeed isn't 0
+	let blipper
+	if(textSpeed != 0) {
+		blipper = source => {
+			if(audioController.rogerBlips[source]) audioController.rogerBlips[source].play()
+		}
+	} else {
+		blipper = () => true
+	}
+	for(let c of tokenize(string, color)) { // loop through all characters
+		span.innerHTML += c.outerHTML || c // add character
+		scrollToBottom()
+		if(textSpeed != 0 && !window.debug) {
+			switch(c) {
+				case ".":
+				case "!":
+				case "?":
+				case ";":
+					await sleep(0.5) // full stop sleep
+					break
+				case ",":
+				case ":":
+					await sleep(0.25) // soft stop sleep
+					break
+				case "<br>":
+					await sleep(textSpeed * textSpeedAdjustment)
+					break
+				case " ":
+					//
+				default:
+					blipper(c.toLowerCase())
+					await sleep(textSpeed * textSpeedAdjustment) // default sleep for characters
+			}
+		}
+	}
+	span.innerHTML += "<br>" // add line break at end
+	scrollToBottom()
+	if(!window.debug) { // end wait
+		await sleep(wait / speed)
+	}
+}
+*/
+
+ //OLD WITH OLD BLIP SYSTEM
+// fancy print
+async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false) {
+	const span = createSpan(color)
+	if(isChoice) span.classList.add("choice")
+	output.appendChild(span) // make and put an empty span of the specified color on the dom
+	let blipper = textSpeed != 0 ? source => audioController.blips[source].play() : true // function that plays blips if textSpeed isn't 0
 	let blipping = 0 // if 1, plays a blip for that character
 	for(let c of tokenize(string, color)) { // loop through all characters
 		span.innerHTML += c.outerHTML || c // add character

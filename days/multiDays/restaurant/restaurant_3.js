@@ -44,5 +44,5 @@ export async function execute(queue) {
 	window.experience++
 	queue.unshift("./days/multiDays/restaurant/restaurant_4.js")
 
-  return queue
+	return queue
 }

@@ -83,7 +83,7 @@ export async function execute(queue) {
 
 	await fprint("Mystery + 3", "rainbow", 1)
 	await fprint("Experience + 1\n", "rainbow", 2)
-  window.experience += 1
+	window.experience += 1
 
 	return queue
 }

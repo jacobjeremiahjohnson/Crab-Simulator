@@ -2,13 +2,13 @@ import { fprint, choice } from "../../../waterWorks.js"
 
 export async function execute(queue) {
 
-  await fprint("You're staked outside a local fast food location in an effort to analyze the inner workings of a successful restaurant.\n", "dim", 1)
-  await fprint("The manager talks to the cashier, who then signals for the line cook to come talk to him.", "dim")
-  await fprint("The line cook glances outside the glass window and starts walking towards the door.\n", "dim", 1)
-  await fprint("He comes out of the restaurant headed straight for the bush you're hiding in and says", "dim", 0)
-  await fprint("Hey, dude, fuck off, you've been hiding in these bushes since 5 in the morning. I'm calling the police.\n", "yellow")
+	await fprint("You're staked outside a local fast food location in an effort to analyze the inner workings of a successful restaurant.\n", "dim", 1)
+	await fprint("The manager talks to the cashier, who then signals for the line cook to come talk to him.", "dim")
+	await fprint("The line cook glances outside the glass window and starts walking towards the door.\n", "dim", 1)
+	await fprint("He comes out of the restaurant headed straight for the bush you're hiding in and says", "dim", 0)
+	await fprint("Hey, dude, fuck off, you've been hiding in these bushes since 5 in the morning. I'm calling the police.\n", "yellow")
 
-  let answer = await choice(["You've got a misunderstanding", "Do it", "Wanna work for my restaurant?"])
+	let answer = await choice(["You've got a misunderstanding", "Do it", "Wanna work for my restaurant?"])
 
 	if(answer == 1) {
 		await fprint("No no no you've got some kind of misunderstanding, you see, I'm starting a restaurant and need to figure out what to do, so I'm stalking yours.\n", "cyan")
@@ -33,8 +33,8 @@ export async function execute(queue) {
 
 		await fprint("Experience running a restaurant + 1", "rainbow", 1)
 		await fprint("Regular experience + 1\n", "rainbow", 2)
-	  window.experience++
-	  queue.unshift("./days/multiDays/restaurant/restaurant_3.js")
+		window.experience++
+		queue.unshift("./days/multiDays/restaurant/restaurant_3.js")
 	}
-  return queue
+	return queue
 }

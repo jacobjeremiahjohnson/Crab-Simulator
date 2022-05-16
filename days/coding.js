@@ -9,18 +9,6 @@ at game (script.js:24)`)
 
 	await config.sleep(1.5)
 
-	/*
-	await fprint(`Uncaught (in promise) ReferenceError: depression.js:0
-    at Module.execute (depression.js:0)
-    at game (script.js:24)`, "red", 1)
-	*/
-
-	/*
-	alert(`Uncaught (in promise) ReferenceError: depression.js:0
-    at Module.execute (depression.js:0)
-    at game (script.js:24)`)
-	*/
-
 	const span = document.createElement("span")
 	//const span = createSpan("white")
 	span.classList.add("choice")
@@ -65,14 +53,14 @@ at game (script.js:24)`)
 		window.state = "You just made it worse, dummy. You're for sure failing your computer science final.16"
 	} else {
 		await config.pause()
-  	await config.sleep(1.5)
+		await config.sleep(1.5)
 		await fprint("", "white", 0)
 		await fprint("...", "green")
 		await fprint("Nice.\n", "green", 1)
 
 		await fprint("Computer knowledge + 1", "rainbow", 1)
-  	await fprint("Experience + 1\n", "rainbow", 2)
-  	window.experience++
+		await fprint("Experience + 1\n", "rainbow", 2)
+		window.experience++
 
 	}
 	return queue

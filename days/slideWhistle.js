@@ -16,7 +16,7 @@ export async function execute(queue) {
 	await fprint("Neat.\n", "cyan", 1)
 
 	await fprint("Experience + 1\n", "rainbow", 2)
-  window.experience += 1
+	window.experience += 1
 
 	return queue
 }

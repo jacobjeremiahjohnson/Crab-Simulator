@@ -59,5 +59,5 @@ export async function execute(queue) {
 	queue.unshift("./days/multiDays/spyStory/5_yardSale.js")
 	queue = config.shuffleArray(queue)
 
-  return queue
+	return queue
 }
