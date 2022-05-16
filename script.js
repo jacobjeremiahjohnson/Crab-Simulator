@@ -44,6 +44,7 @@ fast text speed is recommended to be 0.02
 22 - spyStory/10_fishWalking.js stray cinder block
 23 - sinkhole.js false idol
 24 - riddles.js wrong answer
+25 - /multiDays/school/school_3.js lost a fight
 */
 
 import { fprint, choice, clear, pause } from "./waterWorks.js"
