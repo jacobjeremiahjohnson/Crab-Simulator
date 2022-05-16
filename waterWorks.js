@@ -92,9 +92,11 @@ function rainbowTokenize(string) {
 }
 
 // creates an HTML span element
-function createSpan(color) {
+function createSpan() {
 	const span = document.createElement("p")
-	span.classList.add(color)
+	for(let i of arguments) {
+		span.classList.add(i)
+	}
 	return span
 }
 
