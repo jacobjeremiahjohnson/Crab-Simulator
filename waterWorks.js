@@ -1,4 +1,5 @@
-import audioController from "./audio/audioController.js"
+import audioController from "./libraries/audioController.js"
+import textController from "./libraries/textController.js"
 
 var output // output div
 var input // input div
@@ -150,10 +151,24 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isC
 
  //OLD WITH OLD BLIP SYSTEM
 // fancy print
-async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false) {
+async function fprint(string = "", color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false, destination = output) {
+	if(typeof string !== "string") {
+		return fprintNew(string)
+	}
+	return fprintNew({
+		string: string,
+		color: color,
+		wait: wait,
+		textSpeed: textSpeed,
+		isChoice: isChoice,
+		destination: destination
+	})
+}
+
+async function fprintNew({ string = "", color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false, destination = output }) {
 	const span = createSpan(color)
 	if(isChoice) span.classList.add("choice")
-	output.appendChild(span) // make and put an empty span of the specified color on the dom
+	destination.appendChild(span) // make and put an empty span of the specified color on the dom
 	let blipper = textSpeed != 0 ? source => audioController.blips[source].play() : true // function that plays blips if textSpeed isn't 0
 	let blipping = 0 // if 1, plays a blip for that character
 	for(let c of tokenize(string, color)) { // loop through all characters
