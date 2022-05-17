@@ -1,4 +1,4 @@
-import { awaitInput, createSpan, id, sleep, randomIndex, clear, fprint, pause } from "../../waterWorks.js"
+import { awaitInput, createSpan, id, sleep, randomIndex } from "../../waterWorks.js"
 
 const fps = 60
 const realSleep = s => new Promise(r => setTimeout(r, s * 1000)) // sleep unaffected by shift key
