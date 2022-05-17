@@ -1,5 +1,4 @@
 import audioController from "./libraries/audioController.js"
-import textController from "./libraries/textController.js"
 
 var output // output div
 var input // input div
