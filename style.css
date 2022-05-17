@@ -15,9 +15,9 @@
 
 body {
 	background-color: var(--colorBlack);
-  color: var(--colorCyan);
+	color: var(--colorCyan);
 	word-wrap: break-word;
-  font-family: Consolas, monaco, monospace;
+	font-family: Consolas, monaco, monospace;
 	margin: 8px 10vw;
 }
 
@@ -45,7 +45,7 @@ img.emoji {
 }
 
 ::-webkit-scrollbar {
-    display: none;
+	display: none;
 }
 
 #output {
@@ -59,7 +59,7 @@ img.emoji {
 
 #input {
 	width: 100%;
-  display: none;
+	display: none;
 	align-items: center;
 	flex-direction: column;
 	text-align: center;
@@ -112,7 +112,7 @@ img.emoji {
 }
 
 #input.visible {
-  display: flex;
+	display: flex;
 	bottom: 0;
 	left: 0;
 }
@@ -147,7 +147,7 @@ img.emoji {
 }
 
 .red {
-  color: var(--colorRed);
+	color: var(--colorRed);
 }
 
 .yellow {
@@ -159,11 +159,11 @@ img.emoji {
 }
 
 .blue {
-  color: var(--colorBlue);
+	color: var(--colorBlue);
 }
 
 .purple {
-  color: var(--colorPurple);
+	color: var(--colorPurple);
 }
 
 .cyan {
