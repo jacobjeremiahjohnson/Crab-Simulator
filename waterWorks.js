@@ -43,7 +43,8 @@ function generateQueue() {
 		"./days/cardGame.js",
 		"./days/onlineSalt.js",
 		"./days/antSim.js",
-		"./days/riddles.js"
+		"./days/riddles.js",
+		"./days/fishingMinigame.js"
 	]
 	queueList = shuffleArray(queueList)
 	return queueListTest || queueList
