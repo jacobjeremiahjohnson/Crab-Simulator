@@ -1,4 +1,4 @@
-import { createSpan, fprint, id, rainbowList, realSleep , sleep, tokenize } from "../../waterWorks.js"
+import { clear, createSpan, fprint, id, rainbowList, realSleep } from "../../waterWorks.js"
 
 const fpsInterval = 1000 / 60
 
@@ -10,9 +10,14 @@ let fishList = []
 let currentFish = null
 let meter = 0
 let meterChange = -5
-let fishPrintIteration = 0
+let score = 0
+let fishingGoal = 28700
+let caughtFish = 0
 
 let fishingBar = null
+let fishingTarget = null
+
+let resolveFunc = null
 
 function gameLoop() {
 	if(gameStarted) requestAnimationFrame(gameLoop)
@@ -29,13 +34,20 @@ function gameLoop() {
 	}
 }
 
-function start(mapElement) {
-	map = mapElement
-	gameStarted = true
-	document.addEventListener("keydown", spacebarPress)
-	gameLoop()
-	for(let i = 0; i < 10; i++) new Fish()
-	fishingBar = id("fishingBar")
+async function start(mapElement) {
+	return new Promise(resolve => {
+		resolveFunc = resolve
+		map = mapElement
+		gameStarted = true
+		caughtFish = 0
+		document.addEventListener("keydown", spacebarPress)
+		gameLoop()
+		fishPrint("Catch fish by clicking on them, then mash the spacebar to match it with the target on the right side! Hold it for 10 seconds!", "green")
+		for(let i = 0; i < 8; i++) new Fish()
+		fishingBar = id("fishingBar")
+		fishingTarget = id("fishingTarget")
+	})
+
 }
 
 function stop() {
@@ -44,6 +56,8 @@ function stop() {
 		fishList[f].remove()
 	}
 	document.removeEventListener("keydown", spacebarPress)
+	clear()
+	resolveFunc(caughtFish)
 }
 
 class Fish {
@@ -90,13 +104,25 @@ class Fish {
 
 	clicked = e => {
 		if(currentFish !== null) return
+		score = 0
 		currentFish = this
 		fishClicked(this)
 		this.element.classList.add("target")
-		setTimeout(() => {
+		fishPrint("Mash the spacebar and keep the right bar on the target!", "green")
+		setTimeout(async () => {
+			if(score > fishingGoal) {
+				fishPrint("Aw, it got away...", "green")
+			} else {
+				fishPrint("Nice catch!", "green")
+				caughtFish++
+			}
 			currentFish = null
-			this.element.classList.remove("target")
-			id("fishingTarget").style.backgroundColor = null
+			fishingTarget.style.backgroundColor = null
+			this.remove()
+			if(Object.keys(fishList).length === 0) {
+				await realSleep(3)
+				stop()
+			}
 		}, 10000)
 	}
 
@@ -106,14 +132,14 @@ class Fish {
 		if(this.deltaPosition[0] > 0) this.element.innerHTML = this.sprites[this.spriteID][0]
 		else this.element.innerHTML = this.sprites[this.spriteID][1]
 		await realSleep(time)
-		this.deltaPosition = [null, null, null, null] // done moving
+		this.deltaPosition = [null, null] // done moving
 		// hard set position just incase code has rounding errors or whatever
 		this.x = x2
 		this.y = y2
 	}
 
 	remove() {
-		delete fishList[this.spriteID]
+		delete fishList[this.fishID]
 		this.element.remove()
 	}
 
@@ -140,12 +166,11 @@ function spacebarPress(e) {
 }
 
 function fishClicked(fish) {
-	const target = id("fishingTarget")
 
-	target.style.bottom = `${Math.floor(Math.random() * 360) + 20}px`
+	fishingTarget.style.bottom = `${Math.floor(Math.random() * 360) + 20}px`
 
 	const color = fish.color[0].toUpperCase() + fish.color.substring(1).toLowerCase()
-	target.style.backgroundColor = `var(--color${color})`
+	fishingTarget.style.backgroundColor = `var(--color${color})`
 }
 
 function meterCode() {
@@ -161,9 +186,12 @@ function meterCode() {
 	}
 	meterChange -= 0.4
 	fishingBar.style.bottom = `${meter}px`
+	if(currentFish === null) return
+	score += Math.abs(fishingBar.style.bottom.slice(0, -2) - fishingTarget.style.bottom.slice(0, -2))
 }
 
-async function fishPrint(string = "", color = "white", output) {
+async function fishPrint(string = "", color = "white") {
+	const output = id("fishPrintOutput")
 	output.innerHTML = ""
 	return fprint({
 		string: string,
