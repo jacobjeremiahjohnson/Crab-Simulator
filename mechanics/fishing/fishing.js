@@ -1,4 +1,4 @@
-import { createSpan, rainbowList, realSleep } from "../../waterWorks.js"
+import { createSpan, fprint, id, rainbowList, realSleep , sleep, tokenize } from "../../waterWorks.js"
 
 const fpsInterval = 1000 / 60
 
@@ -8,6 +8,11 @@ let map = null
 
 let fishList = []
 let currentFish = null
+let meter = 0
+let meterChange = -5
+let fishPrintIteration = 0
+
+let fishingBar = null
 
 function gameLoop() {
 	if(gameStarted) requestAnimationFrame(gameLoop)
@@ -27,8 +32,10 @@ function gameLoop() {
 function start(mapElement) {
 	map = mapElement
 	gameStarted = true
+	document.addEventListener("keydown", spacebarPress)
 	gameLoop()
 	for(let i = 0; i < 10; i++) new Fish()
+	fishingBar = id("fishingBar")
 }
 
 function stop() {
@@ -36,6 +43,7 @@ function stop() {
 	for(let f in fishList) {
 		fishList[f].remove()
 	}
+	document.removeEventListener("keydown", spacebarPress)
 }
 
 class Fish {
@@ -44,6 +52,7 @@ class Fish {
 	y = 0
 	deltaPosition = [null, null]
 	moving = true
+	color = null
 
 	sprites = [
 		[">(=o)", "(o=)<"],
@@ -57,12 +66,13 @@ class Fish {
 	fishID = null
 
 	constructor() {
-		this.x = Math.floor(Math.random() * 560) + 20
-		this.y = Math.floor(Math.random() * 360) + 20
+		this.x = Math.floor(Math.random() * 540) + 20
+		this.y = Math.floor(Math.random() * 340) + 20
 		this.spriteID = Math.floor(Math.random() * 5)
 		this.fishID = Math.random()
+		this.color = rainbowList[Math.floor(Math.random() * rainbowList.length)]
 		fishList[this.fishID] = this
-		this.element.classList.add(rainbowList[Math.floor(Math.random() * rainbowList.length)])
+		this.element.classList.add(this.color)
 		this.element.innerHTML = this.sprites[this.spriteID][0]
 		map.appendChild(this.element)
 		this.movingLoop()
@@ -81,10 +91,12 @@ class Fish {
 	clicked = e => {
 		if(currentFish !== null) return
 		currentFish = this
+		fishClicked(this)
 		this.element.classList.add("target")
-		setInterval(() => {
+		setTimeout(() => {
 			currentFish = null
 			this.element.classList.remove("target")
+			id("fishingTarget").style.backgroundColor = null
 		}, 10000)
 	}
 
@@ -112,18 +124,56 @@ class Fish {
 	}
 
 	async randomPosition() {
-		let x = Math.floor(Math.random() * 560) + 20
-		let y = Math.floor(Math.random() * 320) + 20
+		let x = Math.floor(Math.random() * 540) + 20
+		let y = Math.floor(Math.random() * 340) + 20
 		await this.moveTo(x, y, 0.01 * Math.sqrt((this.x - x) ** 2 + (this.y - y) ** 2))
 		await realSleep(1)
 	}
 }
 
-function meterCode() {
-	if(currentFish === null) return
+function spacebarPress(e) {
+	if(e.code === "Space") {
+		if(meterChange < 0) meterChange = 0
+		meterChange += 4
+		if(meterChange > 25) meterChange = 25
+	}
+}
 
+function fishClicked(fish) {
+	const target = id("fishingTarget")
+
+	target.style.bottom = `${Math.floor(Math.random() * 360) + 20}px`
+
+	const color = fish.color[0].toUpperCase() + fish.color.substring(1).toLowerCase()
+	target.style.backgroundColor = `var(--color${color})`
+}
+
+function meterCode() {
+	if(fishingBar === null) return
+	meter += meterChange
+	if(meter < 0) {
+		meter = 0
+		meterChange = 0
+	}
+	if(meter > 400) {
+		meter = 400
+		if(meterChange > 2) meterChange = 1
+	}
+	meterChange -= 0.4
+	fishingBar.style.bottom = `${meter}px`
+}
+
+async function fishPrint(string = "", color = "white", output) {
+	output.innerHTML = ""
+	return fprint({
+		string: string,
+		color: color,
+		destination: output,
+		cancellable: true
+	})
 }
 
 export {
-	start
+	start,
+	fishPrint
 }

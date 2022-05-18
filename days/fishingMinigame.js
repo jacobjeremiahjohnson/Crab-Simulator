@@ -1,5 +1,5 @@
 import { fprint, clear, output, id } from "../waterWorks.js"
-import { start } from "../mechanics/fishing/fishing.js"
+import { start, fishPrint } from "../mechanics/fishing/fishing.js"
 
 export async function execute(queue) {
 
@@ -15,21 +15,25 @@ export async function execute(queue) {
 	clear()
 
 let html = `
-<div class='fishingMinigame'>
-	<div id='fishingMinigameMap' class='map'>
-	</div>
-	<div class='meter'>
-	</div>
+<div id='fishingMinigameMap'>
 </div>
-<div id='fishingMinigameOutput'>
+<div id='fishingMinigameMeter'>
+	<div id='fishingTarget'></div>
+	<div id='fishingBar'></div>
 </div>
 `
 	let div = document.createElement("div")
+	div.classList.add("fishingMinigame")
 	div.innerHTML = html
 	output.appendChild(div)
 
+	let fishPrintOutput = document.createElement("div")
+	fishPrintOutput.id = "fishPrintOutput"
+	output.appendChild(fishPrintOutput)
+
 	return new Promise(res => {
 		start(id("fishingMinigameMap"))
+		fishPrint("Catch fish by clicking on them, then mash the spacebar to match it with the target on the right side! Hold it for 10 seconds!", "green", fishPrintOutput)
 	})
 
 }

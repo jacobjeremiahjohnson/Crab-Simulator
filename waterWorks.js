@@ -147,7 +147,7 @@ async function fprint(string, color = "white", wait = 0.5, textSpeed = 0.04, isC
 
  //OLD WITH OLD BLIP SYSTEM
 // fancy print
-async function fprint(string = "", color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false, destination = output) {
+async function fprint(string = "", color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false, destination = output, cancellable = false) {
 	if(typeof string !== "string") {
 		return fprintNew(string)
 	}
@@ -157,20 +157,32 @@ async function fprint(string = "", color = "white", wait = 0.5, textSpeed = 0.04
 		wait: wait,
 		textSpeed: textSpeed,
 		isChoice: isChoice,
-		destination: destination
+		destination: destination,
+		cancellable: cancellable
 	})
 }
 
-async function fprintNew({ string = "", color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false, destination = output }) {
+let fprintIteration = 0
+
+async function fprintNew({ string = "", color = "white", wait = 0.5, textSpeed = 0.04, isChoice = false, destination = output, cancellable = false }) {
 	const span = createSpan(color)
+
 	if(isChoice) span.classList.add("choice")
+	if(cancellable) fprintIteration++
+	let currentIteration = fprintIteration
+
 	destination.appendChild(span) // make and put an empty span of the specified color on the dom
+
 	let blipper = textSpeed != 0 ? source => audioController.blips[source].play() : true // function that plays blips if textSpeed isn't 0
 	let blipping = 0 // if 1, plays a blip for that character
+
+	let canceller = cancellable ? () => currentIteration !== fprintIteration : () => false
+
 	for(let c of tokenize(string, color)) { // loop through all characters
+		if(canceller()) break
 		span.innerHTML += c.outerHTML || c // add character
 		scrollToBottom()
-		if(textSpeed != 0 && !window.debug) {
+		if(textSpeed != 0) {
 			switch(c) {
 				case ".":
 				case "!":
@@ -198,9 +210,7 @@ async function fprintNew({ string = "", color = "white", wait = 0.5, textSpeed =
 	}
 	span.innerHTML += "<br>" // add line break at end
 	scrollToBottom()
-	if(!window.debug) { // end wait
-		await sleep(wait / speed)
-	}
+	await sleep(wait / speed)
 }
 
 const clear = () => output.innerHTML = ""
@@ -544,30 +554,16 @@ const settings = async () => new Promise((resolve, reject) => {
 })
 
 async function fprintSettings(speed = 1) {
-	let span = id("textSpeedDisp")
-	span.innerHTML = ""
-	fprintSettingsIter++
-	let currentIteration = fprintSettingsIter
-	for(let c of "This is how fast text appears in the game, at least under normal conditions. Holding the shift key doubles it.") {
-		if(currentIteration != fprintSettingsIter) {
-			break
-		}
-		span.innerHTML += c
-		switch(c) {
-			case ".":
-			case "!":
-			case "?":
-			case ";":
-				await sleep(0.5)
-				break
-			case ",":
-			case ":":
-				await sleep(0.25)
-				break
-			default:
-				await sleep(0.04 * speed)
-		}
-	}
+	let output = id("textSpeedDisp")
+	output.innerHTML = ""
+	return fprint({
+		string: "This is how fast text appears in the game, at least under normal conditions. Holding the shift key doubles it.",
+		color: "green",
+		wait: 0,
+		textSpeed: 0.04 * speed,
+		destination: output,
+		cancellable: true
+	})
 }
 
 function updateSettingsScreen(selections) {
@@ -600,7 +596,7 @@ function updateSettingsScreen(selections) {
 // ["lightYellow", "green", "blue", "pink", "purple", "red", "yellow"]
 
 window.addEventListener("load", () => {
-	window.debug ? sleep = () => true : sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
+	sleep = s => new Promise(r => setTimeout(r, s * 1000 / speed))
 	output = document.getElementById("output")
 	input = document.getElementById("input")
 	document.addEventListener("keydown", e => {
@@ -639,5 +635,6 @@ export {
 	settings,
 	realSleep,
 	textInput,
-	rainbowList
+	rainbowList,
+	tokenize
 }

@@ -56,7 +56,6 @@ var atEndOfDay = false
 var quitVar = 0 // save and quit stuff
 var quitDotInterval // save and quit stuff
 var queue, dayString
-window.debug = false // skips all sleep
 window.days = 0 // number of days
 window.experience = 0 // exp level
 window.personality = 0 // positive = good, negative = bad
@@ -98,7 +97,6 @@ async function game(flag = false) {
 		clear()
 		await fprint("DAY " + window.days + "\n", "white", 1, 0)
 		dayString = queue.shift()
-		if(window.debug) fprint(dayString)
 		quitable = false
 		if(dayString !== undefined) { // saving and quiting on the last day results in undefined queue
 			var day = await import(dayString)
@@ -363,10 +361,7 @@ window.addEventListener("load", async () => {
 	})
 
 	clear()
-	if(window.debug) {
-		game()
-	} else {
-		if(skipIntro) game()
-		else titleScreen()
-	}
+
+	if(skipIntro) game()
+	else titleScreen()
 })

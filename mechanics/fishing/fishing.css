@@ -4,24 +4,35 @@
 	column-gap: 10px;
 }
 
-.fishingMinigame .map {
+#fishingMinigameMap {
 	position: relative;
 	height: 100%;
 	width: 600px;
 }
 
-.fishingMinigame .meter {
+#fishingMinigameMeter {
+	position: relative;
 	background-color: var(--colorDim);
 	height: 100%;
-	width: 50px;
+	width: 30px;
 }
 
-.fishingMinigameOutput {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	text-align: center;
+#fishingTarget {
+	position: absolute;
+	width: 30px;
+	height: 8px;
+}
+
+#fishingBar {
+	position: absolute;
+	width: 30px;
+	height: 8px;
+	background-color: var(--colorWhite);
+	bottom: 0px;
+}
+
+#fishPrintOutput {
+	padding-top: 1em;
 }
 
 .fish {
